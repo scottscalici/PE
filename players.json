@@ -1,0 +1,75 @@
+{
+  "3A": {
+    "class_ID": "3A",
+    "players": [
+      { "id": "3A_01", "name": "Oliver S.", "grid": "B1", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_02", "name": "Mira R.", "grid": "C1", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3A_03", "name": "Surya N.", "grid": "D1", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_04", "name": "Adam K.", "grid": "E1", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_05", "name": "Sophia G.", "grid": "F1", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3A_06", "name": "Dima D.", "grid": "G1", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3A_07", "name": "Adrian W.", "grid": "A2", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_08", "name": "Umberto S.", "grid": "B2", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_09", "name": "Nicholai Q.", "grid": "C2", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_10", "name": "Chloe M.", "grid": "D2", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3A_11", "name": "Jason I.", "grid": "E2", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_12", "name": "Eriny G.", "grid": "F2", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3A_13", "name": "Danielle C.", "grid": "G2", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3A_14", "name": "Ardon U.", "grid": "A3", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_15", "name": "Thomas S.", "grid": "B3", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_16", "name": "Neil P.", "grid": "C3", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_17", "name": "Dominic L.", "grid": "D3", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_18", "name": "Sarah H.", "grid": "E3", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3A_19", "name": "Kaylee F.", "grid": "F3", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3A_20", "name": "Daniel B.", "grid": "G3", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_21", "name": "Brynley T.", "grid": "A4", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3A_22", "name": "Bodhi S.", "grid": "B4", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_23", "name": "Michael O.", "grid": "C4", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_24", "name": "Anthony L.", "grid": "D4", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_25", "name": "Jermarco H.", "grid": "E4", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_26", "name": "Christina D.", "grid": "F4", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3A_27", "name": "Chase B.", "grid": "G4", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_28", "name": "Christopher T.", "grid": "A5", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_29", "name": "Roman R.", "grid": "B5", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_30", "name": "Dawn N.", "grid": "C5", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3A_31", "name": "Nolan G.", "grid": "E5", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3A_32", "name": "Nivelle D.", "grid": "F5", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3A_33", "name": "Kyro A.", "grid": "G5", "gender": "M", "skill": "5", "compete": "5" }
+    ],
+    "blocked_spots": [
+      { "grid": "A1", "type": "Empty" },
+      { "grid": "D5", "type": "Projector" }
+    ]
+  },
+  "3B": {
+    "class_ID": "3B",
+    "players": [
+      { "id": "3B_01", "name": "Camden S.", "grid": "B1", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_02", "name": "Angel R.", "grid": "C1", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3B_03", "name": "Matthew M.", "grid": "D1", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_04", "name": "Sebastian J.", "grid": "E1", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_05", "name": "Aarav C.", "grid": "F1", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_06", "name": "Joel Z.", "grid": "A2", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_07", "name": "Kate S.", "grid": "B2", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3B_08", "name": "Evalynn P.", "grid": "C2", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3B_09", "name": "Shila L.", "grid": "D2", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3B_10", "name": "Anthony G.", "grid": "E2", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_11", "name": "Veron B.", "grid": "F2", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_12", "name": "Ric Y.", "grid": "A3", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_13", "name": "Sara S.", "grid": "B3", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3B_14", "name": "Noor M.", "grid": "C3", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3B_15", "name": "Mia K.", "grid": "D3", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3B_16", "name": "Lindsay G.", "grid": "E3", "gender": "F", "skill": "5", "compete": "5" },
+      { "id": "3B_17", "name": "Adam B.", "grid": "F3", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_18", "name": "Christian T.", "grid": "A4", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_19", "name": "Alexander S.", "grid": "B4", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_20", "name": "Colin M.", "grid": "C4", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_21", "name": "Rahul K.", "grid": "D4", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_22", "name": "Denny G.", "grid": "E4", "gender": "M", "skill": "5", "compete": "5" },
+      { "id": "3B_23", "name": "Carter A.", "grid": "F4", "gender": "M", "skill": "5", "compete": "5" }
+    ],
+    "blocked_spots": [
+      { "grid": "A1", "type": "Empty" }
+    ]
+  }
+}
