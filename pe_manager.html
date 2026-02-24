@@ -140,7 +140,7 @@
                     </div>
                 </div>
 
-                <div class="form-group" id="standardTeamInput">
+                <div class="form-group" id="TeamInput">
                     <label>Number of Teams</label>
                     <input type="number" id="numTeams" value="4" min="2" max="10">
                 </div>
@@ -492,7 +492,7 @@
                 baseTeams = [...compTeams, ...recTeams];
             } else {
                 let numTeams = parseInt(document.getElementById('numTeams').value);
-                baseTeams = runSnakeDraft(players, numTeams, "Standard", 1);
+                baseTeams = runSnakeDraft(players, numTeams, "", 1);
             }
 
             currentUnit = {
