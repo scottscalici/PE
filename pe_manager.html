@@ -85,8 +85,8 @@
                 </div>
                 
                 <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                    <button class="btn-success" style="margin:0; flex: 1;" onclick="saveGitHubCredentials()">Save Token Locally</button>
-                    <button class="btn-secondary" style="margin:0; flex: 1;" onclick="testGitHubToken()">🔍 Test Connection</button>
+                    <button class="btn-success" style="margin:0; flex: 1;" onclick="saveGitHubCredentials()">Save Token</button>
+                    <button class="btn-secondary" style="margin:0; flex: 1;" onclick="testGitHubToken()">🔍 Test</button>
                 </div>
                 <div id="credStatus" style="font-size: 0.8em; color: green; display: none;">Credentials saved!</div>
                 
@@ -145,7 +145,7 @@
                     <input type="number" id="numTeams" value="4" min="2" max="10">
                 </div>
 
-                <button onclick="generateNewUnit()">Generate Base Teams</button>
+                <button onclick="generateNewUnit()">Generate Teams</button>
             </div>
 
             <div class="panel">
@@ -257,7 +257,6 @@
             const select = document.getElementById('githubUnitsSelect');
             select.innerHTML = '<option value="">Loading...</option>';
             
-            // Remove trailing slash for the API request if it exists
             if (folder.endsWith('/')) folder = folder.slice(0, -1);
             
             const repoOwner = "scottscalici";
@@ -277,8 +276,6 @@
                 }
                 
                 const files = await response.json();
-                
-                // Filter to only show JSON files
                 const jsonFiles = files.filter(f => f.name.endsWith('.json'));
                 
                 if (jsonFiles.length === 0) {
@@ -288,7 +285,6 @@
                 
                 select.innerHTML = '<option value="">-- Select a unit --</option>';
                 jsonFiles.forEach(file => {
-                    // Clean up name for the dropdown display (removes _teams.json and underscores)
                     let cleanName = file.name.replace('_teams.json', '').replace(/_/g, ' ');
                     select.innerHTML += `<option value="${file.download_url}">${cleanName}</option>`;
                 });
@@ -423,18 +419,32 @@
             return array;
         }
 
+        // --- NEW: WOBBLY SNAKE DRAFT LOGIC ---
         function runSnakeDraft(playersArray, numTeams, leagueName, startIndex = 1) {
-            playersArray.sort((a, b) => b.skill - a.skill);
+            // 1. Map players to a temporary object with a "wobbly" draft score
+            let draftPool = playersArray.map(p => ({
+                originalPlayer: p,
+                // Add a random variance between -0.75 and +0.75 to their skill score
+                draftScore: p.skill + (Math.random() * 1.5 - 0.75) 
+            }));
+
+            // 2. Sort by the new wobbly draft score (descending)
+            draftPool.sort((a, b) => b.draftScore - a.draftScore);
+
             let teams = Array.from({ length: numTeams }, (_, i) => ({
                 id: startIndex + i,
                 name: `${leagueName} Team ${i + 1}`,
                 league: leagueName,
                 players: []
             }));
+
+            // 3. Snake draft
             let forward = true;
             let teamIndex = 0;
-            playersArray.forEach(player => {
-                teams[teamIndex].players.push(player);
+            draftPool.forEach(draftItem => {
+                // Push the clean, original player object into the team
+                teams[teamIndex].players.push(draftItem.originalPlayer);
+                
                 if (forward) {
                     teamIndex++;
                     if (teamIndex === numTeams) { teamIndex--; forward = false; }
@@ -444,6 +454,7 @@
                 }
             });
 
+            // 4. Shuffle the final display order so kids don't know who was picked first
             teams.forEach(team => {
                 team.players = shuffleArray(team.players);
             });
