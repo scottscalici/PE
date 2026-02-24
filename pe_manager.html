@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PE Unit & Team Manager</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
+        h1, h2, h3, h4 { margin-top: 0; }
+        .grid-container { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
+        .panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
+        select, input[type="text"], input[type="number"], input[type="password"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        input[type="checkbox"] { width: auto; margin-right: 8px; }
+        button { background: #0056b3; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; transition: 0.2s; }
+        button:hover { background: #004494; }
+        button.btn-secondary { background: #6c757d; }
+        button.btn-secondary:hover { background: #5a6268; }
+        button.btn-success { background: #28a745; }
+        button.btn-success:hover { background: #218838; }
+        button.btn-github { background: #24292e; color: white; }
+        button.btn-github:hover { background: #000; }
+        button.btn-outline { background: white; color: #333; border: 1px solid #ccc; }
+        button.btn-outline:hover { background: #f8f9fa; }
+        
+        .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .league-section { background: #e9ecef; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid #6c757d; }
+        .league-comp { border-left-color: #dc3545; background: #f8d7da; }
+        .league-rec { border-left-color: #28a745; background: #d4edda; }
+        
+        .team-box { border: 2px solid #ced4da; border-radius: 6px; overflow: hidden; background: #fff; }
+        .team-header { background: #343a40; color: white; padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .league-comp .team-header { background: #c82333; }
+        .league-rec .team-header { background: #218838; }
+        
+        .team-header input { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.5); color: white; font-weight: bold; padding: 4px; border-radius: 3px; font-size: 1.1em; }
+        .team-header input:focus { background: white; color: black; }
+        .team-header-stats { font-size: 0.85em; display: flex; justify-content: space-between; color: rgba(255,255,255,0.9); font-weight: bold; }
+        .team-list { padding: 0; margin: 0; list-style: none; min-height: 50px; }
+        .player-item { display: flex; justify-content: space-between; padding: 8px 10px; border-bottom: 1px solid #eee; align-items: center; font-size: 0.9em; }
+        .player-item:last-child { border-bottom: none; }
+        .stats { font-size: 0.8em; color: #666; margin-left: 5px; font-style: italic; }
+        
+        .btn-status { padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8em; font-weight: bold; width: auto; margin: 0; }
+        .btn-present { background: #e2e3e5; color: #383d41; }
+        .btn-absent { background: #f8d7da; color: #721c24; }
+        
+        .shifted-in { background-color: #fff3cd; border-left: 4px solid #ffc107; }
+        .shifted-out { color: #868e96; background-color: #e2e3e5; border-left: 4px solid #adb5bd; }
+        .absent-text { text-decoration: line-through; color: #dc3545; background-color: #f8f9fa; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .grid-container { display: block; }
+            .grid-container > div:first-child { display: none; }
+            .panel { box-shadow: none; padding: 0; border: none; margin: 0; }
+            .workspace-controls, button, .btn-status { display: none !important; }
+            .teams-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .team-box { border: 1px solid #000; page-break-inside: avoid; }
+            .team-header { background: #eee !important; color: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .league-comp .team-header, .league-rec .team-header { background: #ddd !important; }
+            .team-header input { background: transparent; border: none; color: black; padding: 0; font-size: 1.2em; font-weight: bold; }
+            .team-header-stats { color: #333; }
+            .shifted-in, .shifted-out, .absent-text { background-color: transparent; }
+            .shifted-in { border-left: 2px solid #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>PE Unit & Team Manager</h1>
+
+    <div class="grid-container">
+        <div>
+            <div class="panel" style="background: #e8f0fe; border: 1px solid #b6d4fe;">
+                <h3>⚙️ GitHub API Settings</h3>
+                <div class="form-group">
+                    <label>Personal Access Token:</label>
+                    <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxx...">
+                </div>
+                <div class="form-group">
+                    <label>Save Folder Path (optional):</label>
+                    <input type="text" id="ghFolder" placeholder="e.g., units/" value="units/">
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <button class="btn-success" style="margin:0; flex: 1;" onclick="saveGitHubCredentials()">Save Token Locally</button>
+                    <button class="btn-secondary" style="margin:0; flex: 1;" onclick="testGitHubToken()">🔍 Test Connection</button>
+                </div>
+                <div id="credStatus" style="font-size: 0.8em; color: green; display: none;">Credentials saved!</div>
+                
+                <div id="githubDebug" style="background: #1e1e1e; color: #00ff00; padding: 10px; font-family: monospace; font-size: 0.8em; margin-top: 10px; border-radius: 4px; display: none; white-space: pre-wrap; word-wrap: break-word;"></div>
+            </div>
+
+            <div class="panel">
+                <h3>1. Load Master Roster</h3>
+                <div class="form-group">
+                    <label>GitHub Raw URL:</label>
+                    <input type="text" id="githubUrl" value="https://raw.githubusercontent.com/scottscalici/PE/main/players.json">
+                </div>
+                <button onclick="fetchFromGitHub()">Fetch Players</button>
+                <div id="fileStatus" style="font-size: 0.85em; color: green; display: none; margin-top: 10px;">✓ Roster Loaded</div>
+            </div>
+
+            <div class="panel" id="unitBuilderPanel" style="opacity: 0.5; pointer-events: none;">
+                <h3>2. Build New Unit</h3>
+                <div class="form-group">
+                    <label>Unit Name</label>
+                    <input type="text" id="unitName" placeholder="e.g., Soccer 2024">
+                </div>
+                <div class="form-group">
+                    <label>Target Class</label>
+                    <select id="classSelect"></select>
+                </div>
+                
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center;">
+                        <input type="checkbox" id="splitLeagues" onchange="toggleLeagueOptions()"> 
+                        Split into Comp/Rec Leagues?
+                    </label>
+                </div>
+
+                <div id="leagueOptions" style="display: none; background: #f8f9fa; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                    <div class="form-group">
+                        <label>Compete Threshold (1-5)</label>
+                        <input type="number" id="competeThreshold" value="4" min="2" max="5">
+                    </div>
+                    <div class="form-group" style="display:flex; gap:10px;">
+                        <div style="flex:1;">
+                            <label>Comp Teams</label>
+                            <input type="number" id="numCompTeams" value="2" min="1">
+                        </div>
+                        <div style="flex:1;">
+                            <label>Rec Teams</label>
+                            <input type="number" id="numRecTeams" value="2" min="1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="standardTeamInput">
+                    <label>Number of Teams</label>
+                    <input type="number" id="numTeams" value="4" min="2" max="10">
+                </div>
+
+                <button onclick="generateNewUnit()">Generate Base Teams</button>
+            </div>
+
+            <div class="panel">
+                <h3>3. Load Saved Unit Config</h3>
+                <p style="font-size: 0.8em; color: #666;">Fetch files from your repo.</p>
+                
+                <button class="btn-secondary" onclick="fetchGitHubFilesList()">🔄 Refresh List</button>
+                
+                <div class="form-group">
+                    <select id="githubUnitsSelect">
+                        <option value="">-- Click Refresh List first --</option>
+                    </select>
+                </div>
+                
+                <button class="btn-success" onclick="loadSelectedGitHubUnit()">📥 Load Selected Unit</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="workspace-controls" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h2 id="workspaceTitle" style="margin: 0;">Workspace (No Unit Loaded)</h2>
+                <div style="display: flex; gap: 5px;">
+                    <button class="btn-github" style="width: auto; margin: 0;" id="githubSaveBtn" onclick="pushToGitHubRepo()">☁️ Push to GitHub</button>
+                    <button class="btn-outline" style="width: auto; margin: 0;" onclick="exportUnitJSON()">💾 Download Local</button>
+                    <button class="btn-outline" style="width: auto; margin: 0;" onclick="window.print()">🖨️ Print</button>
+                </div>
+            </div>
+            
+            <div id="teamsContainer">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        let allPlayerData = {}; 
+        let currentUnit = null; 
+        let absentIds = new Set(); 
+
+        function logDebug(msg) {
+            const box = document.getElementById('githubDebug');
+            box.style.display = 'block';
+            box.innerText += msg + "\n";
+            console.log(msg);
+        }
+
+        function loadGitHubCredentials() {
+            const token = localStorage.getItem('pe_gh_token') || '';
+            const folder = localStorage.getItem('pe_gh_folder') || 'units/';
+            document.getElementById('ghToken').value = token;
+            document.getElementById('ghFolder').value = folder;
+        }
+
+        function saveGitHubCredentials() {
+            const token = document.getElementById('ghToken').value.trim();
+            let folder = document.getElementById('ghFolder').value.trim();
+            if (folder && !folder.endsWith('/')) folder += '/';
+            
+            localStorage.setItem('pe_gh_token', token);
+            localStorage.setItem('pe_gh_folder', folder);
+            
+            const status = document.getElementById('credStatus');
+            status.style.display = 'block';
+            setTimeout(() => { status.style.display = 'none'; }, 3000);
+        }
+
+        async function testGitHubToken() {
+            const token = document.getElementById('ghToken').value.trim();
+            document.getElementById('githubDebug').innerText = "Testing connection...\n";
+            document.getElementById('githubDebug').style.display = 'block';
+
+            if (!token) {
+                logDebug("❌ Error: No token entered.");
+                return;
+            }
+
+            try {
+                const authRes = await fetch('https://api.github.com/user', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (authRes.ok) {
+                    const userData = await authRes.json();
+                    logDebug(`✅ Authenticated as: ${userData.login}`);
+                    
+                    logDebug(`Testing access to scottscalici/PE...`);
+                    const repoRes = await fetch('https://api.github.com/repos/scottscalici/PE', {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    
+                    if (repoRes.ok) {
+                        logDebug(`✅ Repository found and accessible!`);
+                    } else {
+                        logDebug(`❌ Repo Error: Status ${repoRes.status}. Check permissions.`);
+                    }
+                } else {
+                    logDebug(`❌ Auth Error: Status ${authRes.status}. Token is invalid.`);
+                }
+            } catch (err) {
+                logDebug(`❌ Network Error: ${err.message}`);
+            }
+        }
+
+        async function fetchGitHubFilesList() {
+            const token = document.getElementById('ghToken').value.trim();
+            let folder = document.getElementById('ghFolder').value.trim();
+            
+            if (!token) return alert("Please enter your GitHub Token in the settings panel first.");
+            
+            const select = document.getElementById('githubUnitsSelect');
+            select.innerHTML = '<option value="">Loading...</option>';
+            
+            // Remove trailing slash for the API request if it exists
+            if (folder.endsWith('/')) folder = folder.slice(0, -1);
+            
+            const repoOwner = "scottscalici";
+            const repoName = "PE";
+            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folder}`;
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!response.ok) {
+                    if(response.status === 404) {
+                        throw new Error(`Folder '${folder}' not found. Have you pushed any units yet?`);
+                    }
+                    throw new Error("Failed to fetch folder contents.");
+                }
+                
+                const files = await response.json();
+                
+                // Filter to only show JSON files
+                const jsonFiles = files.filter(f => f.name.endsWith('.json'));
+                
+                if (jsonFiles.length === 0) {
+                    select.innerHTML = '<option value="">No .json files found.</option>';
+                    return;
+                }
+                
+                select.innerHTML = '<option value="">-- Select a unit --</option>';
+                jsonFiles.forEach(file => {
+                    // Clean up name for the dropdown display (removes _teams.json and underscores)
+                    let cleanName = file.name.replace('_teams.json', '').replace(/_/g, ' ');
+                    select.innerHTML += `<option value="${file.download_url}">${cleanName}</option>`;
+                });
+                
+            } catch (error) {
+                alert(error.message);
+                select.innerHTML = '<option value="">-- Error loading list --</option>';
+            }
+        }
+
+        async function loadSelectedGitHubUnit() {
+            const url = document.getElementById('githubUnitsSelect').value;
+            if (!url) return alert("Please select a unit from the dropdown list first.");
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("File not found.");
+                
+                currentUnit = await response.json();
+                absentIds.clear();
+                document.getElementById('workspaceTitle').innerText = `${currentUnit.unit_name} (${currentUnit.class_id})`;
+                updateBoard();
+            } catch (error) {
+                alert("Error fetching saved unit: " + error.message);
+            }
+        }
+
+        async function pushToGitHubRepo() {
+            if (!currentUnit) return alert("No active unit to save!");
+            
+            const token = document.getElementById('ghToken').value.trim();
+            const folder = document.getElementById('ghFolder').value.trim();
+            
+            if (!token) return alert("Please enter your GitHub Token first.");
+
+            const btn = document.getElementById('githubSaveBtn');
+            btn.innerText = "⏳ Pushing...";
+            btn.disabled = true;
+
+            const repoOwner = "scottscalici";
+            const repoName = "PE";
+            const filename = `${currentUnit.unit_name.replace(/\s+/g, '_')}_teams.json`;
+            const filePath = `${folder}${filename}`;
+            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
+
+            try {
+                let sha = null;
+                const getResponse = await fetch(apiUrl, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (getResponse.ok) {
+                    const fileData = await getResponse.json();
+                    sha = fileData.sha;
+                }
+
+                const jsonString = JSON.stringify(currentUnit, null, 2);
+                const encodedContent = btoa(unescape(encodeURIComponent(jsonString))); 
+
+                const payload = {
+                    message: `Auto-saved unit: ${currentUnit.unit_name}`,
+                    content: encodedContent
+                };
+                if (sha) payload.sha = sha;
+
+                const putResponse = await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!putResponse.ok) {
+                    const errorDetails = await putResponse.json();
+                    throw new Error(`PUT failed: ${putResponse.status} - ${errorDetails.message}`);
+                }
+
+                btn.innerText = "✅ Saved to GitHub!";
+                btn.style.background = "#28a745";
+                
+                // Automatically refresh the dropdown list so the new file appears
+                fetchGitHubFilesList();
+
+            } catch (error) {
+                logDebug(`❌ FAILED: ${error.message}`);
+                btn.innerText = "☁️ Push to GitHub";
+            } finally {
+                setTimeout(() => {
+                    btn.innerText = "☁️ Push to GitHub";
+                    btn.style.background = "#24292e";
+                    btn.disabled = false;
+                }, 3000);
+            }
+        }
+
+        async function fetchFromGitHub() {
+            const url = document.getElementById('githubUrl').value.trim();
+            if (!url) return alert("Please enter a URL.");
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Network response was not ok.");
+                allPlayerData = await response.json();
+                
+                const classSelect = document.getElementById('classSelect');
+                classSelect.innerHTML = '';
+                for (const classId in allPlayerData) {
+                    classSelect.innerHTML += `<option value="${classId}">${classId}</option>`;
+                }
+                
+                document.getElementById('fileStatus').style.display = 'block';
+                document.getElementById('unitBuilderPanel').style.opacity = '1';
+                document.getElementById('unitBuilderPanel').style.pointerEvents = 'auto';
+            } catch (error) {
+                alert("Error fetching data: " + error.message);
+            }
+        }
+
+        function toggleLeagueOptions() {
+            const isChecked = document.getElementById('splitLeagues').checked;
+            document.getElementById('leagueOptions').style.display = isChecked ? 'block' : 'none';
+            document.getElementById('standardTeamInput').style.display = isChecked ? 'none' : 'block';
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function runSnakeDraft(playersArray, numTeams, leagueName, startIndex = 1) {
+            playersArray.sort((a, b) => b.skill - a.skill);
+            let teams = Array.from({ length: numTeams }, (_, i) => ({
+                id: startIndex + i,
+                name: `${leagueName} Team ${i + 1}`,
+                league: leagueName,
+                players: []
+            }));
+            let forward = true;
+            let teamIndex = 0;
+            playersArray.forEach(player => {
+                teams[teamIndex].players.push(player);
+                if (forward) {
+                    teamIndex++;
+                    if (teamIndex === numTeams) { teamIndex--; forward = false; }
+                } else {
+                    teamIndex--;
+                    if (teamIndex < 0) { teamIndex++; forward = true; }
+                }
+            });
+
+            teams.forEach(team => {
+                team.players = shuffleArray(team.players);
+            });
+
+            return teams;
+        }
+
+        function generateNewUnit() {
+            const unitName = document.getElementById('unitName').value.trim();
+            const classId = document.getElementById('classSelect').value;
+            const useLeagues = document.getElementById('splitLeagues').checked;
+
+            if (!unitName) return alert("Please enter a Unit Name.");
+            if (!allPlayerData[classId]) return alert("Class data not found.");
+
+            let players = allPlayerData[classId].players.map(p => ({
+                id: p.id,
+                name: p.name,
+                skill: parseInt(p.skill),
+                compete: parseInt(p.compete)
+            }));
+
+            let baseTeams = [];
+
+            if (useLeagues) {
+                let threshold = parseInt(document.getElementById('competeThreshold').value);
+                let numCompTeams = parseInt(document.getElementById('numCompTeams').value);
+                let numRecTeams = parseInt(document.getElementById('numRecTeams').value);
+
+                let compPlayers = players.filter(p => p.compete >= threshold);
+                let recPlayers = players.filter(p => p.compete < threshold);
+
+                let compTeams = runSnakeDraft(compPlayers, numCompTeams, "Competitive", 1);
+                let recTeams = runSnakeDraft(recPlayers, numRecTeams, "Recreational", 1 + numCompTeams);
+                baseTeams = [...compTeams, ...recTeams];
+            } else {
+                let numTeams = parseInt(document.getElementById('numTeams').value);
+                baseTeams = runSnakeDraft(players, numTeams, "Standard", 1);
+            }
+
+            currentUnit = {
+                unit_id: "U_" + Date.now(),
+                unit_name: unitName,
+                class_id: classId,
+                has_leagues: useLeagues,
+                baseTeams: baseTeams
+            };
+            absentIds.clear();
+            document.getElementById('workspaceTitle').innerText = `${currentUnit.unit_name} (${currentUnit.class_id})`;
+            updateBoard();
+        }
+
+        function toggleAttendance(id) {
+            if (absentIds.has(id)) absentIds.delete(id);
+            else absentIds.add(id);
+            updateBoard();
+        }
+
+        function updateTeamName(teamId, newName) {
+            let team = currentUnit.baseTeams.find(t => t.id === teamId);
+            if (team) team.name = newName;
+        }
+
+        function getAverageSkill(activePlayers) {
+            if (activePlayers.length === 0) return 0;
+            return activePlayers.reduce((sum, p) => sum + p.skill, 0) / activePlayers.length;
+        }
+
+        function balanceLeague(teamsInLeague, shiftsArray) {
+            let balancing = true;
+            while (balancing) {
+                teamsInLeague.sort((a, b) => b.activePlayers.length - a.activePlayers.length);
+                let largestTeam = teamsInLeague[0];
+                let smallestTeam = teamsInLeague[teamsInLeague.length - 1];
+
+                if (largestTeam.activePlayers.length - smallestTeam.activePlayers.length >= 2) {
+                    let targetAvg = (getAverageSkill(largestTeam.activePlayers) + getAverageSkill(smallestTeam.activePlayers)) / 2;
+                    let bestPlayer = largestTeam.activePlayers[0];
+                    let smallestDiff = Math.abs(bestPlayer.skill - targetAvg);
+
+                    for (let i = 1; i < largestTeam.activePlayers.length; i++) {
+                        let diff = Math.abs(largestTeam.activePlayers[i].skill - targetAvg);
+                        if (diff < smallestDiff) { smallestDiff = diff; bestPlayer = largestTeam.activePlayers[i]; }
+                    }
+
+                    largestTeam.activePlayers = largestTeam.activePlayers.filter(p => p.id !== bestPlayer.id);
+                    smallestTeam.activePlayers.push(bestPlayer);
+                    shiftsArray.push({ playerId: bestPlayer.id, fromName: largestTeam.name, toName: smallestTeam.name });
+                } else {
+                    balancing = false;
+                }
+            }
+        }
+
+        function updateBoard() {
+            if (!currentUnit) return;
+
+            let dailyTeams = JSON.parse(JSON.stringify(currentUnit.baseTeams));
+            let shifts = []; 
+
+            dailyTeams.forEach(team => {
+                team.activePlayers = team.players.filter(p => !absentIds.has(p.id));
+            });
+
+            let leagues = [...new Set(dailyTeams.map(t => t.league))];
+            leagues.forEach(league => {
+                let teamsInLeague = dailyTeams.filter(t => t.league === league);
+                if (teamsInLeague.length > 1) {
+                    balanceLeague(teamsInLeague, shifts);
+                }
+            });
+
+            const container = document.getElementById('teamsContainer');
+            container.innerHTML = '';
+
+            leagues.forEach(league => {
+                let teamsInLeague = dailyTeams.filter(t => t.league === league).sort((a, b) => a.id - b.id);
+                
+                let leagueClass = league === "Competitive" ? "league-comp" : (league === "Recreational" ? "league-rec" : "");
+                let leagueHtml = `<div class="league-section ${leagueClass}">
+                                    <h4>${league} Bracket</h4>
+                                    <div class="teams-grid">`;
+
+                teamsInLeague.forEach(team => {
+                    leagueHtml += `
+                        <div class="team-box">
+                            <div class="team-header">
+                                <input type="text" value="${team.name}" onchange="updateTeamName(${team.id}, this.value)">
+                                <div class="team-header-stats">
+                                    <span>Active: ${team.activePlayers.length}</span>
+                                </div>
+                            </div>
+                            <ul class="team-list">`;
+                    
+                    let originalTeam = currentUnit.baseTeams.find(t => t.id === team.id);
+                    
+                    originalTeam.players.forEach(p => {
+                        let isAbsent = absentIds.has(p.id);
+                        let isActiveHere = team.activePlayers.find(activeP => activeP.id === p.id);
+                        let wasShiftedOut = !isAbsent && !isActiveHere;
+
+                        if (isAbsent) {
+                            leagueHtml += `<li class="player-item absent-text"><span>${p.name}</span> <button class="btn-status btn-absent" onclick="toggleAttendance('${p.id}')">Absent</button></li>`;
+                        } else if (wasShiftedOut) {
+                            let shiftData = shifts.find(s => s.playerId === p.id);
+                            leagueHtml += `<li class="player-item shifted-out"><span><del>${p.name}</del> <span class="stats">(At ${shiftData.toName})</span></span> <button class="btn-status btn-present" onclick="toggleAttendance('${p.id}')">Present</button></li>`;
+                        } else {
+                            leagueHtml += `<li class="player-item"><span>${p.name}</span> <button class="btn-status btn-present" onclick="toggleAttendance('${p.id}')">Present</button></li>`;
+                        }
+                    });
+
+                    let playersShiftedIn = team.activePlayers.filter(activeP => !originalTeam.players.find(op => op.id === activeP.id));
+                    playersShiftedIn.forEach(p => {
+                        let shiftData = shifts.find(s => s.playerId === p.id);
+                        leagueHtml += `<li class="player-item shifted-in"><span><strong>${p.name}</strong> <span class="stats">(From ${shiftData.fromName})</span></span></li>`;
+                    });
+
+                    leagueHtml += `</ul></div>`;
+                });
+                
+                leagueHtml += `</div></div>`;
+                container.innerHTML += leagueHtml;
+            });
+        }
+
+        function exportUnitJSON() {
+            if (!currentUnit) return alert("No unit to export.");
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentUnit, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `${currentUnit.unit_name.replace(/\s+/g, '_')}_teams.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        // Run on load
+        loadGitHubCredentials();
+
+    </script>
+</body>
+</html>
