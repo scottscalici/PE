@@ -50,26 +50,37 @@
         .shifted-out { color: #868e96; background-color: #e2e3e5; border-left: 4px solid #adb5bd; }
         .absent-text { text-decoration: line-through; color: #dc3545; background-color: #f8f9fa; }
 
+        /* --- PRINT STYLES --- */
         @media print {
-            body { background: white; padding: 0; }
+            @page { margin: 0.5in; }
+            body { background: white; padding: 0; font-size: 11pt; }
+            .no-print { display: none !important; }
             .grid-container { display: block; }
-            .grid-container > div:first-child { display: none; }
+            .grid-container > div:first-child { display: none; } /* Hide Sidebar completely */
             .panel { box-shadow: none; padding: 0; border: none; margin: 0; }
-            .workspace-controls, button, .btn-status { display: none !important; }
-            .teams-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .workspace-controls, button, .btn-status { display: none !important; } /* Hide buttons */
+            
+            /* Format Document Header */
+            #workspaceTitle { text-align: center; font-size: 20pt; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; display: block; }
+            
+            .teams-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; } /* 2 columns for paper */
             .team-box { border: 1px solid #000; page-break-inside: avoid; }
-            .team-header { background: #eee !important; color: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .league-comp .team-header, .league-rec .team-header { background: #ddd !important; }
-            .team-header input { background: transparent; border: none; color: black; padding: 0; font-size: 1.2em; font-weight: bold; }
-            .team-header-stats { color: #333; }
+            .team-header { background: #f0f0f0 !important; color: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-bottom: 1px solid #000; }
+            .league-comp .team-header, .league-rec .team-header { background: #e0e0e0 !important; }
+            
+            /* Make inputs look like regular text on paper */
+            .team-header input { background: transparent; border: none; color: black; padding: 0; font-size: 1.2em; font-weight: bold; text-align: center; width: 100%; margin-bottom: 4px; }
+            .team-header-stats { color: #333; justify-content: center; gap: 20px; }
+            
+            .player-item { padding: 4px 8px; border-bottom: 1px solid #ccc; }
             .shifted-in, .shifted-out, .absent-text { background-color: transparent; }
-            .shifted-in { border-left: 2px solid #000; }
+            .shifted-in { border-left: 3px solid #000; padding-left: 5px; }
         }
     </style>
 </head>
 <body>
 
-    <h1>PE Unit & Team Manager</h1>
+    <h1 class="no-print">PE Unit & Team Manager</h1>
 
     <div class="grid-container">
         <div>
@@ -85,8 +96,8 @@
                 </div>
                 
                 <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                    <button class="btn-success" style="margin:0; flex: 1;" onclick="saveGitHubCredentials()">Save Token</button>
-                    <button class="btn-secondary" style="margin:0; flex: 1;" onclick="testGitHubToken()">🔍 Test</button>
+                    <button class="btn-success" style="margin:0; flex: 1;" onclick="saveGitHubCredentials()">Save Token Locally</button>
+                    <button class="btn-secondary" style="margin:0; flex: 1;" onclick="testGitHubToken()">🔍 Test Connection</button>
                 </div>
                 <div id="credStatus" style="font-size: 0.8em; color: green; display: none;">Credentials saved!</div>
                 
@@ -140,7 +151,7 @@
                     </div>
                 </div>
 
-                <div class="form-group" id="TeamInput">
+                <div class="form-group" id="standardTeamInput">
                     <label>Number of Teams</label>
                     <input type="number" id="numTeams" value="4" min="2" max="10">
                 </div>
@@ -419,16 +430,14 @@
             return array;
         }
 
-        // --- NEW: WOBBLY SNAKE DRAFT LOGIC ---
         function runSnakeDraft(playersArray, numTeams, leagueName, startIndex = 1) {
-            // 1. Map players to a temporary object with a "wobbly" draft score
+            // Add a random variance between -0.75 and +0.75 to their skill score for a "wobbly" draft
             let draftPool = playersArray.map(p => ({
                 originalPlayer: p,
-                // Add a random variance between -0.75 and +0.75 to their skill score
                 draftScore: p.skill + (Math.random() * 1.5 - 0.75) 
             }));
 
-            // 2. Sort by the new wobbly draft score (descending)
+            // Sort by the wobbly draft score
             draftPool.sort((a, b) => b.draftScore - a.draftScore);
 
             let teams = Array.from({ length: numTeams }, (_, i) => ({
@@ -438,13 +447,10 @@
                 players: []
             }));
 
-            // 3. Snake draft
             let forward = true;
             let teamIndex = 0;
             draftPool.forEach(draftItem => {
-                // Push the clean, original player object into the team
                 teams[teamIndex].players.push(draftItem.originalPlayer);
-                
                 if (forward) {
                     teamIndex++;
                     if (teamIndex === numTeams) { teamIndex--; forward = false; }
@@ -454,7 +460,7 @@
                 }
             });
 
-            // 4. Shuffle the final display order so kids don't know who was picked first
+            // Shuffle display order
             teams.forEach(team => {
                 team.players = shuffleArray(team.players);
             });
@@ -492,7 +498,7 @@
                 baseTeams = [...compTeams, ...recTeams];
             } else {
                 let numTeams = parseInt(document.getElementById('numTeams').value);
-                baseTeams = runSnakeDraft(players, numTeams, "", 1);
+                baseTeams = runSnakeDraft(players, numTeams, "Standard", 1);
             }
 
             currentUnit = {
