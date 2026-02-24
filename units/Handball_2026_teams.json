@@ -1,0 +1,241 @@
+{
+  "unit_id": "U_1771945326980",
+  "unit_name": "Handball 2026",
+  "class_id": "3A",
+  "has_leagues": false,
+  "baseTeams": [
+    {
+      "id": 1,
+      "name": "Standard Team 1",
+      "league": "Standard",
+      "players": [
+        {
+          "id": "3A_17",
+          "name": "Dominic L.",
+          "skill": 10,
+          "compete": 5
+        },
+        {
+          "id": "3A_01",
+          "name": "Oliver S.",
+          "skill": 7,
+          "compete": 3
+        },
+        {
+          "id": "3A_05",
+          "name": "Sophia G.",
+          "skill": 7,
+          "compete": 3
+        },
+        {
+          "id": "3A_06",
+          "name": "Dima D.",
+          "skill": 5,
+          "compete": 3
+        },
+        {
+          "id": "3A_27",
+          "name": "Chase B.",
+          "skill": 5,
+          "compete": 2
+        },
+        {
+          "id": "3A_13",
+          "name": "Danielle C.",
+          "skill": 3,
+          "compete": 1
+        },
+        {
+          "id": "3A_19",
+          "name": "Kaylee F.",
+          "skill": 3,
+          "compete": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Standard Team 2",
+      "league": "Standard",
+      "players": [
+        {
+          "id": "3A_04",
+          "name": "Adam K.",
+          "skill": 9,
+          "compete": 5
+        },
+        {
+          "id": "3A_33",
+          "name": "Kyro A.",
+          "skill": 8,
+          "compete": 5
+        },
+        {
+          "id": "3A_29",
+          "name": "Roman R.",
+          "skill": 7,
+          "compete": 4
+        },
+        {
+          "id": "3A_30",
+          "name": "Dawn N.",
+          "skill": 6,
+          "compete": 3
+        },
+        {
+          "id": "3A_02",
+          "name": "Mira R.",
+          "skill": 4,
+          "compete": 2
+        },
+        {
+          "id": "3A_12",
+          "name": "Eriny G.",
+          "skill": 3,
+          "compete": 2
+        },
+        {
+          "id": "3A_26",
+          "name": "Christina D.",
+          "skill": 3,
+          "compete": 3
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Standard Team 3",
+      "league": "Standard",
+      "players": [
+        {
+          "id": "3A_07",
+          "name": "Adrian W.",
+          "skill": 8,
+          "compete": 5
+        },
+        {
+          "id": "3A_31",
+          "name": "Nolan G.",
+          "skill": 8,
+          "compete": 5
+        },
+        {
+          "id": "3A_32",
+          "name": "Nivelle D.",
+          "skill": 7,
+          "compete": 5
+        },
+        {
+          "id": "3A_28",
+          "name": "Christopher T.",
+          "skill": 6,
+          "compete": 5
+        },
+        {
+          "id": "3A_03",
+          "name": "Surya N.",
+          "skill": 4,
+          "compete": 1
+        },
+        {
+          "id": "3A_25",
+          "name": "Jermarco H.",
+          "skill": 4,
+          "compete": 3
+        },
+        {
+          "id": "3A_18",
+          "name": "Sarah H.",
+          "skill": 1,
+          "compete": 1
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Standard Team 4",
+      "league": "Standard",
+      "players": [
+        {
+          "id": "3A_15",
+          "name": "Thomas S.",
+          "skill": 8,
+          "compete": 4
+        },
+        {
+          "id": "3A_24",
+          "name": "Anthony L.",
+          "skill": 8,
+          "compete": 5
+        },
+        {
+          "id": "3A_08",
+          "name": "Umberto S.",
+          "skill": 6,
+          "compete": 4
+        },
+        {
+          "id": "3A_22",
+          "name": "Bodhi S.",
+          "skill": 6,
+          "compete": 4
+        },
+        {
+          "id": "3A_10",
+          "name": "Chloe M.",
+          "skill": 4,
+          "compete": 2
+        },
+        {
+          "id": "3A_21",
+          "name": "Brynley T.",
+          "skill": 4,
+          "compete": 3
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Standard Team 5",
+      "league": "Standard",
+      "players": [
+        {
+          "id": "3A_20",
+          "name": "Daniel B.",
+          "skill": 8,
+          "compete": 4
+        },
+        {
+          "id": "3A_23",
+          "name": "Michael O.",
+          "skill": 8,
+          "compete": 4
+        },
+        {
+          "id": "3A_09",
+          "name": "Nicholai Q.",
+          "skill": 6,
+          "compete": 4
+        },
+        {
+          "id": "3A_16",
+          "name": "Neil P.",
+          "skill": 6,
+          "compete": 5
+        },
+        {
+          "id": "3A_11",
+          "name": "Jason I.",
+          "skill": 4,
+          "compete": 3
+        },
+        {
+          "id": "3A_14",
+          "name": "Ardon U.",
+          "skill": 4,
+          "compete": 2
+        }
+      ]
+    }
+  ]
+}
