@@ -6,7 +6,7 @@
   "baseTeams": [
     {
       "id": 1,
-      "name": "HCE?",
+      "name": "HCE",
       "league": "Standard",
       "players": [
         {
@@ -104,7 +104,7 @@
     },
     {
       "id": 3,
-      "name": "Die Recken",
+      "name": "Zebras",
       "league": "Standard",
       "players": [
         {
@@ -153,7 +153,7 @@
     },
     {
       "id": 4,
-      "name": "Zebras?",
+      "name": "Die Recken",
       "league": "Standard",
       "players": [
         {
