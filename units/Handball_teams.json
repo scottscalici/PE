@@ -6,7 +6,7 @@
   "baseTeams": [
     {
       "id": 1,
-      "name": "Team 1",
+      "name": "HCE?",
       "league": "Standard",
       "players": [
         {
@@ -55,7 +55,7 @@
     },
     {
       "id": 2,
-      "name": "Team 2",
+      "name": "Wild Boys",
       "league": "Standard",
       "players": [
         {
@@ -104,7 +104,7 @@
     },
     {
       "id": 3,
-      "name": "Team 3",
+      "name": "Die Recken",
       "league": "Standard",
       "players": [
         {
@@ -153,7 +153,7 @@
     },
     {
       "id": 4,
-      "name": "Team 4",
+      "name": "Zebras?",
       "league": "Standard",
       "players": [
         {
@@ -196,7 +196,7 @@
     },
     {
       "id": 5,
-      "name": "Team 5",
+      "name": "Füchse",
       "league": "Standard",
       "players": [
         {
