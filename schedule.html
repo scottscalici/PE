@@ -587,7 +587,7 @@
             btn.classList.add('active');
         }
 
-        async function saveScheduleToGitHub() {
+async function saveScheduleToGitHub() {
             const token = document.getElementById('ghToken').value.trim();
             const folder = document.getElementById('ghFolder').value.trim();
             if (!token || !currentUnit) return alert("Missing info to save.");
@@ -596,12 +596,15 @@
             btn.innerText = "⏳ Pushing...";
 
             const filename = `${currentUnit.unit_name.replace(/\s+/g, '_')}_schedule.json`;
-            const apiUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${filename}`;
+            // ADDED CACHE BUSTER (?t=...) so the browser doesn't use old GitHub data
+            const apiUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${filename}?t=${Date.now()}`;
 
             try {
                 let sha = null;
                 const getRes = await fetch(apiUrl, { headers: { 'Authorization': `Bearer ${token}` } });
-                if (getRes.ok) sha = (await getRes.json()).sha;
+                if (getRes.ok) {
+                    sha = (await getRes.json()).sha;
+                }
 
                 const payload = {
                     message: `Update schedule: ${currentUnit.unit_name}`,
@@ -609,18 +612,29 @@
                 };
                 if (sha) payload.sha = sha;
 
-                await fetch(apiUrl, {
+                // Stripped the cache buster off the PUT URL
+                const putUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${filename}`;
+                
+                const putRes = await fetch(putUrl, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
                 
+                // ADDED STRICT ERROR CHECK
+                if (!putRes.ok) {
+                    const errorData = await putRes.json();
+                    throw new Error(`Save failed! GitHub says: ${errorData.message}`);
+                }
+                
                 btn.innerText = "✅ Saved!";
                 btn.style.background = "#28a745";
                 setTimeout(() => { btn.innerText = "☁️ Push Schedule to GitHub"; btn.style.background = "#24292e"; }, 3000);
             } catch (error) {
-                alert("Error saving: " + error.message);
-                btn.innerText = "☁️ Push Schedule to GitHub";
+                alert(error.message);
+                btn.innerText = "❌ Push Failed";
+                btn.style.background = "#dc3545";
+                setTimeout(() => { btn.innerText = "☁️ Push Schedule to GitHub"; btn.style.background = "#24292e"; }, 3000);
             }
         }
     </script>
