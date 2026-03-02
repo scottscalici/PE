@@ -17,6 +17,8 @@
         button.btn-secondary { background: #6c757d; }
         button.btn-success { background: #28a745; }
         button.btn-github { background: #24292e; color: white; }
+        button.btn-outline { background: white; color: #333; border: 1px solid #ccc; }
+        button.btn-outline:hover { background: #f8f9fa; }
         
         table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; }
         th, td { padding: 10px; border: 1px solid #dee2e6; text-align: center; }
@@ -25,23 +27,50 @@
         
         .match-card { background: #f8f9fa; border: 1px solid #ced4da; border-radius: 6px; padding: 10px; margin-bottom: 10px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; }
         .match-card input[type="number"] { width: 60px; text-align: center; font-size: 1.2em; font-weight: bold; margin: 0 5px; }
-        .match-info { grid-column: 1 / -1; display: flex; justify-content: space-between; font-size: 0.85em; color: #666; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 5px; }
-        .team-left { text-align: right; font-weight: bold; }
-        .team-right { text-align: left; font-weight: bold; }
+        
+        .match-info { grid-column: 1 / -1; display: flex; gap: 10px; font-size: 0.85em; color: #666; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 5px; align-items: center; }
+        .match-info select, .match-info input[type="text"] { font-size: 0.9em; padding: 4px; margin: 0; width: auto; flex: 1; }
+        
+        .team-left { text-align: right; font-weight: bold; font-size: 1.1em; }
+        .team-right { text-align: left; font-weight: bold; font-size: 1.1em; }
         .score-box { display: flex; justify-content: center; align-items: center; }
         
         .tab-btn { background: #e9ecef; color: #333; margin: 0; border-radius: 4px 4px 0 0; width: auto; padding: 8px 15px; }
         .tab-btn.active { background: #0056b3; color: white; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+
+        .calc-box { background: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 4px; font-size: 0.9em; margin-bottom: 15px; border: 1px solid #bee5eb; text-align: center; font-weight: bold; }
+
+        @media print {
+            @page { margin: 0.5in; }
+            body { background: white; padding: 0; font-size: 12pt; }
+            .no-print { display: none !important; }
+            .grid-container { display: block; }
+            .grid-container > div:first-child { display: none; }
+            .panel { box-shadow: none; padding: 0; border: none; margin: 0; }
+            
+            #workspaceTitle { text-align: center; font-size: 20pt; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; display: block; }
+            
+            .tab-btn { display: none; }
+            #standingsTab { display: none !important; }
+            #matchesTab { display: block !important; }
+            
+            .match-card { border: none; border-bottom: 1px solid #000; padding: 10px 0; border-radius: 0; background: transparent; break-inside: avoid; }
+            .match-info { border: none; padding: 0; }
+            
+            /* Make inputs look like standard text when printing */
+            .match-info select, .match-info input[type="text"] { border: none; background: transparent; appearance: none; -moz-appearance: none; -webkit-appearance: none; color: black; font-weight: bold; padding: 0; }
+            .score-box input { border: none; background: transparent; font-size: 1em; padding: 0; width: 30px; }
+        }
     </style>
 </head>
 <body>
 
-    <h1>🏆 PE Schedule & Standings</h1>
+    <h1 class="no-print">🏆 PE Schedule & Standings</h1>
 
     <div class="grid-container">
-        <div>
+        <div class="no-print">
             <div class="panel" style="background: #e8f0fe; border: 1px solid #b6d4fe;">
                 <h3>⚙️ Setup & Load</h3>
                 <div class="form-group">
@@ -61,13 +90,29 @@
 
             <div class="panel" id="generatorPanel" style="opacity: 0.5; pointer-events: none;">
                 <h3>📅 Generate Schedule</h3>
-                <div class="form-group">
-                    <label>Class Cycle (A or B Day):</label>
-                    <select id="cycleSelect">
-                        <option value="A">A Day</option>
-                        <option value="B">B Day</option>
-                    </select>
+                
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Class Cycle:</label>
+                        <select id="cycleSelect">
+                            <option value="A">A Day</option>
+                            <option value="B">B Day</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Start Day (Día #):</label>
+                        <input type="number" id="startDia" value="51" min="1">
+                    </div>
                 </div>
+
+                <div class="form-group">
+                    <label>Locations (comma separated):</label>
+                    <input type="text" id="locationsInput" value="Main Gym">
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+                <h4>Timing & Format</h4>
+
                 <div class="form-group">
                     <label>Format:</label>
                     <select id="formatSelect">
@@ -75,14 +120,26 @@
                         <option value="2">Round Robin (2x)</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Games Per Day:</label>
-                    <input type="number" id="gamesPerDay" value="3" min="1" max="10">
+
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Games / Day:</label>
+                        <input type="number" id="gamesPerDay" value="3" min="1" max="10" oninput="updateTimeBlock()">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Game (mins):</label>
+                        <input type="number" id="gameDuration" value="15" min="1" oninput="updateTimeBlock()">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Trans. (mins):</label>
+                        <input type="number" id="transDuration" value="5" min="0" oninput="updateTimeBlock()">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Locations (comma separated):</label>
-                    <input type="text" id="locationsInput" value="Main Gym, Aux Gym">
+
+                <div class="calc-box" id="timeBlockDisplay">
+                    Total Daily Play Block: 55 mins
                 </div>
+
                 <button onclick="generateSchedule()">Generate New Schedule</button>
             </div>
             
@@ -90,14 +147,17 @@
         </div>
 
         <div class="panel">
-            <h2 id="workspaceTitle">Workspace (No Unit Loaded)</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 id="workspaceTitle" style="margin: 0;">Workspace (No Unit Loaded)</h2>
+                <button class="btn-outline no-print" style="width: auto; margin: 0;" onclick="window.print()">🖨️ Print Schedule</button>
+            </div>
             
-            <div style="display: flex; gap: 5px; border-bottom: 2px solid #ccc; margin-bottom: 20px;">
+            <div style="display: flex; gap: 5px; border-bottom: 2px solid #ccc; margin-bottom: 20px;" class="no-print">
                 <button class="tab-btn active" onclick="switchTab('standingsTab', this)">📊 Standings</button>
                 <button class="tab-btn" onclick="switchTab('matchesTab', this)">🏟️ Matches</button>
             </div>
 
-            <div id="standingsTab" class="tab-content active">
+            <div id="standingsTab" class="tab-content active no-print">
                 <div id="standingsContainer"><i>Load a unit and generate a schedule to see standings.</i></div>
             </div>
 
@@ -110,25 +170,54 @@
     <script>
         let currentUnit = null;
         let scheduleData = { matches: [], standings: {} };
-        let calendarDates = [];
+        let fullCalendar = [];
+        let filteredCalendar = [];
 
-        async function fetchCalendar(cycle) {
+        // Setup Local Storage for API token
+        window.onload = () => {
+            document.getElementById('ghToken').value = localStorage.getItem('pe_gh_token') || '';
+            document.getElementById('ghFolder').value = localStorage.getItem('pe_gh_folder') || 'units/';
+            updateTimeBlock();
+            preloadCalendar();
+        };
+
+        function updateTimeBlock() {
+            let games = parseInt(document.getElementById('gamesPerDay').value) || 0;
+            let duration = parseInt(document.getElementById('gameDuration').value) || 0;
+            let trans = parseInt(document.getElementById('transDuration').value) || 0;
+            
+            let total = 0;
+            if (games > 0) {
+                total = (games * duration) + ((games - 1) * trans);
+            }
+            
+            document.getElementById('timeBlockDisplay').innerText = `Total Daily Play Block: ${total} mins`;
+        }
+
+        async function preloadCalendar() {
             const calUrl = "https://raw.githubusercontent.com/scottscalici/imagenes/main/planes/calendario.json";
             try {
                 const response = await fetch(calUrl);
                 const data = await response.json();
-                calendarDates = data.map.filter(d => d.ciclo === cycle).map(d => d.fecha);
-                calendarDates.sort(); // Ensure chronological order
+                fullCalendar = data.map;
             } catch (err) {
-                alert("Error fetching calendar. Using default dates.");
-                calendarDates = ["TBD"];
+                console.error("Error preloading calendar", err);
             }
+        }
+
+        function filterCalendarDates(cycle, startDia) {
+            filteredCalendar = fullCalendar
+                .filter(d => d.ciclo === cycle && d.dia >= startDia)
+                .sort((a, b) => a.dia - b.dia);
         }
 
         async function fetchGitHubFilesList() {
             const token = document.getElementById('ghToken').value.trim();
             let folder = document.getElementById('ghFolder').value.trim();
             if (!token) return alert("Enter GitHub Token.");
+            
+            localStorage.setItem('pe_gh_token', token);
+            localStorage.setItem('pe_gh_folder', folder);
             
             const select = document.getElementById('githubUnitsSelect');
             if (folder.endsWith('/')) folder = folder.slice(0, -1);
@@ -156,11 +245,14 @@
             const res = await fetch(url);
             currentUnit = await res.json();
             
-            document.getElementById('workspaceTitle').innerText = `${currentUnit.unit_name} - Schedule Manager`;
+            let displayTitle = currentUnit.unit_name.includes(currentUnit.class_id) 
+                ? currentUnit.unit_name 
+                : `${currentUnit.unit_name} (${currentUnit.class_id})`;
+            
+            document.getElementById('workspaceTitle').innerText = `${displayTitle} - Schedule`;
             document.getElementById('generatorPanel').style.opacity = '1';
             document.getElementById('generatorPanel').style.pointerEvents = 'auto';
             
-            // Try to load existing schedule if it exists
             const token = document.getElementById('ghToken').value.trim();
             let folder = document.getElementById('ghFolder').value.trim();
             const schedUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${currentUnit.unit_name.replace(/\s+/g, '_')}_schedule.json`;
@@ -188,15 +280,17 @@
             renderAll();
         }
 
-        async function generateSchedule() {
+        function generateSchedule() {
             if (!currentUnit) return alert("Load a unit first!");
+            if (fullCalendar.length === 0) return alert("Calendar data not loaded yet. Try again in a second.");
             
             const cycle = document.getElementById('cycleSelect').value;
+            const startDia = parseInt(document.getElementById('startDia').value) || 1;
             const multiplier = parseInt(document.getElementById('formatSelect').value);
             const gamesPerDay = parseInt(document.getElementById('gamesPerDay').value);
             const locations = document.getElementById('locationsInput').value.split(',').map(l => l.trim());
             
-            await fetchCalendar(cycle);
+            filterCalendarDates(cycle, startDia);
             
             let teams = currentUnit.baseTeams.map(t => t.name);
             if (teams.length % 2 !== 0) teams.push("BYE");
@@ -213,7 +307,6 @@
                         let away = currentTeams[currentTeams.length - 1 - i];
                         
                         if (home !== "BYE" && away !== "BYE") {
-                            // Alternate home/away for 2x multiplier
                             if (m === 1) [home, away] = [away, home];
                             
                             matches.push({
@@ -222,30 +315,35 @@
                                 away_team: away,
                                 home_score: null,
                                 away_score: null,
+                                date_str: "", 
+                                location: "",
                                 completed: false
                             });
                         }
                     }
-                    currentTeams.splice(1, 0, currentTeams.pop()); // Rotate array for Round Robin
+                    currentTeams.splice(1, 0, currentTeams.pop());
                 }
             }
 
-            // Assign Dates and Locations based on volume
             let dateIndex = 0;
             let gamesToday = 0;
             
-            matches.forEach((match, index) => {
+            matches.forEach((match) => {
                 if (gamesToday >= gamesPerDay) {
                     gamesToday = 0;
                     dateIndex++;
                 }
-                match.date = calendarDates[dateIndex] || "TBD";
-                match.location = locations[gamesToday % locations.length] || "TBD";
+                
+                let calObj = filteredCalendar[dateIndex];
+                match.date_str = calObj ? `Dia ${calObj.dia} (${calObj.fecha})` : "TBD";
+                match.location = locations[gamesToday % locations.length] || locations[0] || "Main Gym";
+                
                 gamesToday++;
             });
 
             scheduleData.matches = matches;
-            initializeStandings(); // Resets standings for new schedule
+            initializeStandings(); 
+            switchTab('matchesTab', document.querySelectorAll('.tab-btn')[1]);
         }
 
         function updateScore(matchId, isHome, value) {
@@ -257,8 +355,12 @@
             recalculateStandings();
         }
 
+        function updateMatchField(matchId, field, value) {
+            let match = scheduleData.matches.find(m => m.id === matchId);
+            if(match) match[field] = value;
+        }
+
         function recalculateStandings() {
-            // Reset
             Object.keys(scheduleData.standings).forEach(t => {
                 scheduleData.standings[t] = { w: 0, l: 0, t: 0, pf: 0, pa: 0, pd: 0, pts: 0 };
             });
@@ -267,22 +369,23 @@
                 let hTeam = scheduleData.standings[m.home_team];
                 let aTeam = scheduleData.standings[m.away_team];
                 
-                hTeam.pf += m.home_score; hTeam.pa += m.away_score;
-                aTeam.pf += m.away_score; aTeam.pa += m.home_score;
-                
-                if (m.home_score > m.away_score) {
-                    hTeam.w++; hTeam.pts += 3;
-                    aTeam.l++;
-                } else if (m.home_score < m.away_score) {
-                    aTeam.w++; aTeam.pts += 3;
-                    hTeam.l++;
-                } else {
-                    hTeam.t++; hTeam.pts += 1;
-                    aTeam.t++; aTeam.pts += 1;
+                if(hTeam && aTeam) {
+                    hTeam.pf += m.home_score; hTeam.pa += m.away_score;
+                    aTeam.pf += m.away_score; aTeam.pa += m.home_score;
+                    
+                    if (m.home_score > m.away_score) {
+                        hTeam.w++; hTeam.pts += 3;
+                        aTeam.l++;
+                    } else if (m.home_score < m.away_score) {
+                        aTeam.w++; aTeam.pts += 3;
+                        hTeam.l++;
+                    } else {
+                        hTeam.t++; hTeam.pts += 1;
+                        aTeam.t++; aTeam.pts += 1;
+                    }
                 }
             });
 
-            // Calculate Differentials
             Object.keys(scheduleData.standings).forEach(t => {
                 scheduleData.standings[t].pd = scheduleData.standings[t].pf - scheduleData.standings[t].pa;
             });
@@ -293,6 +396,25 @@
         function renderAll() {
             renderMatches();
             renderStandings();
+        }
+
+        function getCalendarOptionsHtml(selectedDateStr) {
+            let options = `<option value="TBD">TBD</option>`;
+            
+            let cycle = document.getElementById('cycleSelect').value || "A";
+            let relevantDays = fullCalendar.filter(d => d.ciclo === cycle);
+            
+            relevantDays.forEach(d => {
+                let str = `Dia ${d.dia} (${d.fecha})`;
+                let selected = (str === selectedDateStr) ? "selected" : "";
+                options += `<option value="${str}" ${selected}>${str}</option>`;
+            });
+            
+            if(!relevantDays.find(d => `Dia ${d.dia} (${d.fecha})` === selectedDateStr) && selectedDateStr !== "TBD" && selectedDateStr !== "") {
+                 options += `<option value="${selectedDateStr}" selected>${selectedDateStr}</option>`;
+            }
+
+            return options;
         }
 
         function renderMatches() {
@@ -307,13 +429,19 @@
                 html += `
                 <div class="match-card">
                     <div class="match-info">
-                        <span>🗓️ ${m.date} | 📍 ${m.location}</span>
+                        🗓️ <select onchange="updateMatchField(${m.id}, 'date_str', this.value)">
+                            ${getCalendarOptionsHtml(m.date_str)}
+                        </select>
+                        📍 <input type="text" value="${m.location}" onchange="updateMatchField(${m.id}, 'location', this.value)">
                     </div>
                     <div class="team-left">${m.home_team}</div>
-                    <div class="score-box">
+                    <div class="score-box no-print">
                         <input type="number" value="${hScore}" onchange="updateScore(${m.id}, true, this.value)">
                         -
                         <input type="number" value="${aScore}" onchange="updateScore(${m.id}, false, this.value)">
+                    </div>
+                    <div class="score-box" style="display:none;" media="print">
+                         VS 
                     </div>
                     <div class="team-right">${m.away_team}</div>
                 </div>`;
@@ -327,7 +455,6 @@
                 return { name, ...scheduleData.standings[name] };
             });
 
-            // Sort logic: Points -> Point Differential -> Points For
             teams.sort((a, b) => {
                 if (b.pts !== a.pts) return b.pts - a.pts;
                 if (b.pd !== a.pd) return b.pd - a.pd;
@@ -362,6 +489,9 @@
             const folder = document.getElementById('ghFolder').value.trim();
             if (!token || !currentUnit) return alert("Missing info to save.");
 
+            const btn = document.querySelector('.btn-github');
+            btn.innerText = "⏳ Pushing...";
+
             const filename = `${currentUnit.unit_name.replace(/\s+/g, '_')}_schedule.json`;
             const apiUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${filename}`;
 
@@ -381,9 +511,13 @@
                     headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                alert("✅ Schedule Saved to GitHub!");
+                
+                btn.innerText = "✅ Saved!";
+                btn.style.background = "#28a745";
+                setTimeout(() => { btn.innerText = "☁️ Push Schedule to GitHub"; btn.style.background = "#24292e"; }, 3000);
             } catch (error) {
                 alert("Error saving: " + error.message);
+                btn.innerText = "☁️ Push Schedule to GitHub";
             }
         }
     </script>
