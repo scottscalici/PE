@@ -11,7 +11,7 @@
         .panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
-        select, input[type="text"], input[type="number"], input[type="password"], input[type="date"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        select, input[type="text"], input[type="number"], input[type="password"], input[type="date"], input[type="time"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         button { background: #0056b3; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; transition: 0.2s; }
         button:hover { background: #004494; }
         button.btn-secondary { background: #6c757d; }
@@ -28,8 +28,8 @@
         .match-card { background: #f8f9fa; border: 1px solid #ced4da; border-radius: 6px; padding: 10px; margin-bottom: 10px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; }
         .match-card input[type="number"] { width: 60px; text-align: center; font-size: 1.2em; font-weight: bold; margin: 0 5px; }
         
-        .match-info { grid-column: 1 / -1; display: flex; gap: 10px; font-size: 0.85em; color: #666; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 5px; align-items: center; }
-        .match-info select, .match-info input[type="text"] { font-size: 0.9em; padding: 4px; margin: 0; width: auto; flex: 1; }
+        .match-info { grid-column: 1 / -1; display: flex; gap: 10px; font-size: 0.85em; color: #666; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 5px; align-items: center; flex-wrap: wrap; }
+        .match-info select, .match-info input[type="text"], .match-info input[type="time"] { font-size: 0.9em; padding: 4px; margin: 0; width: auto; flex: 1; min-width: 100px; }
         
         .team-left { text-align: right; font-weight: bold; font-size: 1.1em; }
         .team-right { text-align: left; font-weight: bold; font-size: 1.1em; }
@@ -41,10 +41,15 @@
         .tab-content.active { display: block; }
 
         .calc-box { background: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 4px; font-size: 0.9em; margin-bottom: 15px; border: 1px solid #bee5eb; text-align: center; font-weight: bold; }
+        
+        .player-row td { text-align: left; vertical-align: top; border-bottom: 1px solid #eee; }
+        .player-schedule-list { list-style-type: none; padding: 0; margin: 0; font-size: 0.85em; color: #555; }
+        .player-schedule-list li { margin-bottom: 3px; }
+        .player-schedule-list strong { color: #222; }
 
         @media print {
             @page { margin: 0.5in; }
-            body { background: white; padding: 0; font-size: 12pt; }
+            body { background: white; padding: 0; font-size: 11pt; }
             .no-print { display: none !important; }
             .grid-container { display: block; }
             .grid-container > div:first-child { display: none; }
@@ -53,14 +58,18 @@
             #workspaceTitle { text-align: center; font-size: 20pt; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; display: block; }
             
             .tab-btn { display: none; }
-            #standingsTab { display: none !important; }
-            #matchesTab { display: block !important; }
+            /* Smart Print: Only show the currently active tab */
+            .tab-content { display: none !important; }
+            .tab-content.active { display: block !important; }
             
             .match-card { border: none; border-bottom: 1px solid #000; padding: 10px 0; border-radius: 0; background: transparent; break-inside: avoid; }
             .match-info { border: none; padding: 0; }
             
-            .match-info select, .match-info input[type="text"] { border: none; background: transparent; appearance: none; -moz-appearance: none; -webkit-appearance: none; color: black; font-weight: bold; padding: 0; }
+            .match-info select, .match-info input[type="text"], .match-info input[type="time"] { border: none; background: transparent; appearance: none; -moz-appearance: none; -webkit-appearance: none; color: black; font-weight: bold; padding: 0; }
             .score-box input { border: none; background: transparent; font-size: 1em; padding: 0; width: 30px; }
+            
+            table { page-break-inside: auto; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
         }
     </style>
 </head>
@@ -120,9 +129,15 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label>Games / Day (e.g., 1, 3, 4):</label>
-                    <input type="text" id="gamesPerDay" value="1, 3" oninput="updateTimeBlock()" placeholder="Sequence of games">
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 2;">
+                        <label>Games / Day (e.g., 1, 3):</label>
+                        <input type="text" id="gamesPerDay" value="1, 3" oninput="updateTimeBlock()" placeholder="Sequence">
+                    </div>
+                    <div class="form-group" style="flex: 1.5;">
+                        <label>Start Time:</label>
+                        <input type="time" id="startTime" value="09:00">
+                    </div>
                 </div>
 
                 <div style="display: flex; gap: 10px;">
@@ -149,20 +164,25 @@
         <div class="panel">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 id="workspaceTitle" style="margin: 0;">Workspace (No Unit Loaded)</h2>
-                <button class="btn-outline no-print" style="width: auto; margin: 0;" onclick="window.print()">🖨️ Print Schedule</button>
+                <button class="btn-outline no-print" style="width: auto; margin: 0;" onclick="window.print()">🖨️ Print Active Tab</button>
             </div>
             
             <div style="display: flex; gap: 5px; border-bottom: 2px solid #ccc; margin-bottom: 20px;" class="no-print">
                 <button class="tab-btn active" onclick="switchTab('standingsTab', this)">📊 Standings</button>
                 <button class="tab-btn" onclick="switchTab('matchesTab', this)">🏟️ Matches</button>
+                <button class="tab-btn" onclick="switchTab('playersTab', this)">🧑‍🎓 Player View</button>
             </div>
 
-            <div id="standingsTab" class="tab-content active no-print">
+            <div id="standingsTab" class="tab-content active">
                 <div id="standingsContainer"><i>Load a unit and generate a schedule to see standings.</i></div>
             </div>
 
             <div id="matchesTab" class="tab-content">
                 <div id="matchesContainer"><i>No matches generated yet.</i></div>
+            </div>
+            
+            <div id="playersTab" class="tab-content">
+                <div id="playersContainer"><i>Load a unit and generate a schedule to see personalized player schedules.</i></div>
             </div>
         </div>
     </div>
@@ -173,7 +193,6 @@
         let fullCalendar = [];
         let filteredCalendar = [];
 
-        // Setup Local Storage for API token
         window.onload = () => {
             document.getElementById('ghToken').value = localStorage.getItem('pe_gh_token') || '';
             document.getElementById('ghFolder').value = localStorage.getItem('pe_gh_folder') || 'units/';
@@ -183,10 +202,8 @@
 
         function updateTimeBlock() {
             let gamesInput = document.getElementById('gamesPerDay').value;
-            // Parse sequence, filter out bad inputs
             let gamesSeq = gamesInput.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n) && n > 0);
-            
-            if (gamesSeq.length === 0) gamesSeq = [1]; // Fallback to 1 if empty/invalid
+            if (gamesSeq.length === 0) gamesSeq = [1]; 
 
             let duration = parseInt(document.getElementById('gameDuration').value) || 0;
             let trans = parseInt(document.getElementById('transDuration').value) || 0;
@@ -194,9 +211,7 @@
             let minGames = Math.min(...gamesSeq);
             let maxGames = Math.max(...gamesSeq);
 
-            function calcTime(games) {
-                return games > 0 ? (games * duration) + ((games - 1) * trans) : 0;
-            }
+            function calcTime(games) { return games > 0 ? (games * duration) + ((games - 1) * trans) : 0; }
 
             let minTime = calcTime(minGames);
             let maxTime = calcTime(maxGames);
@@ -214,15 +229,33 @@
                 const response = await fetch(calUrl);
                 const data = await response.json();
                 fullCalendar = data.map;
-            } catch (err) {
-                console.error("Error preloading calendar", err);
-            }
+            } catch (err) { console.error("Error preloading calendar", err); }
         }
 
         function filterCalendarDates(cycle, startDia) {
             filteredCalendar = fullCalendar
                 .filter(d => d.ciclo === cycle && d.dia >= startDia)
                 .sort((a, b) => a.dia - b.dia);
+        }
+
+        function timeToMins(timeStr) {
+            if (!timeStr) return 0;
+            let [h, m] = timeStr.split(':').map(Number);
+            return (h * 60) + m;
+        }
+
+        function minsToTimeStr(mins) {
+            let h = Math.floor(mins / 60) % 24;
+            let m = mins % 60;
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+        }
+
+        function formatAmPm(timeStr) {
+            if (!timeStr) return "TBD";
+            let [h, m] = timeStr.split(':').map(Number);
+            let ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12 || 12;
+            return `${h}:${m.toString().padStart(2, '0')} ${ampm}`;
         }
 
         async function fetchGitHubFilesList() {
@@ -247,9 +280,7 @@
                 jsonFiles.forEach(f => {
                     select.innerHTML += `<option value="${f.download_url}">${f.name.replace('_teams.json', '')}</option>`;
                 });
-            } catch (error) {
-                alert("Error: " + error.message);
-            }
+            } catch (error) { alert("Error: " + error.message); }
         }
 
         async function loadSelectedGitHubUnit() {
@@ -260,8 +291,7 @@
             currentUnit = await res.json();
             
             let displayTitle = currentUnit.unit_name.includes(currentUnit.class_id) 
-                ? currentUnit.unit_name 
-                : `${currentUnit.unit_name} (${currentUnit.class_id})`;
+                ? currentUnit.unit_name : `${currentUnit.unit_name} (${currentUnit.class_id})`;
             
             document.getElementById('workspaceTitle').innerText = `${displayTitle} - Schedule`;
             document.getElementById('generatorPanel').style.opacity = '1';
@@ -304,8 +334,12 @@
             
             const gamesInput = document.getElementById('gamesPerDay').value;
             let gamesSeq = gamesInput.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n) && n > 0);
-            if (gamesSeq.length === 0) gamesSeq = [3]; // Fallback to 3 if empty
+            if (gamesSeq.length === 0) gamesSeq = [3]; 
             
+            const startTimeVal = document.getElementById('startTime').value || "09:00";
+            const duration = parseInt(document.getElementById('gameDuration').value) || 15;
+            const trans = parseInt(document.getElementById('transDuration').value) || 5;
+
             const locations = document.getElementById('locationsInput').value.split(',').map(l => l.trim());
             
             filterCalendarDates(cycle, startDia);
@@ -334,6 +368,7 @@
                                 home_score: null,
                                 away_score: null,
                                 date_str: "", 
+                                time: "",
                                 location: "",
                                 completed: false
                             });
@@ -345,21 +380,24 @@
 
             let dateIndex = 0;
             let gamesToday = 0;
+            let currentDayMins = timeToMins(startTimeVal);
             
             matches.forEach((match) => {
-                // Determine target games for this specific date index based on user sequence
                 let targetGames = gamesSeq[Math.min(dateIndex, gamesSeq.length - 1)];
 
                 if (gamesToday >= targetGames) {
                     gamesToday = 0;
                     dateIndex++;
+                    currentDayMins = timeToMins(startTimeVal); // Reset clock for new day
                 }
                 
                 let calObj = filteredCalendar[dateIndex];
                 match.date_str = calObj ? `Dia ${calObj.dia} (${calObj.fecha})` : "TBD";
+                match.time = minsToTimeStr(currentDayMins);
                 match.location = locations[gamesToday % locations.length] || locations[0] || "Main Gym";
                 
                 gamesToday++;
+                currentDayMins += duration + trans; // Advance clock for next game
             });
 
             scheduleData.matches = matches;
@@ -379,6 +417,7 @@
         function updateMatchField(matchId, field, value) {
             let match = scheduleData.matches.find(m => m.id === matchId);
             if(match) match[field] = value;
+            if(field === 'time' || field === 'date_str' || field === 'location') renderPlayers(); // Live update player tab
         }
 
         function recalculateStandings() {
@@ -395,14 +434,11 @@
                     aTeam.pf += m.away_score; aTeam.pa += m.home_score;
                     
                     if (m.home_score > m.away_score) {
-                        hTeam.w++; hTeam.pts += 3;
-                        aTeam.l++;
+                        hTeam.w++; hTeam.pts += 3; aTeam.l++;
                     } else if (m.home_score < m.away_score) {
-                        aTeam.w++; aTeam.pts += 3;
-                        hTeam.l++;
+                        aTeam.w++; aTeam.pts += 3; hTeam.l++;
                     } else {
-                        hTeam.t++; hTeam.pts += 1;
-                        aTeam.t++; aTeam.pts += 1;
+                        hTeam.t++; hTeam.pts += 1; aTeam.t++; aTeam.pts += 1;
                     }
                 }
             });
@@ -417,11 +453,11 @@
         function renderAll() {
             renderMatches();
             renderStandings();
+            renderPlayers();
         }
 
         function getCalendarOptionsHtml(selectedDateStr) {
             let options = `<option value="TBD">TBD</option>`;
-            
             let cycle = document.getElementById('cycleSelect').value || "A";
             let relevantDays = fullCalendar.filter(d => d.ciclo === cycle);
             
@@ -434,7 +470,6 @@
             if(!relevantDays.find(d => `Dia ${d.dia} (${d.fecha})` === selectedDateStr) && selectedDateStr !== "TBD" && selectedDateStr !== "") {
                  options += `<option value="${selectedDateStr}" selected>${selectedDateStr}</option>`;
             }
-
             return options;
         }
 
@@ -450,20 +485,16 @@
                 html += `
                 <div class="match-card">
                     <div class="match-info">
-                        🗓️ <select onchange="updateMatchField(${m.id}, 'date_str', this.value)">
-                            ${getCalendarOptionsHtml(m.date_str)}
-                        </select>
+                        🗓️ <select onchange="updateMatchField(${m.id}, 'date_str', this.value)">${getCalendarOptionsHtml(m.date_str)}</select>
+                        ⏱️ <input type="time" value="${m.time || ''}" onchange="updateMatchField(${m.id}, 'time', this.value)">
                         📍 <input type="text" value="${m.location}" onchange="updateMatchField(${m.id}, 'location', this.value)">
                     </div>
                     <div class="team-left">${m.home_team}</div>
                     <div class="score-box no-print">
-                        <input type="number" value="${hScore}" onchange="updateScore(${m.id}, true, this.value)">
-                        -
+                        <input type="number" value="${hScore}" onchange="updateScore(${m.id}, true, this.value)">-
                         <input type="number" value="${aScore}" onchange="updateScore(${m.id}, false, this.value)">
                     </div>
-                    <div class="score-box" style="display:none;" media="print">
-                         VS 
-                    </div>
+                    <div class="score-box" style="display:none;" media="print"> VS </div>
                     <div class="team-right">${m.away_team}</div>
                 </div>`;
             });
@@ -472,9 +503,7 @@
 
         function renderStandings() {
             const container = document.getElementById('standingsContainer');
-            let teams = Object.keys(scheduleData.standings).map(name => {
-                return { name, ...scheduleData.standings[name] };
-            });
+            let teams = Object.keys(scheduleData.standings).map(name => { return { name, ...scheduleData.standings[name] }; });
 
             teams.sort((a, b) => {
                 if (b.pts !== a.pts) return b.pts - a.pts;
@@ -482,19 +511,54 @@
                 return b.pf - a.pf;
             });
 
-            let html = `<table>
-                <tr><th>Rank</th><th>Team</th><th>W</th><th>L</th><th>T</th><th>PF</th><th>PA</th><th>PD</th><th>PTS</th></tr>`;
-            
+            let html = `<table><tr><th>Rank</th><th>Team</th><th>W</th><th>L</th><th>T</th><th>PF</th><th>PA</th><th>PD</th><th>PTS</th></tr>`;
             teams.forEach((t, i) => {
-                html += `<tr>
-                    <td>${i + 1}</td>
-                    <td class="team-name">${t.name}</td>
-                    <td>${t.w}</td><td>${t.l}</td><td>${t.t}</td>
-                    <td>${t.pf}</td><td>${t.pa}</td><td>${t.pd > 0 ? '+'+t.pd : t.pd}</td>
-                    <td><strong>${t.pts}</strong></td>
-                </tr>`;
+                html += `<tr><td>${i + 1}</td><td class="team-name">${t.name}</td><td>${t.w}</td><td>${t.l}</td><td>${t.t}</td>
+                    <td>${t.pf}</td><td>${t.pa}</td><td>${t.pd > 0 ? '+'+t.pd : t.pd}</td><td><strong>${t.pts}</strong></td></tr>`;
             });
             html += '</table>';
+            container.innerHTML = html;
+        }
+
+        function renderPlayers() {
+            const container = document.getElementById('playersContainer');
+            if (!currentUnit || !scheduleData.matches.length) { container.innerHTML = "<i>No matches generated.</i>"; return; }
+
+            // Extract all players and map to their team
+            let allPlayers = [];
+            currentUnit.baseTeams.forEach(team => {
+                team.players.forEach(p => {
+                    allPlayers.push({ name: p.name, team: team.name });
+                });
+            });
+
+            // Sort alphabetically by first name
+            allPlayers.sort((a, b) => a.name.localeCompare(b.name));
+
+            let html = `<table class="player-row">
+                <tr><th>Student Name</th><th>Team</th><th>Upcoming Schedule</th></tr>`;
+
+            allPlayers.forEach(player => {
+                // Find matches involving this player's team
+                let pMatches = scheduleData.matches.filter(m => m.home_team === player.team || m.away_team === player.team);
+                
+                let scheduleListHtml = `<ul class="player-schedule-list">`;
+                pMatches.forEach(m => {
+                    let opponent = m.home_team === player.team ? m.away_team : m.home_team;
+                    let displayTime = formatAmPm(m.time);
+                    scheduleListHtml += `<li><strong>${m.date_str} @ ${displayTime}</strong> - ${m.location} <i>(vs ${opponent})</i></li>`;
+                });
+                if (pMatches.length === 0) scheduleListHtml += `<li>No matches scheduled.</li>`;
+                scheduleListHtml += `</ul>`;
+
+                html += `<tr>
+                    <td><strong>${player.name}</strong></td>
+                    <td>${player.team}</td>
+                    <td>${scheduleListHtml}</td>
+                </tr>`;
+            });
+
+            html += `</table>`;
             container.innerHTML = html;
         }
 
