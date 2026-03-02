@@ -1,0 +1,161 @@
+{
+  "matches": [
+    {
+      "id": 1,
+      "home_team": "Wild Boys",
+      "away_team": "Füchse",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "Dia 51 (2026-03-02)",
+      "time": "09:00",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "home_team": "Zebras",
+      "away_team": "Die Recken",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "Dia 51 (2026-03-02)",
+      "time": "09:13",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 3,
+      "home_team": "HCE",
+      "away_team": "Füchse",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "Dia 51 (2026-03-02)",
+      "time": "09:26",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 4,
+      "home_team": "Wild Boys",
+      "away_team": "Zebras",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "Dia 51 (2026-03-02)",
+      "time": "09:39",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 5,
+      "home_team": "HCE",
+      "away_team": "Die Recken",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "Dia 51 (2026-03-02)",
+      "time": "09:52",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 6,
+      "home_team": "Füchse",
+      "away_team": "Zebras",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "Dia 52 (2026-03-04)",
+      "time": "09:00",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 7,
+      "home_team": "HCE",
+      "away_team": "Zebras",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "Dia 52 (2026-03-04)",
+      "time": "09:13",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 8,
+      "home_team": "Die Recken",
+      "away_team": "Wild Boys",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "Dia 52 (2026-03-04)",
+      "time": "09:26",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 9,
+      "home_team": "HCE",
+      "away_team": "Wild Boys",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "Dia 52 (2026-03-04)",
+      "time": "09:39",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 10,
+      "home_team": "Die Recken",
+      "away_team": "Füchse",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "Dia 52 (2026-03-04)",
+      "time": "09:52",
+      "location": "Main Gym",
+      "completed": false
+    }
+  ],
+  "standings": {
+    "HCE": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Wild Boys": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Zebras": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Die Recken": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Füchse": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    }
+  }
+}
