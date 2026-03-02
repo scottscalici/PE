@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PE Schedule & Standings Manager</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
+        h1, h2, h3, h4 { margin-top: 0; }
+        .grid-container { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
+        .panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
+        select, input[type="text"], input[type="number"], input[type="password"], input[type="date"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background: #0056b3; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; transition: 0.2s; }
+        button:hover { background: #004494; }
+        button.btn-secondary { background: #6c757d; }
+        button.btn-success { background: #28a745; }
+        button.btn-github { background: #24292e; color: white; }
+        
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; }
+        th, td { padding: 10px; border: 1px solid #dee2e6; text-align: center; }
+        th { background: #343a40; color: white; }
+        .team-name { text-align: left; font-weight: bold; }
+        
+        .match-card { background: #f8f9fa; border: 1px solid #ced4da; border-radius: 6px; padding: 10px; margin-bottom: 10px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; }
+        .match-card input[type="number"] { width: 60px; text-align: center; font-size: 1.2em; font-weight: bold; margin: 0 5px; }
+        .match-info { grid-column: 1 / -1; display: flex; justify-content: space-between; font-size: 0.85em; color: #666; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 5px; }
+        .team-left { text-align: right; font-weight: bold; }
+        .team-right { text-align: left; font-weight: bold; }
+        .score-box { display: flex; justify-content: center; align-items: center; }
+        
+        .tab-btn { background: #e9ecef; color: #333; margin: 0; border-radius: 4px 4px 0 0; width: auto; padding: 8px 15px; }
+        .tab-btn.active { background: #0056b3; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <h1>🏆 PE Schedule & Standings</h1>
+
+    <div class="grid-container">
+        <div>
+            <div class="panel" style="background: #e8f0fe; border: 1px solid #b6d4fe;">
+                <h3>⚙️ Setup & Load</h3>
+                <div class="form-group">
+                    <label>GitHub Token:</label>
+                    <input type="password" id="ghToken">
+                </div>
+                <div class="form-group">
+                    <label>Base GitHub Folder (e.g., units/):</label>
+                    <input type="text" id="ghFolder" value="units/">
+                </div>
+                <button class="btn-secondary" onclick="fetchGitHubFilesList()">1. Refresh Unit List</button>
+                <div class="form-group">
+                    <select id="githubUnitsSelect"><option value="">-- Load Units First --</option></select>
+                </div>
+                <button class="btn-success" onclick="loadSelectedGitHubUnit()">2. Load Teams</button>
+            </div>
+
+            <div class="panel" id="generatorPanel" style="opacity: 0.5; pointer-events: none;">
+                <h3>📅 Generate Schedule</h3>
+                <div class="form-group">
+                    <label>Class Cycle (A or B Day):</label>
+                    <select id="cycleSelect">
+                        <option value="A">A Day</option>
+                        <option value="B">B Day</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Format:</label>
+                    <select id="formatSelect">
+                        <option value="1">Round Robin (1x)</option>
+                        <option value="2">Round Robin (2x)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Games Per Day:</label>
+                    <input type="number" id="gamesPerDay" value="3" min="1" max="10">
+                </div>
+                <div class="form-group">
+                    <label>Locations (comma separated):</label>
+                    <input type="text" id="locationsInput" value="Main Gym, Aux Gym">
+                </div>
+                <button onclick="generateSchedule()">Generate New Schedule</button>
+            </div>
+            
+            <button class="btn-github" onclick="saveScheduleToGitHub()">☁️ Push Schedule to GitHub</button>
+        </div>
+
+        <div class="panel">
+            <h2 id="workspaceTitle">Workspace (No Unit Loaded)</h2>
+            
+            <div style="display: flex; gap: 5px; border-bottom: 2px solid #ccc; margin-bottom: 20px;">
+                <button class="tab-btn active" onclick="switchTab('standingsTab', this)">📊 Standings</button>
+                <button class="tab-btn" onclick="switchTab('matchesTab', this)">🏟️ Matches</button>
+            </div>
+
+            <div id="standingsTab" class="tab-content active">
+                <div id="standingsContainer"><i>Load a unit and generate a schedule to see standings.</i></div>
+            </div>
+
+            <div id="matchesTab" class="tab-content">
+                <div id="matchesContainer"><i>No matches generated yet.</i></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUnit = null;
+        let scheduleData = { matches: [], standings: {} };
+        let calendarDates = [];
+
+        async function fetchCalendar(cycle) {
+            const calUrl = "https://raw.githubusercontent.com/scottscalici/imagenes/main/planes/calendario.json";
+            try {
+                const response = await fetch(calUrl);
+                const data = await response.json();
+                calendarDates = data.map.filter(d => d.ciclo === cycle).map(d => d.fecha);
+                calendarDates.sort(); // Ensure chronological order
+            } catch (err) {
+                alert("Error fetching calendar. Using default dates.");
+                calendarDates = ["TBD"];
+            }
+        }
+
+        async function fetchGitHubFilesList() {
+            const token = document.getElementById('ghToken').value.trim();
+            let folder = document.getElementById('ghFolder').value.trim();
+            if (!token) return alert("Enter GitHub Token.");
+            
+            const select = document.getElementById('githubUnitsSelect');
+            if (folder.endsWith('/')) folder = folder.slice(0, -1);
+            
+            try {
+                const response = await fetch(`https://api.github.com/repos/scottscalici/PE/contents/${folder}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const files = await response.json();
+                const jsonFiles = files.filter(f => f.name.endsWith('_teams.json'));
+                
+                select.innerHTML = '<option value="">-- Select a unit --</option>';
+                jsonFiles.forEach(f => {
+                    select.innerHTML += `<option value="${f.download_url}">${f.name.replace('_teams.json', '')}</option>`;
+                });
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        }
+
+        async function loadSelectedGitHubUnit() {
+            const url = document.getElementById('githubUnitsSelect').value;
+            if (!url) return;
+            
+            const res = await fetch(url);
+            currentUnit = await res.json();
+            
+            document.getElementById('workspaceTitle').innerText = `${currentUnit.unit_name} - Schedule Manager`;
+            document.getElementById('generatorPanel').style.opacity = '1';
+            document.getElementById('generatorPanel').style.pointerEvents = 'auto';
+            
+            // Try to load existing schedule if it exists
+            const token = document.getElementById('ghToken').value.trim();
+            let folder = document.getElementById('ghFolder').value.trim();
+            const schedUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${currentUnit.unit_name.replace(/\s+/g, '_')}_schedule.json`;
+            
+            try {
+                const schedRes = await fetch(schedUrl, { headers: { 'Accept': 'application/vnd.github.v3.raw', 'Authorization': `Bearer ${token}` } });
+                if (schedRes.ok) {
+                    scheduleData = await schedRes.json();
+                    renderAll();
+                } else {
+                    scheduleData = { matches: [], standings: {} };
+                    initializeStandings();
+                }
+            } catch (e) {
+                scheduleData = { matches: [], standings: {} };
+                initializeStandings();
+            }
+        }
+
+        function initializeStandings() {
+            scheduleData.standings = {};
+            currentUnit.baseTeams.forEach(team => {
+                scheduleData.standings[team.name] = { w: 0, l: 0, t: 0, pf: 0, pa: 0, pd: 0, pts: 0 };
+            });
+            renderAll();
+        }
+
+        async function generateSchedule() {
+            if (!currentUnit) return alert("Load a unit first!");
+            
+            const cycle = document.getElementById('cycleSelect').value;
+            const multiplier = parseInt(document.getElementById('formatSelect').value);
+            const gamesPerDay = parseInt(document.getElementById('gamesPerDay').value);
+            const locations = document.getElementById('locationsInput').value.split(',').map(l => l.trim());
+            
+            await fetchCalendar(cycle);
+            
+            let teams = currentUnit.baseTeams.map(t => t.name);
+            if (teams.length % 2 !== 0) teams.push("BYE");
+            
+            let matches = [];
+            let matchId = 1;
+            let totalRounds = teams.length - 1;
+
+            for (let m = 0; m < multiplier; m++) {
+                let currentTeams = [...teams];
+                for (let round = 0; round < totalRounds; round++) {
+                    for (let i = 0; i < currentTeams.length / 2; i++) {
+                        let home = currentTeams[i];
+                        let away = currentTeams[currentTeams.length - 1 - i];
+                        
+                        if (home !== "BYE" && away !== "BYE") {
+                            // Alternate home/away for 2x multiplier
+                            if (m === 1) [home, away] = [away, home];
+                            
+                            matches.push({
+                                id: matchId++,
+                                home_team: home,
+                                away_team: away,
+                                home_score: null,
+                                away_score: null,
+                                completed: false
+                            });
+                        }
+                    }
+                    currentTeams.splice(1, 0, currentTeams.pop()); // Rotate array for Round Robin
+                }
+            }
+
+            // Assign Dates and Locations based on volume
+            let dateIndex = 0;
+            let gamesToday = 0;
+            
+            matches.forEach((match, index) => {
+                if (gamesToday >= gamesPerDay) {
+                    gamesToday = 0;
+                    dateIndex++;
+                }
+                match.date = calendarDates[dateIndex] || "TBD";
+                match.location = locations[gamesToday % locations.length] || "TBD";
+                gamesToday++;
+            });
+
+            scheduleData.matches = matches;
+            initializeStandings(); // Resets standings for new schedule
+        }
+
+        function updateScore(matchId, isHome, value) {
+            let match = scheduleData.matches.find(m => m.id === matchId);
+            if (isHome) match.home_score = value !== "" ? parseInt(value) : null;
+            else match.away_score = value !== "" ? parseInt(value) : null;
+            
+            match.completed = (match.home_score !== null && match.away_score !== null);
+            recalculateStandings();
+        }
+
+        function recalculateStandings() {
+            // Reset
+            Object.keys(scheduleData.standings).forEach(t => {
+                scheduleData.standings[t] = { w: 0, l: 0, t: 0, pf: 0, pa: 0, pd: 0, pts: 0 };
+            });
+
+            scheduleData.matches.filter(m => m.completed).forEach(m => {
+                let hTeam = scheduleData.standings[m.home_team];
+                let aTeam = scheduleData.standings[m.away_team];
+                
+                hTeam.pf += m.home_score; hTeam.pa += m.away_score;
+                aTeam.pf += m.away_score; aTeam.pa += m.home_score;
+                
+                if (m.home_score > m.away_score) {
+                    hTeam.w++; hTeam.pts += 3;
+                    aTeam.l++;
+                } else if (m.home_score < m.away_score) {
+                    aTeam.w++; aTeam.pts += 3;
+                    hTeam.l++;
+                } else {
+                    hTeam.t++; hTeam.pts += 1;
+                    aTeam.t++; aTeam.pts += 1;
+                }
+            });
+
+            // Calculate Differentials
+            Object.keys(scheduleData.standings).forEach(t => {
+                scheduleData.standings[t].pd = scheduleData.standings[t].pf - scheduleData.standings[t].pa;
+            });
+            
+            renderAll();
+        }
+
+        function renderAll() {
+            renderMatches();
+            renderStandings();
+        }
+
+        function renderMatches() {
+            const container = document.getElementById('matchesContainer');
+            if (!scheduleData.matches.length) { container.innerHTML = "<i>No matches generated.</i>"; return; }
+            
+            let html = '';
+            scheduleData.matches.forEach(m => {
+                let hScore = m.home_score !== null ? m.home_score : '';
+                let aScore = m.away_score !== null ? m.away_score : '';
+                
+                html += `
+                <div class="match-card">
+                    <div class="match-info">
+                        <span>🗓️ ${m.date} | 📍 ${m.location}</span>
+                    </div>
+                    <div class="team-left">${m.home_team}</div>
+                    <div class="score-box">
+                        <input type="number" value="${hScore}" onchange="updateScore(${m.id}, true, this.value)">
+                        -
+                        <input type="number" value="${aScore}" onchange="updateScore(${m.id}, false, this.value)">
+                    </div>
+                    <div class="team-right">${m.away_team}</div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderStandings() {
+            const container = document.getElementById('standingsContainer');
+            let teams = Object.keys(scheduleData.standings).map(name => {
+                return { name, ...scheduleData.standings[name] };
+            });
+
+            // Sort logic: Points -> Point Differential -> Points For
+            teams.sort((a, b) => {
+                if (b.pts !== a.pts) return b.pts - a.pts;
+                if (b.pd !== a.pd) return b.pd - a.pd;
+                return b.pf - a.pf;
+            });
+
+            let html = `<table>
+                <tr><th>Rank</th><th>Team</th><th>W</th><th>L</th><th>T</th><th>PF</th><th>PA</th><th>PD</th><th>PTS</th></tr>`;
+            
+            teams.forEach((t, i) => {
+                html += `<tr>
+                    <td>${i + 1}</td>
+                    <td class="team-name">${t.name}</td>
+                    <td>${t.w}</td><td>${t.l}</td><td>${t.t}</td>
+                    <td>${t.pf}</td><td>${t.pa}</td><td>${t.pd > 0 ? '+'+t.pd : t.pd}</td>
+                    <td><strong>${t.pts}</strong></td>
+                </tr>`;
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        async function saveScheduleToGitHub() {
+            const token = document.getElementById('ghToken').value.trim();
+            const folder = document.getElementById('ghFolder').value.trim();
+            if (!token || !currentUnit) return alert("Missing info to save.");
+
+            const filename = `${currentUnit.unit_name.replace(/\s+/g, '_')}_schedule.json`;
+            const apiUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${filename}`;
+
+            try {
+                let sha = null;
+                const getRes = await fetch(apiUrl, { headers: { 'Authorization': `Bearer ${token}` } });
+                if (getRes.ok) sha = (await getRes.json()).sha;
+
+                const payload = {
+                    message: `Update schedule: ${currentUnit.unit_name}`,
+                    content: btoa(unescape(encodeURIComponent(JSON.stringify(scheduleData, null, 2))))
+                };
+                if (sha) payload.sha = sha;
+
+                await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                alert("✅ Schedule Saved to GitHub!");
+            } catch (error) {
+                alert("Error saving: " + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
