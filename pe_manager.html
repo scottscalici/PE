@@ -312,6 +312,13 @@
             }
         }
 
+        function getDisplayTitle(unit) {
+            if (unit.unit_name.includes(unit.class_id)) {
+                return unit.unit_name;
+            }
+            return `${unit.unit_name} (${unit.class_id})`;
+        }
+
         async function loadSelectedGitHubUnit() {
             const url = document.getElementById('githubUnitsSelect').value;
             if (!url) return alert("Please select a unit from the dropdown list first.");
@@ -323,8 +330,9 @@
                 currentUnit = await response.json();
                 resetWorkspace();
                 
-                document.getElementById('workspaceTitle').innerText = `${currentUnit.unit_name} (${currentUnit.class_id})`;
-                document.title = `${currentUnit.unit_name} (${currentUnit.class_id}) Teams`;
+                const displayTitle = getDisplayTitle(currentUnit);
+                document.getElementById('workspaceTitle').innerText = displayTitle;
+                document.title = `${displayTitle} Teams`;
                 
                 updateBoard();
             } catch (error) {
@@ -443,17 +451,13 @@
             return playerArray.reduce((sum, p) => sum + p.skill, 0) / playerArray.length;
         }
 
-        // New balanced draft function replacing the standard snake draft
         function generateBalancedTeams(playersArray, numTeams, leagueName, startIndex = 1) {
-            // 1. Separate by gender (assumes JSON has a gender property like "F" or "girl")
             let girls = playersArray.filter(p => p.gender === 'F' || p.gender === 'girl');
             let boys = playersArray.filter(p => p.gender !== 'F' && p.gender !== 'girl');
 
-            // 2. Completely randomize both pools
             shuffleArray(girls);
             shuffleArray(boys);
 
-            // 3. Initialize Teams
             let teams = Array.from({ length: numTeams }, (_, i) => ({
                 id: startIndex + i,
                 name: `${leagueName} Team ${i + 1}`,
@@ -461,7 +465,6 @@
                 players: []
             }));
 
-            // 4. Deal out players (distributing girls evenly first)
             let teamIdx = 0;
             const deal = (pool) => {
                 pool.forEach(p => {
@@ -473,26 +476,22 @@
             deal(girls);
             deal(boys);
 
-            // 5. Auto-level logic (swap players of the same gender to close skill gaps)
             for (let iter = 0; iter < 15; iter++) {
-                // Sort teams by average skill descending
                 teams.sort((a, b) => getAverageSkill(b.players) - getAverageSkill(a.players));
                 let best = teams[0];
                 let worst = teams[teams.length - 1];
 
                 let diff = getAverageSkill(best.players) - getAverageSkill(worst.players);
-                if (diff < 0.5) break; // Good enough
+                if (diff < 0.5) break; 
 
                 let bestSwap = null;
                 let bestSwapReduction = 0;
 
-                // Look for pairs to swap
                 for (let i = 0; i < best.players.length; i++) {
                     for (let j = 0; j < worst.players.length; j++) {
                         let p1 = best.players[i];
                         let p2 = worst.players[j];
                         
-                        // Only swap same genders to preserve girl balancing
                         let p1IsGirl = (p1.gender === 'F' || p1.gender === 'girl');
                         let p2IsGirl = (p2.gender === 'F' || p2.gender === 'girl');
                         
@@ -512,17 +511,15 @@
                     }
                 }
 
-                // Execute the best improving swap found during this pass
                 if (bestSwap) {
                     let temp = best.players[bestSwap.i];
                     best.players[bestSwap.i] = worst.players[bestSwap.j];
                     worst.players[bestSwap.j] = temp;
                 } else {
-                    break; // No further optimizations found
+                    break; 
                 }
             }
 
-            // Restore ordering by ID
             teams.sort((a, b) => a.id - b.id);
             return teams;
         }
@@ -535,7 +532,6 @@
             if (!unitName) return alert("Please enter a Unit Name.");
             if (!allPlayerData[classId]) return alert("Class data not found.");
 
-            // Extract players and account for gender if provided
             let players = allPlayerData[classId].players.map(p => ({
                 id: p.id,
                 name: p.name,
@@ -572,8 +568,9 @@
             
             resetWorkspace();
             
-            document.getElementById('workspaceTitle').innerText = `${currentUnit.unit_name} (${currentUnit.class_id})`;
-            document.title = `${currentUnit.unit_name} (${currentUnit.class_id}) Teams`;
+            const displayTitle = getDisplayTitle(currentUnit);
+            document.getElementById('workspaceTitle').innerText = displayTitle;
+            document.title = `${displayTitle} Teams`;
             
             updateBoard();
         }
@@ -590,7 +587,6 @@
             updateBoard();
         }
 
-        // --- Manual Swap Feature Logic ---
         function initiateSwap(playerId, teamId) {
             if (!pendingSwap) {
                 pendingSwap = { playerId, teamId };
@@ -616,12 +612,10 @@
             let p1 = t1.players[p1Idx];
             let p2 = t2.players[p2Idx];
 
-            // Perform the swap
             t1.players[p1Idx] = p2;
             t2.players[p2Idx] = p1;
 
             if (!isUndo) {
-                // To undo this action easily, save the reverse configuration
                 swapHistory.push({ p1Id: p2.id, t1Id: t1.id, p2Id: p1.id, t2Id: t2.id });
             }
             updateBoard();
