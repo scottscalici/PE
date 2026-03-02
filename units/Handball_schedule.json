@@ -4,56 +4,56 @@
       "id": 1,
       "home_team": "Wild Boys",
       "away_team": "Füchse",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 7,
+      "away_score": 4,
       "date_str": "Dia 51 (2026-03-02)",
-      "time": "09:00",
+      "time": "11:15",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 2,
       "home_team": "Zebras",
       "away_team": "Die Recken",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 8,
+      "away_score": 8,
       "date_str": "Dia 51 (2026-03-02)",
       "time": "09:13",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 3,
       "home_team": "HCE",
       "away_team": "Füchse",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 4,
+      "away_score": 7,
       "date_str": "Dia 51 (2026-03-02)",
       "time": "09:26",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 4,
       "home_team": "Wild Boys",
       "away_team": "Zebras",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 6,
+      "away_score": 4,
       "date_str": "Dia 51 (2026-03-02)",
       "time": "09:39",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 5,
       "home_team": "HCE",
       "away_team": "Die Recken",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 4,
+      "away_score": 7,
       "date_str": "Dia 51 (2026-03-02)",
       "time": "09:52",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 6,
@@ -112,49 +112,49 @@
     }
   ],
   "standings": {
-    "HCE": {
-      "w": 0,
-      "l": 0,
-      "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
-    },
     "Wild Boys": {
-      "w": 0,
+      "w": 2,
       "l": 0,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
+      "pf": 13,
+      "pa": 8,
+      "pd": 5,
+      "pts": 6
+    },
+    "Füchse": {
+      "w": 1,
+      "l": 1,
+      "t": 0,
+      "pf": 11,
+      "pa": 11,
       "pd": 0,
-      "pts": 0
+      "pts": 3
     },
     "Zebras": {
       "w": 0,
-      "l": 0,
-      "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
+      "l": 1,
+      "t": 1,
+      "pf": 12,
+      "pa": 14,
+      "pd": -2,
+      "pts": 1
     },
     "Die Recken": {
-      "w": 0,
+      "w": 1,
       "l": 0,
-      "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
+      "t": 1,
+      "pf": 15,
+      "pa": 12,
+      "pd": 3,
+      "pts": 4
     },
-    "Füchse": {
+    "HCE": {
       "w": 0,
-      "l": 0,
+      "l": 2,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
+      "pf": 8,
+      "pa": 14,
+      "pd": -6,
       "pts": 0
     }
   }
