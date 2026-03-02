@@ -1,0 +1,108 @@
+{
+  "matches": [
+    {
+      "id": 1,
+      "home_team": "Zebras",
+      "away_team": "Die Löwen",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 3 (Day 51)",
+      "time": "11:15",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "home_team": "Die Recken",
+      "away_team": "Wild Boys",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 3 (Day 51)",
+      "time": "11:30",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 3,
+      "home_team": "Zebras",
+      "away_team": "Wild Boys",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 3 (Day 51)",
+      "time": "11:45",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 4,
+      "home_team": "Die Löwen",
+      "away_team": "Die Recken",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 5 (Day 52)",
+      "time": "11:15",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 5,
+      "home_team": "Zebras",
+      "away_team": "Die Recken",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 5 (Day 52)",
+      "time": "11:30",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 6,
+      "home_team": "Wild Boys",
+      "away_team": "Die Löwen",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 5 (Day 52)",
+      "time": "11:45",
+      "location": "Main Gym",
+      "completed": false
+    }
+  ],
+  "standings": {
+    "Zebras": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Die Recken": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Wild Boys": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Die Löwen": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    }
+  }
+}
