@@ -199,10 +199,9 @@
             preloadCalendar();
         };
 
-        // Date Formatter Helper
         function formatFriendlyDate(dateStr) {
             if (!dateStr || dateStr === "TBD") return "TBD";
-            const parts = dateStr.split('-'); // Expects YYYY-MM-DD
+            const parts = dateStr.split('-'); 
             if (parts.length !== 3) return dateStr;
             const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             const month = months[parseInt(parts[1], 10) - 1];
@@ -309,29 +308,29 @@
             
             const token = document.getElementById('ghToken').value.trim();
             let folder = document.getElementById('ghFolder').value.trim();
-            const schedUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${currentUnit.unit_name.replace(/\s+/g, '_')}_schedule.json`;
+            
+            // Added Cache-buster to guarantee we pull the latest saved schedule!
+            const schedUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${currentUnit.unit_name.replace(/\s+/g, '_')}_schedule.json?t=${Date.now()}`;
             
             try {
                 const schedRes = await fetch(schedUrl, { headers: { 'Accept': 'application/vnd.github.v3.raw', 'Authorization': `Bearer ${token}` } });
                 if (schedRes.ok) {
                     scheduleData = await schedRes.json();
-                    renderAll();
+                    recalculateStandings(); // Force accurate math on load
+                    renderMatches();
+                    renderPlayers();
                 } else {
                     scheduleData = { matches: [], standings: {} };
-                    initializeStandings();
+                    recalculateStandings();
+                    renderMatches();
+                    renderPlayers();
                 }
             } catch (e) {
                 scheduleData = { matches: [], standings: {} };
-                initializeStandings();
+                recalculateStandings();
+                renderMatches();
+                renderPlayers();
             }
-        }
-
-        function initializeStandings() {
-            scheduleData.standings = {};
-            currentUnit.baseTeams.forEach(team => {
-                scheduleData.standings[team.name] = { w: 0, l: 0, t: 0, pf: 0, pa: 0, pd: 0, pts: 0 };
-            });
-            renderAll();
         }
 
         function generateSchedule() {
@@ -411,7 +410,9 @@
             });
 
             scheduleData.matches = matches;
-            initializeStandings(); 
+            recalculateStandings();
+            renderMatches();
+            renderPlayers();
             switchTab('matchesTab', document.querySelectorAll('.tab-btn')[1]);
         }
 
@@ -421,7 +422,8 @@
             else match.away_score = value !== "" ? parseInt(value) : null;
             
             match.completed = (match.home_score !== null && match.away_score !== null);
-            recalculateStandings();
+            recalculateStandings(); 
+            // Purposely NOT re-rendering matches here to stop it from stealing focus!
         }
 
         function updateMatchField(matchId, field, value) {
@@ -431,39 +433,46 @@
         }
 
         function recalculateStandings() {
-            Object.keys(scheduleData.standings).forEach(t => {
+            scheduleData.standings = {};
+            
+            // Build the standings object directly from the matches just to be mathematically perfect
+            let activeTeams = new Set();
+            if(scheduleData.matches) {
+                scheduleData.matches.forEach(m => {
+                    if(m.home_team !== "BYE") activeTeams.add(m.home_team);
+                    if(m.away_team !== "BYE") activeTeams.add(m.away_team);
+                });
+            }
+
+            activeTeams.forEach(t => {
                 scheduleData.standings[t] = { w: 0, l: 0, t: 0, pf: 0, pa: 0, pd: 0, pts: 0 };
             });
 
-            scheduleData.matches.filter(m => m.completed).forEach(m => {
-                let hTeam = scheduleData.standings[m.home_team];
-                let aTeam = scheduleData.standings[m.away_team];
-                
-                if(hTeam && aTeam) {
-                    hTeam.pf += m.home_score; hTeam.pa += m.away_score;
-                    aTeam.pf += m.away_score; aTeam.pa += m.home_score;
+            if(scheduleData.matches) {
+                scheduleData.matches.filter(m => m.completed).forEach(m => {
+                    let hTeam = scheduleData.standings[m.home_team];
+                    let aTeam = scheduleData.standings[m.away_team];
                     
-                    if (m.home_score > m.away_score) {
-                        hTeam.w++; hTeam.pts += 3; aTeam.l++;
-                    } else if (m.home_score < m.away_score) {
-                        aTeam.w++; aTeam.pts += 3; hTeam.l++;
-                    } else {
-                        hTeam.t++; hTeam.pts += 1; aTeam.t++; aTeam.pts += 1;
+                    if(hTeam && aTeam) {
+                        hTeam.pf += m.home_score; hTeam.pa += m.away_score;
+                        aTeam.pf += m.away_score; aTeam.pa += m.home_score;
+                        
+                        if (m.home_score > m.away_score) {
+                            hTeam.w++; hTeam.pts += 3; aTeam.l++;
+                        } else if (m.home_score < m.away_score) {
+                            aTeam.w++; aTeam.pts += 3; hTeam.l++;
+                        } else {
+                            hTeam.t++; hTeam.pts += 1; aTeam.t++; aTeam.pts += 1;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             Object.keys(scheduleData.standings).forEach(t => {
                 scheduleData.standings[t].pd = scheduleData.standings[t].pf - scheduleData.standings[t].pa;
             });
             
-            renderAll();
-        }
-
-        function renderAll() {
-            renderMatches();
             renderStandings();
-            renderPlayers();
         }
 
         function getCalendarOptionsHtml(selectedDateStr) {
@@ -485,7 +494,7 @@
 
         function renderMatches() {
             const container = document.getElementById('matchesContainer');
-            if (!scheduleData.matches.length) { container.innerHTML = "<i>No matches generated.</i>"; return; }
+            if (!scheduleData.matches || !scheduleData.matches.length) { container.innerHTML = "<i>No matches generated.</i>"; return; }
             
             let html = '';
             scheduleData.matches.forEach(m => {
@@ -513,6 +522,8 @@
 
         function renderStandings() {
             const container = document.getElementById('standingsContainer');
+            if(!scheduleData.standings) return;
+            
             let teams = Object.keys(scheduleData.standings).map(name => { return { name, ...scheduleData.standings[name] }; });
 
             teams.sort((a, b) => {
@@ -532,7 +543,7 @@
 
         function renderPlayers() {
             const container = document.getElementById('playersContainer');
-            if (!currentUnit || !scheduleData.matches.length) { container.innerHTML = "<i>No matches generated.</i>"; return; }
+            if (!currentUnit || !scheduleData.matches || !scheduleData.matches.length) { container.innerHTML = "<i>No matches generated.</i>"; return; }
 
             let allPlayers = [];
             currentUnit.baseTeams.forEach(team => {
