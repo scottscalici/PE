@@ -6,7 +6,7 @@
       "away_team": "Füchse",
       "home_score": 7,
       "away_score": 4,
-      "date_str": "Dia 51 (2026-03-02)",
+      "date_str": "March 2 (Day 51)",
       "time": "11:15",
       "location": "Main Gym",
       "completed": true
@@ -17,7 +17,7 @@
       "away_team": "Die Recken",
       "home_score": 8,
       "away_score": 8,
-      "date_str": "Dia 51 (2026-03-02)",
+      "date_str": "March 2 (Day 51)",
       "time": "11:28",
       "location": "Main Gym",
       "completed": true
@@ -28,7 +28,7 @@
       "away_team": "Füchse",
       "home_score": 4,
       "away_score": 7,
-      "date_str": "Dia 51 (2026-03-02)",
+      "date_str": "March 2 (Day 51)",
       "time": "11:41",
       "location": "Main Gym",
       "completed": true
@@ -39,7 +39,7 @@
       "away_team": "Zebras",
       "home_score": 6,
       "away_score": 4,
-      "date_str": "Dia 51 (2026-03-02)",
+      "date_str": "March 2 (Day 51)",
       "time": "11:54",
       "location": "Main Gym",
       "completed": true
@@ -50,7 +50,7 @@
       "away_team": "Die Recken",
       "home_score": 4,
       "away_score": 7,
-      "date_str": "Dia 51 (2026-03-02)",
+      "date_str": "March 2 (Day 51)",
       "time": "00:07",
       "location": "Main Gym",
       "completed": true
@@ -61,7 +61,7 @@
       "away_team": "Zebras",
       "home_score": null,
       "away_score": null,
-      "date_str": "Dia 52 (2026-03-04)",
+      "date_str": "March 4 (Day 52)",
       "time": "11:15",
       "location": "Main Gym",
       "completed": false
@@ -72,7 +72,7 @@
       "away_team": "Zebras",
       "home_score": null,
       "away_score": null,
-      "date_str": "Dia 52 (2026-03-04)",
+      "date_str": "March 4 (Day 52)",
       "time": "11:28",
       "location": "Main Gym",
       "completed": false
@@ -83,7 +83,7 @@
       "away_team": "Wild Boys",
       "home_score": null,
       "away_score": null,
-      "date_str": "Dia 52 (2026-03-04)",
+      "date_str": "March 4 (Day 52)",
       "time": "11:41",
       "location": "Main Gym",
       "completed": false
@@ -94,7 +94,7 @@
       "away_team": "Wild Boys",
       "home_score": null,
       "away_score": null,
-      "date_str": "Dia 52 (2026-03-04)",
+      "date_str": "March 4 (Day 52)",
       "time": "11:54",
       "location": "Main Gym",
       "completed": false
@@ -105,7 +105,7 @@
       "away_team": "Füchse",
       "home_score": null,
       "away_score": null,
-      "date_str": "Dia 52 (2026-03-04)",
+      "date_str": "March 4 (Day 52)",
       "time": "12:07",
       "location": "Main Gym",
       "completed": false
