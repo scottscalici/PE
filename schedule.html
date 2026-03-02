@@ -58,7 +58,6 @@
             #workspaceTitle { text-align: center; font-size: 20pt; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; display: block; }
             
             .tab-btn { display: none; }
-            /* Smart Print: Only show the currently active tab */
             .tab-content { display: none !important; }
             .tab-content.active { display: block !important; }
             
@@ -108,7 +107,7 @@
                         </select>
                     </div>
                     <div class="form-group" style="flex: 1;">
-                        <label>Start Day (Day #):</label>
+                        <label>Start Day (Día #):</label>
                         <input type="number" id="startDia" value="51" min="1">
                     </div>
                 </div>
@@ -199,6 +198,17 @@
             updateTimeBlock();
             preloadCalendar();
         };
+
+        // Date Formatter Helper
+        function formatFriendlyDate(dateStr) {
+            if (!dateStr || dateStr === "TBD") return "TBD";
+            const parts = dateStr.split('-'); // Expects YYYY-MM-DD
+            if (parts.length !== 3) return dateStr;
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const month = months[parseInt(parts[1], 10) - 1];
+            const day = parseInt(parts[2], 10);
+            return `${month} ${day}`;
+        }
 
         function updateTimeBlock() {
             let gamesInput = document.getElementById('gamesPerDay').value;
@@ -388,16 +398,16 @@
                 if (gamesToday >= targetGames) {
                     gamesToday = 0;
                     dateIndex++;
-                    currentDayMins = timeToMins(startTimeVal); // Reset clock for new day
+                    currentDayMins = timeToMins(startTimeVal); 
                 }
                 
                 let calObj = filteredCalendar[dateIndex];
-                match.date_str = calObj ? `Dia ${calObj.dia} (${calObj.fecha})` : "TBD";
+                match.date_str = calObj ? `${formatFriendlyDate(calObj.fecha)} (Day ${calObj.dia})` : "TBD";
                 match.time = minsToTimeStr(currentDayMins);
                 match.location = locations[gamesToday % locations.length] || locations[0] || "Main Gym";
                 
                 gamesToday++;
-                currentDayMins += duration + trans; // Advance clock for next game
+                currentDayMins += duration + trans; 
             });
 
             scheduleData.matches = matches;
@@ -417,7 +427,7 @@
         function updateMatchField(matchId, field, value) {
             let match = scheduleData.matches.find(m => m.id === matchId);
             if(match) match[field] = value;
-            if(field === 'time' || field === 'date_str' || field === 'location') renderPlayers(); // Live update player tab
+            if(field === 'time' || field === 'date_str' || field === 'location') renderPlayers(); 
         }
 
         function recalculateStandings() {
@@ -462,12 +472,12 @@
             let relevantDays = fullCalendar.filter(d => d.ciclo === cycle);
             
             relevantDays.forEach(d => {
-                let str = `Dia ${d.dia} (${d.fecha})`;
+                let str = `${formatFriendlyDate(d.fecha)} (Day ${d.dia})`;
                 let selected = (str === selectedDateStr) ? "selected" : "";
                 options += `<option value="${str}" ${selected}>${str}</option>`;
             });
             
-            if(!relevantDays.find(d => `Dia ${d.dia} (${d.fecha})` === selectedDateStr) && selectedDateStr !== "TBD" && selectedDateStr !== "") {
+            if(!relevantDays.find(d => `${formatFriendlyDate(d.fecha)} (Day ${d.dia})` === selectedDateStr) && selectedDateStr !== "TBD" && selectedDateStr !== "") {
                  options += `<option value="${selectedDateStr}" selected>${selectedDateStr}</option>`;
             }
             return options;
@@ -524,7 +534,6 @@
             const container = document.getElementById('playersContainer');
             if (!currentUnit || !scheduleData.matches.length) { container.innerHTML = "<i>No matches generated.</i>"; return; }
 
-            // Extract all players and map to their team
             let allPlayers = [];
             currentUnit.baseTeams.forEach(team => {
                 team.players.forEach(p => {
@@ -532,14 +541,12 @@
                 });
             });
 
-            // Sort alphabetically by first name
             allPlayers.sort((a, b) => a.name.localeCompare(b.name));
 
             let html = `<table class="player-row">
                 <tr><th>Student Name</th><th>Team</th><th>Upcoming Schedule</th></tr>`;
 
             allPlayers.forEach(player => {
-                // Find matches involving this player's team
                 let pMatches = scheduleData.matches.filter(m => m.home_team === player.team || m.away_team === player.team);
                 
                 let scheduleListHtml = `<ul class="player-schedule-list">`;
