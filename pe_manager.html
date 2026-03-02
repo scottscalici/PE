@@ -45,10 +45,14 @@
         .btn-status { padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8em; font-weight: bold; width: auto; margin: 0; }
         .btn-present { background: #e2e3e5; color: #383d41; }
         .btn-absent { background: #f8d7da; color: #721c24; }
+        .btn-swap { background: #17a2b8; color: white; margin-right: 5px; }
+        .btn-swap:hover { background: #138496; }
+        .btn-swap.pending { background: #ffc107; color: #212529; }
         
         .shifted-in { background-color: #fff3cd; border-left: 4px solid #ffc107; }
         .shifted-out { color: #868e96; background-color: #e2e3e5; border-left: 4px solid #adb5bd; }
         .absent-text { text-decoration: line-through; color: #dc3545; background-color: #f8f9fa; }
+        .controls-group { display: flex; align-items: center; }
 
         @media print {
             @page { margin: 0.5in; }
@@ -58,7 +62,6 @@
             .grid-container > div:first-child { display: none; }
             .panel { box-shadow: none; padding: 0; border: none; margin: 0; }
             
-            /* FIXED: Stopped hiding the whole .workspace-controls wrapper! */
             button, .btn-status { display: none !important; }
             
             #workspaceTitle { text-align: center; font-size: 20pt; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; display: block; }
@@ -178,6 +181,7 @@
             <div class="workspace-controls" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                 <h2 id="workspaceTitle" style="margin: 0;">Workspace (No Unit Loaded)</h2>
                 <div style="display: flex; gap: 5px;" class="no-print">
+                    <button class="btn-outline" style="width: auto; margin: 0; display: none; background-color: #fff3cd; border-color: #ffc107;" id="undoSwapBtn" onclick="undoLastSwap()">↩️ Undo Swap</button>
                     <button class="btn-github" style="width: auto; margin: 0;" id="githubSaveBtn" onclick="pushToGitHubRepo()">☁️ Push to GitHub</button>
                     <button class="btn-outline" style="width: auto; margin: 0;" onclick="exportUnitJSON()">💾 Download Local</button>
                     <button class="btn-outline" style="width: auto; margin: 0;" onclick="window.print()">🖨️ Print</button>
@@ -193,6 +197,9 @@
         let allPlayerData = {}; 
         let currentUnit = null; 
         let absentIds = new Set(); 
+        
+        let pendingSwap = null; 
+        let swapHistory = []; 
 
         function logDebug(msg) {
             const box = document.getElementById('githubDebug');
@@ -314,7 +321,7 @@
                 if (!response.ok) throw new Error("File not found.");
                 
                 currentUnit = await response.json();
-                absentIds.clear();
+                resetWorkspace();
                 
                 document.getElementById('workspaceTitle').innerText = `${currentUnit.unit_name} (${currentUnit.class_id})`;
                 document.title = `${currentUnit.unit_name} (${currentUnit.class_id}) Teams`;
@@ -431,14 +438,22 @@
             return array;
         }
 
-        function runSnakeDraft(playersArray, numTeams, leagueName, startIndex = 1) {
-            let draftPool = playersArray.map(p => ({
-                originalPlayer: p,
-                draftScore: p.skill + (Math.random() * 1.5 - 0.75) 
-            }));
+        function getAverageSkill(playerArray) {
+            if (playerArray.length === 0) return 0;
+            return playerArray.reduce((sum, p) => sum + p.skill, 0) / playerArray.length;
+        }
 
-            draftPool.sort((a, b) => b.draftScore - a.draftScore);
+        // New balanced draft function replacing the standard snake draft
+        function generateBalancedTeams(playersArray, numTeams, leagueName, startIndex = 1) {
+            // 1. Separate by gender (assumes JSON has a gender property like "F" or "girl")
+            let girls = playersArray.filter(p => p.gender === 'F' || p.gender === 'girl');
+            let boys = playersArray.filter(p => p.gender !== 'F' && p.gender !== 'girl');
 
+            // 2. Completely randomize both pools
+            shuffleArray(girls);
+            shuffleArray(boys);
+
+            // 3. Initialize Teams
             let teams = Array.from({ length: numTeams }, (_, i) => ({
                 id: startIndex + i,
                 name: `${leagueName} Team ${i + 1}`,
@@ -446,23 +461,69 @@
                 players: []
             }));
 
-            let forward = true;
-            let teamIndex = 0;
-            draftPool.forEach(draftItem => {
-                teams[teamIndex].players.push(draftItem.originalPlayer);
-                if (forward) {
-                    teamIndex++;
-                    if (teamIndex === numTeams) { teamIndex--; forward = false; }
-                } else {
-                    teamIndex--;
-                    if (teamIndex < 0) { teamIndex++; forward = true; }
+            // 4. Deal out players (distributing girls evenly first)
+            let teamIdx = 0;
+            const deal = (pool) => {
+                pool.forEach(p => {
+                    teams[teamIdx].players.push(p);
+                    teamIdx = (teamIdx + 1) % numTeams;
+                });
+            };
+            
+            deal(girls);
+            deal(boys);
+
+            // 5. Auto-level logic (swap players of the same gender to close skill gaps)
+            for (let iter = 0; iter < 15; iter++) {
+                // Sort teams by average skill descending
+                teams.sort((a, b) => getAverageSkill(b.players) - getAverageSkill(a.players));
+                let best = teams[0];
+                let worst = teams[teams.length - 1];
+
+                let diff = getAverageSkill(best.players) - getAverageSkill(worst.players);
+                if (diff < 0.5) break; // Good enough
+
+                let bestSwap = null;
+                let bestSwapReduction = 0;
+
+                // Look for pairs to swap
+                for (let i = 0; i < best.players.length; i++) {
+                    for (let j = 0; j < worst.players.length; j++) {
+                        let p1 = best.players[i];
+                        let p2 = worst.players[j];
+                        
+                        // Only swap same genders to preserve girl balancing
+                        let p1IsGirl = (p1.gender === 'F' || p1.gender === 'girl');
+                        let p2IsGirl = (p2.gender === 'F' || p2.gender === 'girl');
+                        
+                        if (p1IsGirl === p2IsGirl) {
+                            if (p1.skill > p2.skill) {
+                                let newBestAvg = (best.players.reduce((s,p)=>s+p.skill,0) - p1.skill + p2.skill) / best.players.length;
+                                let newWorstAvg = (worst.players.reduce((s,p)=>s+p.skill,0) - p2.skill + p1.skill) / worst.players.length;
+                                let newDiff = Math.abs(newBestAvg - newWorstAvg);
+                                let reduction = diff - newDiff;
+                                
+                                if (reduction > bestSwapReduction) {
+                                    bestSwapReduction = reduction;
+                                    bestSwap = { i, j };
+                                }
+                            }
+                        }
+                    }
                 }
-            });
 
-            teams.forEach(team => {
-                team.players = shuffleArray(team.players);
-            });
+                // Execute the best improving swap found during this pass
+                if (bestSwap) {
+                    let temp = best.players[bestSwap.i];
+                    best.players[bestSwap.i] = worst.players[bestSwap.j];
+                    worst.players[bestSwap.j] = temp;
+                } else {
+                    break; // No further optimizations found
+                }
+            }
 
+            // Restore ordering by ID
+            teams.sort((a, b) => a.id - b.id);
             return teams;
         }
 
@@ -474,11 +535,13 @@
             if (!unitName) return alert("Please enter a Unit Name.");
             if (!allPlayerData[classId]) return alert("Class data not found.");
 
+            // Extract players and account for gender if provided
             let players = allPlayerData[classId].players.map(p => ({
                 id: p.id,
                 name: p.name,
                 skill: parseInt(p.skill),
-                compete: parseInt(p.compete)
+                compete: parseInt(p.compete),
+                gender: p.gender || 'M' 
             }));
 
             let baseTeams = [];
@@ -491,12 +554,12 @@
                 let compPlayers = players.filter(p => p.compete >= threshold);
                 let recPlayers = players.filter(p => p.compete < threshold);
 
-                let compTeams = runSnakeDraft(compPlayers, numCompTeams, "Competitive", 1);
-                let recTeams = runSnakeDraft(recPlayers, numRecTeams, "Recreational", 1 + numCompTeams);
+                let compTeams = generateBalancedTeams(compPlayers, numCompTeams, "Competitive", 1);
+                let recTeams = generateBalancedTeams(recPlayers, numRecTeams, "Recreational", 1 + numCompTeams);
                 baseTeams = [...compTeams, ...recTeams];
             } else {
                 let numTeams = parseInt(document.getElementById('numTeams').value);
-                baseTeams = runSnakeDraft(players, numTeams, "", 1);
+                baseTeams = generateBalancedTeams(players, numTeams, "Standard", 1);
             }
 
             currentUnit = {
@@ -506,12 +569,19 @@
                 has_leagues: useLeagues,
                 baseTeams: baseTeams
             };
-            absentIds.clear();
+            
+            resetWorkspace();
             
             document.getElementById('workspaceTitle').innerText = `${currentUnit.unit_name} (${currentUnit.class_id})`;
             document.title = `${currentUnit.unit_name} (${currentUnit.class_id}) Teams`;
             
             updateBoard();
+        }
+
+        function resetWorkspace() {
+            absentIds.clear();
+            pendingSwap = null;
+            swapHistory = [];
         }
 
         function toggleAttendance(id) {
@@ -520,14 +590,52 @@
             updateBoard();
         }
 
+        // --- Manual Swap Feature Logic ---
+        function initiateSwap(playerId, teamId) {
+            if (!pendingSwap) {
+                pendingSwap = { playerId, teamId };
+                updateBoard(); 
+            } else {
+                if (pendingSwap.playerId === playerId) {
+                    pendingSwap = null; 
+                    updateBoard();
+                    return;
+                }
+                executeSwap(pendingSwap.playerId, pendingSwap.teamId, playerId, teamId);
+                pendingSwap = null;
+            }
+        }
+
+        function executeSwap(p1Id, t1Id, p2Id, t2Id, isUndo = false) {
+            let t1 = currentUnit.baseTeams.find(t => t.id === t1Id);
+            let t2 = currentUnit.baseTeams.find(t => t.id === t2Id);
+
+            let p1Idx = t1.players.findIndex(p => p.id === p1Id);
+            let p2Idx = t2.players.findIndex(p => p.id === p2Id);
+
+            let p1 = t1.players[p1Idx];
+            let p2 = t2.players[p2Idx];
+
+            // Perform the swap
+            t1.players[p1Idx] = p2;
+            t2.players[p2Idx] = p1;
+
+            if (!isUndo) {
+                // To undo this action easily, save the reverse configuration
+                swapHistory.push({ p1Id: p2.id, t1Id: t1.id, p2Id: p1.id, t2Id: t2.id });
+            }
+            updateBoard();
+        }
+
+        function undoLastSwap() {
+            if (swapHistory.length === 0) return;
+            let last = swapHistory.pop();
+            executeSwap(last.p1Id, last.t1Id, last.p2Id, last.t2Id, true);
+        }
+
         function updateTeamName(teamId, newName) {
             let team = currentUnit.baseTeams.find(t => t.id === teamId);
             if (team) team.name = newName;
-        }
-
-        function getAverageSkill(activePlayers) {
-            if (activePlayers.length === 0) return 0;
-            return activePlayers.reduce((sum, p) => sum + p.skill, 0) / activePlayers.length;
         }
 
         function balanceLeague(teamsInLeague, shiftsArray) {
@@ -558,6 +666,8 @@
 
         function updateBoard() {
             if (!currentUnit) return;
+            
+            document.getElementById('undoSwapBtn').style.display = swapHistory.length > 0 ? 'block' : 'none';
 
             let dailyTeams = JSON.parse(JSON.stringify(currentUnit.baseTeams));
             let shifts = []; 
@@ -605,14 +715,19 @@
                         let isAbsent = absentIds.has(p.id);
                         let isActiveHere = team.activePlayers.find(activeP => activeP.id === p.id);
                         let wasShiftedOut = !isAbsent && !isActiveHere;
+                        
+                        let isPending = pendingSwap && pendingSwap.playerId === p.id;
+                        let swapText = isPending ? 'Cancel' : (pendingSwap ? 'Swap Here' : 'Swap');
+                        let swapClass = isPending ? 'btn-swap pending' : 'btn-swap';
+                        let swapAction = `initiateSwap('${p.id}', ${originalTeam.id})`;
 
                         if (isAbsent) {
-                            leagueHtml += `<li class="player-item absent-text"><span>${p.name}</span> <button class="btn-status btn-absent" onclick="toggleAttendance('${p.id}')">Absent</button></li>`;
+                            leagueHtml += `<li class="player-item absent-text"><span>${p.name}</span> <div class="controls-group"><button class="btn-status ${swapClass}" onclick="${swapAction}">${swapText}</button> <button class="btn-status btn-absent" onclick="toggleAttendance('${p.id}')">Absent</button></div></li>`;
                         } else if (wasShiftedOut) {
                             let shiftData = shifts.find(s => s.playerId === p.id);
-                            leagueHtml += `<li class="player-item shifted-out"><span><del>${p.name}</del> <span class="stats">(At ${shiftData.toName})</span></span> <button class="btn-status btn-present" onclick="toggleAttendance('${p.id}')">Present</button></li>`;
+                            leagueHtml += `<li class="player-item shifted-out"><span><del>${p.name}</del> <span class="stats">(At ${shiftData.toName})</span></span> <div class="controls-group"><button class="btn-status ${swapClass}" onclick="${swapAction}">${swapText}</button> <button class="btn-status btn-present" onclick="toggleAttendance('${p.id}')">Present</button></div></li>`;
                         } else {
-                            leagueHtml += `<li class="player-item"><span>${p.name}</span> <button class="btn-status btn-present" onclick="toggleAttendance('${p.id}')">Present</button></li>`;
+                            leagueHtml += `<li class="player-item"><span>${p.name}</span> <div class="controls-group"><button class="btn-status ${swapClass}" onclick="${swapAction}">${swapText}</button> <button class="btn-status btn-present" onclick="toggleAttendance('${p.id}')">Present</button></div></li>`;
                         }
                     });
 
