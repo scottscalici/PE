@@ -7,6 +7,11 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
         h1, h2, h3, h4 { margin-top: 0; }
+        /* Top Navigation Bar */
+        .top-nav { background: #343a40; padding: 10px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; }
+        .top-nav a { color: white; text-decoration: none; font-weight: bold; padding: 8px 12px; border-radius: 4px; transition: 0.2s; }
+        .top-nav a:hover { background: #495057; }
+        .top-nav a.active { background: #0056b3; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .grid-container { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
         .panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .form-group { margin-bottom: 15px; }
@@ -78,7 +83,10 @@
 <body>
 
     <h1 class="no-print">PE Unit & Team Manager</h1>
-
+<div class="top-nav no-print">
+        <a href="https://scottscalici.github.io/PE/pe_manager.html" class="active">🛠️ Team Creator</a>
+        <a href="https://scottscalici.github.io/PE/schedule.html">📅 Scheduler & Scores</a>
+    </div>
     <div class="grid-container">
         <div class="no-print">
             <div class="panel" style="background: #e8f0fe; border: 1px solid #b6d4fe;">
