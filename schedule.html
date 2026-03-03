@@ -310,7 +310,7 @@
             let folder = document.getElementById('ghFolder').value.trim();
             
             // Added Cache-buster to guarantee we pull the latest saved schedule!
-            const schedUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${currentUnit.unit_name.replace(/\s+/g, '_')}_schedule.json?t=${Date.now()}`;
+            const cleanName = currentUnit.unit_name.replace(/\s+/g, '_').toLowerCase(); const schedUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${cleanName}_schedule.json?t=${Date.now()}`;
             
             try {
                 const schedRes = await fetch(schedUrl, { headers: { 'Accept': 'application/vnd.github.v3.raw', 'Authorization': `Bearer ${token}` } });
@@ -595,7 +595,7 @@ async function saveScheduleToGitHub() {
             const btn = document.querySelector('.btn-github');
             btn.innerText = "⏳ Pushing...";
 
-            const filename = `${currentUnit.unit_name.replace(/\s+/g, '_')}_schedule.json`;
+            const filename = `${currentUnit.unit_name.replace(/\s+/g, '_').toLowerCase()}_schedule.json`;
             // ADDED CACHE BUSTER (?t=...) so the browser doesn't use old GitHub data
             const apiUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${filename}?t=${Date.now()}`;
 
