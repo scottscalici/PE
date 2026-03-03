@@ -1,0 +1,161 @@
+{
+  "matches": [
+    {
+      "id": 1,
+      "home_team": "Zebras",
+      "away_team": "Füchse Berlin",
+      "home_score": 5,
+      "away_score": 4,
+      "date_str": "March 2 (Day 51)",
+      "time": "09:00",
+      "location": "Main Gym",
+      "completed": true
+    },
+    {
+      "id": 2,
+      "home_team": "Die Recken",
+      "away_team": "Stuttgart Wild Boys",
+      "home_score": 2,
+      "away_score": 3,
+      "date_str": "March 2 (Day 51)",
+      "time": "09:20",
+      "location": "Main Gym",
+      "completed": true
+    },
+    {
+      "id": 3,
+      "home_team": "Die Löwen",
+      "away_team": "Füchse Berlin",
+      "home_score": 1,
+      "away_score": 6,
+      "date_str": "March 2 (Day 51)",
+      "time": "09:40",
+      "location": "Main Gym",
+      "completed": true
+    },
+    {
+      "id": 4,
+      "home_team": "Zebras",
+      "away_team": "Die Recken",
+      "home_score": 7,
+      "away_score": 4,
+      "date_str": "March 2 (Day 51)",
+      "time": "10:00",
+      "location": "Main Gym",
+      "completed": true
+    },
+    {
+      "id": 5,
+      "home_team": "Die Löwen",
+      "away_team": "Stuttgart Wild Boys",
+      "home_score": 4,
+      "away_score": 7,
+      "date_str": "March 2 (Day 51)",
+      "time": "10:20",
+      "location": "Main Gym",
+      "completed": true
+    },
+    {
+      "id": 6,
+      "home_team": "Füchse Berlin",
+      "away_team": "Die Recken",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 4 (Day 52)",
+      "time": "09:00",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 7,
+      "home_team": "Die Löwen",
+      "away_team": "Die Recken",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 4 (Day 52)",
+      "time": "09:20",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 8,
+      "home_team": "Stuttgart Wild Boys",
+      "away_team": "Zebras",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 4 (Day 52)",
+      "time": "09:40",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 9,
+      "home_team": "Die Löwen",
+      "away_team": "Zebras",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 4 (Day 52)",
+      "time": "10:00",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 10,
+      "home_team": "Stuttgart Wild Boys",
+      "away_team": "Füchse Berlin",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 4 (Day 52)",
+      "time": "10:20",
+      "location": "Main Gym",
+      "completed": false
+    }
+  ],
+  "standings": {
+    "Zebras": {
+      "w": 2,
+      "l": 0,
+      "t": 0,
+      "pf": 12,
+      "pa": 8,
+      "pd": 4,
+      "pts": 6
+    },
+    "Füchse Berlin": {
+      "w": 1,
+      "l": 1,
+      "t": 0,
+      "pf": 10,
+      "pa": 6,
+      "pd": 4,
+      "pts": 3
+    },
+    "Die Recken": {
+      "w": 0,
+      "l": 2,
+      "t": 0,
+      "pf": 6,
+      "pa": 10,
+      "pd": -4,
+      "pts": 0
+    },
+    "Stuttgart Wild Boys": {
+      "w": 2,
+      "l": 0,
+      "t": 0,
+      "pf": 10,
+      "pa": 6,
+      "pd": 4,
+      "pts": 6
+    },
+    "Die Löwen": {
+      "w": 0,
+      "l": 2,
+      "t": 0,
+      "pf": 5,
+      "pa": 13,
+      "pd": -8,
+      "pts": 0
+    }
+  }
+}
