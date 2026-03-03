@@ -1,0 +1,202 @@
+{
+  "unit_id": "U_1772579910049",
+  "unit_name": "backwards_soccer_3b",
+  "sport_type": "backwards_soccer",
+  "class_id": "3B",
+  "has_leagues": true,
+  "baseTeams": [
+    {
+      "id": 1,
+      "name": "Ctrl+Z FC",
+      "league": "Competitive",
+      "players": [
+        {
+          "id": "3B_04",
+          "name": "Sebastian J.",
+          "skill": 6,
+          "compete": 5,
+          "gender": "M"
+        },
+        {
+          "id": "3B_21",
+          "name": "Rahul K.",
+          "skill": 8,
+          "compete": 4,
+          "gender": "M"
+        },
+        {
+          "id": "3B_05",
+          "name": "Aarav C.",
+          "skill": 5,
+          "compete": 4,
+          "gender": "M"
+        },
+        {
+          "id": "3B_06",
+          "name": "Joel Z.",
+          "skill": 7,
+          "compete": 4,
+          "gender": "M"
+        },
+        {
+          "id": "3B_11",
+          "name": "Veron B.",
+          "skill": 6,
+          "compete": 5,
+          "gender": "M"
+        },
+        {
+          "id": "3B_10",
+          "name": "Anthony G.",
+          "skill": 8,
+          "compete": 5,
+          "gender": "M"
+        }
+      ],
+      "logo_id": "ctrl_z_fc"
+    },
+    {
+      "id": 2,
+      "name": "Marcha Atrás",
+      "league": "Competitive",
+      "players": [
+        {
+          "id": "3B_12",
+          "name": "Ric Y.",
+          "skill": 6,
+          "compete": 5,
+          "gender": "M"
+        },
+        {
+          "id": "3B_23",
+          "name": "Carter A.",
+          "skill": 6,
+          "compete": 5,
+          "gender": "M"
+        },
+        {
+          "id": "3B_03",
+          "name": "Matthew M.",
+          "skill": 10,
+          "compete": 5,
+          "gender": "M"
+        },
+        {
+          "id": "3B_19",
+          "name": "Alexander S.",
+          "skill": 8,
+          "compete": 5,
+          "gender": "M"
+        },
+        {
+          "id": "3B_18",
+          "name": "Christian T.",
+          "skill": 6,
+          "compete": 5,
+          "gender": "M"
+        },
+        {
+          "id": "3B_17",
+          "name": "Adam B.",
+          "skill": 5,
+          "compete": 4,
+          "gender": "M"
+        }
+      ],
+      "logo_id": "marcha_atras"
+    },
+    {
+      "id": 3,
+      "name": "The Moonwalkers",
+      "league": "Recreational",
+      "players": [
+        {
+          "id": "3B_14",
+          "name": "Noor M.",
+          "skill": 4,
+          "compete": 1,
+          "gender": "F"
+        },
+        {
+          "id": "3B_16",
+          "name": "Lindsay G.",
+          "skill": 7,
+          "compete": 3,
+          "gender": "F"
+        },
+        {
+          "id": "3B_02",
+          "name": "Angel R.",
+          "skill": 6,
+          "compete": 3,
+          "gender": "F"
+        },
+        {
+          "id": "3B_15",
+          "name": "Mia K.",
+          "skill": 1,
+          "compete": 1,
+          "gender": "F"
+        },
+        {
+          "id": "3B_01",
+          "name": "Camden S.",
+          "skill": 4,
+          "compete": 2,
+          "gender": "M"
+        },
+        {
+          "id": "3B_22",
+          "name": "Denny G.",
+          "skill": 7,
+          "compete": 3,
+          "gender": "M"
+        }
+      ],
+      "logo_id": "moonwalkers"
+    },
+    {
+      "id": 4,
+      "name": "Reverse Cards",
+      "league": "Recreational",
+      "players": [
+        {
+          "id": "3B_09",
+          "name": "Shila L.",
+          "skill": 5,
+          "compete": 2,
+          "gender": "F"
+        },
+        {
+          "id": "3B_13",
+          "name": "Sara S.",
+          "skill": 4,
+          "compete": 1,
+          "gender": "F"
+        },
+        {
+          "id": "3B_08",
+          "name": "Evalynn P.",
+          "skill": 2,
+          "compete": 1,
+          "gender": "F"
+        },
+        {
+          "id": "3B_07",
+          "name": "Kate S.",
+          "skill": 6,
+          "compete": 3,
+          "gender": "F"
+        },
+        {
+          "id": "3B_20",
+          "name": "Colin M.",
+          "skill": 6,
+          "compete": 3,
+          "gender": "M"
+        }
+      ],
+      "logo_id": "reverse_cards"
+    }
+  ]
+}
