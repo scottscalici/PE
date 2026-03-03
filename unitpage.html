@@ -34,6 +34,19 @@
         .team-cell { display: flex; align-items: center; gap: 10px; font-weight: bold;}
         .table-logo { width: 30px; height: 30px; object-fit: contain; }
 
+        /* Schedule Styles */
+        .schedule-group { margin-bottom: 20px; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; }
+        .schedule-date { background: #e9ecef; color: #333; padding: 8px 15px; font-weight: bold; border-bottom: 2px solid var(--primary); }
+        .match-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid #eee; background: #fff; flex-wrap: wrap; gap: 10px;}
+        .match-row:last-child { border-bottom: none; }
+        .match-row:nth-child(even) { background: #fcfcfc; }
+        .match-time-loc { font-size: 0.85em; color: #666; flex: 1; min-width: 100px;}
+        .match-teams { flex: 3; display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: bold; font-size: 1.05em; min-width: 250px;}
+        .match-score { font-size: 1.2em; color: var(--primary); padding: 0 15px; text-align: center; min-width: 50px; }
+        .team-display { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .team-display.home { justify-content: flex-end; text-align: right; }
+        .team-display.away { justify-content: flex-start; text-align: left; }
+
         .rosters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
         .team-card { border-radius: 8px; overflow: hidden; border: 1px solid #ddd; border-top: 4px solid var(--primary); }
         .team-card-header { text-align: center; padding: 10px; background: #f8f9fa; border-bottom: 1px solid #eee; }
@@ -50,7 +63,7 @@
         <button class="btn-class active" onclick="showSyllabus()">Unit Plan</button>
         </div>
 
-<div id="syllabusView" class="panel">
+    <div id="syllabusView" class="panel">
         <div class="syllabus-grid">
             <div id="leftColumn">
                 <h2>🎒 Equipment</h2>
@@ -65,16 +78,20 @@
             </div>
         </div>
     </div>
+
     <div id="classView" style="display: none;">
         <div class="panel">
             <h2>🏆 Standings</h2>
             <div class="standings-container">
                 <table>
-                    <thead><tr><th>Rk</th><th>Team</th><th>W</th><th>L</th><th>T</th><th>PTS</th></tr></thead>
+                    <thead><tr><th>Rk</th><th>Team</th><th>W</th><th>L</th><th>T</th><th>PD</th><th>PTS</th></tr></thead>
                     <tbody id="standingsBody"></tbody>
                 </table>
             </div>
             
+            <h2 style="margin-top: 40px;">🗓️ Schedule & Results</h2>
+            <div id="scheduleContainer" style="margin-bottom: 40px;">Loading schedule...</div>
+
             <h2>📋 Official Rosters</h2>
             <div class="rosters-grid" id="rostersGrid"></div>
         </div>
@@ -89,14 +106,13 @@
         // 1. What sport master file should this page read?
         const SPORT_ID = "handball"; 
         
-        // 2. What are the active classes for this unit?
+        // 2. What are the active classes for this unit? (lowercase prefixes!)
         const CLASSES = [
             { display: "Class 3A", filePrefix: "handball_3a" },
             { display: "Class 3B", filePrefix: "handball_3b" }
         ];
         // ==========================================
 
-        // Initialize Page
         window.onload = async () => {
             buildNavButtons();
             await fetchSyllabus();
@@ -119,13 +135,14 @@
         }
 
         function showSyllabus() {
-            setActiveButton(document.querySelector('.btn-class')); // Selects the first button (Unit Plan)
+            setActiveButton(document.querySelector('.btn-class')); 
             document.getElementById('classView').style.display = 'none';
             document.getElementById('syllabusView').style.display = 'block';
         }
 
-async function fetchSyllabus() {
-            const url = `${REPO_BASE_URL}/teams/${SPORT_ID}/${SPORT_ID}.json`;
+        async function fetchSyllabus() {
+            // Added ?t= cachebuster so the Unit Plan stays perfectly updated
+            const url = `${REPO_BASE_URL}/teams/${SPORT_ID}/${SPORT_ID}.json?t=${Date.now()}`;
             try {
                 const res = await fetch(url);
                 if(!res.ok) throw new Error("Could not find sport JSON");
@@ -149,9 +166,9 @@ async function fetchSyllabus() {
                     document.getElementById('termsContainer').innerHTML = "";
                 }
 
-                // Print Unit Plan (Supports the new spreadsheet columns)
+                // Print Unit Plan
                 let planHtml = "";
-                let planData = data.unit_plan || data.daily_plan; // backwards compatible
+                let planData = data.unit_plan || data.daily_plan; 
                 if (planData && planData.length > 0) {
                     planData.forEach(d => {
                         planHtml += `<div class="day-card">
@@ -160,7 +177,7 @@ async function fetchSyllabus() {
                         if(d.skills) planHtml += `<p><strong>Skills:</strong> ${d.skills}</p>`;
                         if(d.games) planHtml += `<p><strong>Games:</strong> ${d.games}</p>`;
                         if(d.discussion) planHtml += `<p><strong>Discussion:</strong> ${d.discussion}</p>`;
-                        if(d.desc) planHtml += `<p style="margin-top: 5px;">${d.desc}</p>`; // for old formats
+                        if(d.desc) planHtml += `<p style="margin-top: 5px;">${d.desc}</p>`; 
                         planHtml += `</div>`;
                     });
                 } else {
@@ -173,6 +190,7 @@ async function fetchSyllabus() {
                 document.getElementById('unitPlanContainer').innerHTML = "<p>Error loading unit plan.</p>";
             }
         }
+
         async function loadClassData(filePrefix, btnElement) {
             setActiveButton(btnElement);
             document.getElementById('syllabusView').style.display = 'none';
@@ -180,11 +198,14 @@ async function fetchSyllabus() {
             
             const rostersGrid = document.getElementById('rostersGrid');
             const standingsBody = document.getElementById('standingsBody');
+            const scheduleContainer = document.getElementById('scheduleContainer');
+            
             rostersGrid.innerHTML = "Loading...";
-            standingsBody.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
+            standingsBody.innerHTML = "<tr><td colspan='7'>Loading...</td></tr>";
+            scheduleContainer.innerHTML = "Loading...";
 
-            const teamsUrl = `${REPO_BASE_URL}/units/${filePrefix}_teams.json`;
-            const schedUrl = `${REPO_BASE_URL}/units/${filePrefix}_schedule.json`;
+            const teamsUrl = `${REPO_BASE_URL}/units/${filePrefix}_teams.json?t=${Date.now()}`;
+            const schedUrl = `${REPO_BASE_URL}/units/${filePrefix}_schedule.json?t=${Date.now()}`;
 
             try {
                 const teamRes = await fetch(teamsUrl);
@@ -201,6 +222,7 @@ async function fetchSyllabus() {
             } catch (err) {
                 rostersGrid.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
                 standingsBody.innerHTML = "";
+                scheduleContainer.innerHTML = "";
             }
         }
 
@@ -208,10 +230,19 @@ async function fetchSyllabus() {
             let teams = teamData.baseTeams || [];
             const rostersGrid = document.getElementById('rostersGrid');
             const standingsBody = document.getElementById('standingsBody');
+            const scheduleContainer = document.getElementById('scheduleContainer');
             
             rostersGrid.innerHTML = '';
             standingsBody.innerHTML = '';
 
+            // Map Team Logos for easy lookup in the schedule
+            let teamLogos = {};
+            teams.forEach(t => {
+                let logoId = t.logo_id && t.logo_id !== "none" ? t.logo_id : "placeholder";
+                teamLogos[t.name] = logoId === "placeholder" ? "https://via.placeholder.com/30?text=?" : `${REPO_BASE_URL}/teams/${SPORT_ID}/${logoId}.png`;
+            });
+
+            // 1. Sort & Render Standings
             if (schedData && schedData.standings) {
                 teams.sort((a, b) => {
                     let statA = schedData.standings[a.name] || {pts: 0, pd: 0};
@@ -222,9 +253,9 @@ async function fetchSyllabus() {
             }
 
             teams.forEach((team, index) => {
-                let logoId = team.logo_id && team.logo_id !== "none" ? team.logo_id : "placeholder";
-                const logoUrl = logoId === "placeholder" ? "https://via.placeholder.com/150?text=Logo" : `${REPO_BASE_URL}/teams/${SPORT_ID}/${logoId}.png`;
-
+                let logoUrl = teamLogos[team.name];
+                
+                // Rosters
                 let playerHtml = team.players.map(p => `<li>${p.name}</li>`).join('');
                 rostersGrid.innerHTML += `
                     <div class="team-card">
@@ -235,15 +266,68 @@ async function fetchSyllabus() {
                         <ul class="player-list">${playerHtml}</ul>
                     </div>`;
 
-                let stats = (schedData && schedData.standings && schedData.standings[team.name]) ? schedData.standings[team.name] : { w: 0, l: 0, t: 0, pts: 0 };
+                // Standings
+                let stats = (schedData && schedData.standings && schedData.standings[team.name]) ? schedData.standings[team.name] : { w: 0, l: 0, t: 0, pd: 0, pts: 0 };
+                let pdDisplay = stats.pd > 0 ? `+${stats.pd}` : stats.pd;
                 standingsBody.innerHTML += `
                     <tr>
                         <td><strong>${index + 1}</strong></td>
                         <td><div class="team-cell"><img src="${logoUrl}" class="table-logo" onerror="this.src='https://via.placeholder.com/40?text=?'"> ${team.name}</div></td>
-                        <td>${stats.w}</td><td>${stats.l}</td><td>${stats.t}</td>
+                        <td>${stats.w}</td><td>${stats.l}</td><td>${stats.t}</td><td>${pdDisplay}</td>
                         <td style="color: var(--primary);"><strong>${stats.pts}</strong></td>
                     </tr>`;
             });
+
+            // 2. Render Schedule
+            if (schedData && schedData.matches && schedData.matches.length > 0) {
+                let scheduleHtml = '';
+                let datesObj = {};
+                
+                // Group matches by date string
+                schedData.matches.forEach(m => {
+                    if(!datesObj[m.date_str]) datesObj[m.date_str] = [];
+                    datesObj[m.date_str].push(m);
+                });
+
+                for (let date in datesObj) {
+                    scheduleHtml += `<div class="schedule-group"><div class="schedule-date">${date}</div>`;
+                    
+                    datesObj[date].forEach(m => {
+                        let scoreDisplay = m.completed ? `${m.home_score} - ${m.away_score}` : 'vs';
+                        let homeLogo = teamLogos[m.home_team] || "https://via.placeholder.com/30?text=?";
+                        let awayLogo = teamLogos[m.away_team] || "https://via.placeholder.com/30?text=?";
+                        
+                        // Handle 'BYE' formatting beautifully
+                        if (m.home_team === "BYE" || m.away_team === "BYE") {
+                            let actualTeam = m.home_team === "BYE" ? m.away_team : m.home_team;
+                            let actualLogo = teamLogos[actualTeam];
+                            scheduleHtml += `
+                            <div class="match-row">
+                                <div class="match-time-loc"><i>No Game Scheduled</i></div>
+                                <div class="match-teams" style="color:#666; font-weight:normal;">
+                                    <div class="team-display home">${actualTeam} <img src="${actualLogo}" class="table-logo"></div>
+                                    <div class="match-score" style="color:#999; font-size: 1em;">BYE</div>
+                                    <div class="team-display away"></div>
+                                </div>
+                            </div>`;
+                        } else {
+                            scheduleHtml += `
+                            <div class="match-row">
+                                <div class="match-time-loc">⏱️ ${m.time}<br>📍 ${m.location}</div>
+                                <div class="match-teams">
+                                    <div class="team-display home">${m.home_team} <img src="${homeLogo}" class="table-logo"></div>
+                                    <div class="match-score">${scoreDisplay}</div>
+                                    <div class="team-display away"><img src="${awayLogo}" class="table-logo"> ${m.away_team}</div>
+                                </div>
+                            </div>`;
+                        }
+                    });
+                    scheduleHtml += `</div>`;
+                }
+                scheduleContainer.innerHTML = scheduleHtml;
+            } else {
+                scheduleContainer.innerHTML = "<p>No matches scheduled yet.</p>";
+            }
         }
     </script>
 </body>
