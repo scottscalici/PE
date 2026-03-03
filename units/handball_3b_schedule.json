@@ -39,8 +39,8 @@
       "away_team": "Die Recken",
       "home_score": 1,
       "away_score": 8,
-      "date_str": "March 5 (Day 52)",
-      "time": "11:15",
+      "date_str": "March 3 (Day 51)",
+      "time": "12:00",
       "location": "Main Gym",
       "completed": true
     },
@@ -51,7 +51,7 @@
       "home_score": null,
       "away_score": null,
       "date_str": "March 5 (Day 52)",
-      "time": "11:30",
+      "time": "11:15",
       "location": "Main Gym",
       "completed": false
     },
@@ -62,15 +62,47 @@
       "home_score": null,
       "away_score": null,
       "date_str": "March 5 (Day 52)",
-      "time": "11:45",
+      "time": "11:30",
       "location": "Main Gym",
       "completed": false
     }
   ],
   "standings": {
-    "Zebras": { "w": 1, "l": 1, "t": 0, "pf": 19, "pa": 14, "pd": 5, "pts": 3 },
-    "Die Löwen": { "w": 0, "l": 2, "t": 0, "pf": 5, "pa": 19, "pd": -14, "pts": 0 },
-    "Die Recken": { "w": 1, "l": 1, "t": 0, "pf": 10, "pa": 7, "pd": 3, "pts": 3 },
-    "Wild Boys": { "w": 2, "l": 0, "t": 0, "pf": 16, "pa": 10, "pd": 6, "pts": 6 }
+    "Zebras": {
+      "w": 1,
+      "l": 1,
+      "t": 0,
+      "pf": 19,
+      "pa": 14,
+      "pd": 5,
+      "pts": 3
+    },
+    "Die Löwen": {
+      "w": 0,
+      "l": 2,
+      "t": 0,
+      "pf": 5,
+      "pa": 19,
+      "pd": -14,
+      "pts": 0
+    },
+    "Die Recken": {
+      "w": 1,
+      "l": 1,
+      "t": 0,
+      "pf": 10,
+      "pa": 7,
+      "pd": 3,
+      "pts": 3
+    },
+    "Wild Boys": {
+      "w": 2,
+      "l": 0,
+      "t": 0,
+      "pf": 16,
+      "pa": 10,
+      "pd": 6,
+      "pts": 6
+    }
   }
 }
