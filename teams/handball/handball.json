@@ -1,1 +1,12 @@
-
+{
+  "sport": "handball",
+  "available_teams": [
+    { "display": "Die Löwen", "id": "lowen", "logo": "lowen.png" },
+    { "display": "Zebras", "id": "zebras", "logo": "zebras.png" },
+    { "display": "Füchse Berlin", "id": "fuchse", "logo": "fuchse.png" },
+    { "display": "Die Roten", "id": "roten", "logo": "roten.png" },
+    { "display": "Handball Club Erlangen (HCE)", "id": "hce", "logo": "hce.png" },
+    { "display": "Stuttgart Wild Boys", "id": "wild_boys", "logo": "wild_boys.png" },
+    { "display": "Die Recken", "id": "recken", "logo": "recken.png" }
+  ]
+}
