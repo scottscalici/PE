@@ -1,1 +1,36 @@
-
+{
+  "sport": "backwards_soccer",
+  "display_name": "Backwards Soccer",
+  "equipment": [
+    "Soccer balls (or Gator skin/beach balls)",
+    "Pinnies (4 colors)",
+    "Indoor Goals (Turned backwards!)",
+    "Cones for boundaries"
+  ],
+  "vocabulary": [
+    { "word": "El Fútbol", "translation": "Soccer" },
+    { "word": "Hacia Atrás", "translation": "Backwards" },
+    { "word": "Las Manos", "translation": "Hands" },
+    { "word": "El Portero / La Portera", "translation": "Goalkeeper" },
+    { "word": "El Gol", "translation": "Goal" }
+  ],
+  "rules": [
+    "Nets are turned completely backwards (facing the wall).",
+    "Field players MUST use their hands to strike the ball (no grabbing, catching, or picking it up).",
+    "Goalies CANNOT use their hands! They must use their feet or body to block the ball.",
+    "No traditional soccer kicking allowed by field players."
+  ],
+  "daily_plan": [
+    { 
+      "day": 1, 
+      "title": "Workout & Match Day", 
+      "desc": "1. Daily workout (unrelated to game).\n2. Rule Explanation: Everything is backwards!\n3. Split: Competitive League plays in the Main Gym. Rec League plays in the Aux Gym." 
+    }
+  ],
+  "available_teams": [
+    { "display": "Ctrl+Z FC", "id": "ctrl_z_fc", "logo": "ctrl_z_fc.png" },
+    { "display": "Marcha Atrás", "id": "marcha_atras", "logo": "marcha_atras.png" },
+    { "display": "The Moonwalkers", "id": "moonwalkers", "logo": "moonwalkers.png" },
+    { "display": "Reverse Cards", "id": "reverse_cards", "logo": "reverse_cards.png" }
+  ]
+}
