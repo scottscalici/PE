@@ -123,6 +123,16 @@
                     <input type="text" id="unitName" placeholder="e.g., Soccer 2024">
                 </div>
                 <div class="form-group">
+    <label>Sport / Game Type</label>
+    <select id="sportType">
+        <option value="handball">Handball</option>
+        <option value="backwards_soccer">Backwards Soccer</option>
+        <option value="football">American Football</option>
+        <option value="volleyball">Volleyball</option>
+        <option value="basketball">Basketball</option>
+    </select>
+</div>
+                <div class="form-group">
                     <label>Target Class</label>
                     <select id="classSelect"></select>
                 </div>
@@ -524,11 +534,16 @@
             return teams;
         }
 
+
+   
+   
+   
         function generateNewUnit() {
             const unitName = document.getElementById('unitName').value.trim();
             const classId = document.getElementById('classSelect').value;
             const useLeagues = document.getElementById('splitLeagues').checked;
-
+            const sportType = document.getElementById('sportType').value;
+            
             if (!unitName) return alert("Please enter a Unit Name.");
             if (!allPlayerData[classId]) return alert("Class data not found.");
 
@@ -558,23 +573,23 @@
                 baseTeams = generateBalancedTeams(players, numTeams, "Standard", 1);
             }
 
-            currentUnit = {
-                unit_id: "U_" + Date.now(),
-                unit_name: unitName,
-                class_id: classId,
-                has_leagues: useLeagues,
-                baseTeams: baseTeams
-            };
-            
-            resetWorkspace();
-            
-            const displayTitle = getDisplayTitle(currentUnit);
-            document.getElementById('workspaceTitle').innerText = displayTitle;
-            document.title = `${displayTitle} Teams`;
-            
-            updateBoard();
-        }
-
+             currentUnit = {
+        unit_id: "U_" + Date.now(),
+        unit_name: unitName,
+        sport_type: sportType, // <--- THE HANDSHAKE TAG
+        class_id: classId,
+        has_leagues: useLeagues,
+        baseTeams: baseTeams
+    };
+    
+    resetWorkspace();
+    
+    const displayTitle = getDisplayTitle(currentUnit);
+    document.getElementById('workspaceTitle').innerText = displayTitle;
+    document.title = `${displayTitle} Teams`;
+    
+    updateBoard();
+}
         function resetWorkspace() {
             absentIds.clear();
             pendingSwap = null;
