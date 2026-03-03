@@ -7,6 +7,13 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
         h1, h2, h3, h4 { margin-top: 0; }
+        
+        /* Top Navigation Bar */
+        .top-nav { background: #343a40; padding: 10px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; }
+        .top-nav a { color: white; text-decoration: none; font-weight: bold; padding: 8px 12px; border-radius: 4px; transition: 0.2s; }
+        .top-nav a:hover { background: #495057; }
+        .top-nav a.active { background: #0056b3; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+
         .grid-container { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
         .panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .form-group { margin-bottom: 15px; }
@@ -15,8 +22,11 @@
         button { background: #0056b3; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; transition: 0.2s; }
         button:hover { background: #004494; }
         button.btn-secondary { background: #6c757d; }
+        button.btn-secondary:hover { background: #5a6268; }
         button.btn-success { background: #28a745; }
+        button.btn-success:hover { background: #218838; }
         button.btn-github { background: #24292e; color: white; }
+        button.btn-github:hover { background: #000; }
         button.btn-outline { background: white; color: #333; border: 1px solid #ccc; }
         button.btn-outline:hover { background: #f8f9fa; }
         
@@ -75,6 +85,11 @@
 <body>
 
     <h1 class="no-print">🏆 PE Schedule & Standings</h1>
+
+    <div class="top-nav no-print">
+        <a href="https://scottscalici.github.io/PE/pe_manager.html">🛠️ Team Creator</a>
+        <a href="https://scottscalici.github.io/PE/schedule.html" class="active">📅 Scheduler & Scores</a>
+    </div>
 
     <div class="grid-container">
         <div class="no-print">
@@ -309,14 +324,15 @@
             const token = document.getElementById('ghToken').value.trim();
             let folder = document.getElementById('ghFolder').value.trim();
             
-            // Added Cache-buster to guarantee we pull the latest saved schedule!
-            const cleanName = currentUnit.unit_name.replace(/\s+/g, '_').toLowerCase(); const schedUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${cleanName}_schedule.json?t=${Date.now()}`;
+            // FIX 1: Enforce lowercase with underscores for safe fetching
+            const cleanName = currentUnit.unit_name.replace(/\s+/g, '_').toLowerCase();
+            const schedUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${cleanName}_schedule.json?t=${Date.now()}`;
             
             try {
                 const schedRes = await fetch(schedUrl, { headers: { 'Accept': 'application/vnd.github.v3.raw', 'Authorization': `Bearer ${token}` } });
                 if (schedRes.ok) {
                     scheduleData = await schedRes.json();
-                    recalculateStandings(); // Force accurate math on load
+                    recalculateStandings(); 
                     renderMatches();
                     renderPlayers();
                 } else {
@@ -423,7 +439,6 @@
             
             match.completed = (match.home_score !== null && match.away_score !== null);
             recalculateStandings(); 
-            // Purposely NOT re-rendering matches here to stop it from stealing focus!
         }
 
         function updateMatchField(matchId, field, value) {
@@ -435,7 +450,6 @@
         function recalculateStandings() {
             scheduleData.standings = {};
             
-            // Build the standings object directly from the matches just to be mathematically perfect
             let activeTeams = new Set();
             if(scheduleData.matches) {
                 scheduleData.matches.forEach(m => {
@@ -587,7 +601,7 @@
             btn.classList.add('active');
         }
 
-async function saveScheduleToGitHub() {
+        async function saveScheduleToGitHub() {
             const token = document.getElementById('ghToken').value.trim();
             const folder = document.getElementById('ghFolder').value.trim();
             if (!token || !currentUnit) return alert("Missing info to save.");
@@ -595,8 +609,9 @@ async function saveScheduleToGitHub() {
             const btn = document.querySelector('.btn-github');
             btn.innerText = "⏳ Pushing...";
 
-            const filename = `${currentUnit.unit_name.replace(/\s+/g, '_').toLowerCase()}_schedule.json`;
-            // ADDED CACHE BUSTER (?t=...) so the browser doesn't use old GitHub data
+            // FIX 2: Enforce lowercase with underscores for safe pushing
+            const cleanName = currentUnit.unit_name.replace(/\s+/g, '_').toLowerCase();
+            const filename = `${cleanName}_schedule.json`;
             const apiUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${filename}?t=${Date.now()}`;
 
             try {
@@ -612,7 +627,6 @@ async function saveScheduleToGitHub() {
                 };
                 if (sha) payload.sha = sha;
 
-                // Stripped the cache buster off the PUT URL
                 const putUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${filename}`;
                 
                 const putRes = await fetch(putUrl, {
@@ -621,7 +635,6 @@ async function saveScheduleToGitHub() {
                     body: JSON.stringify(payload)
                 });
                 
-                // ADDED STRICT ERROR CHECK
                 if (!putRes.ok) {
                     const errorData = await putRes.json();
                     throw new Error(`Save failed! GitHub says: ${errorData.message}`);
