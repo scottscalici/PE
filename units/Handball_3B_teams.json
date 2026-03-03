@@ -1,6 +1,7 @@
 {
   "unit_id": "U_1772038945213",
   "unit_name": "Handball 3B",
+  "sport_type": "handball",
   "class_id": "3B",
   "has_leagues": false,
   "baseTeams": [
