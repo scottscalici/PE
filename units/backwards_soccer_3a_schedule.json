@@ -1,0 +1,108 @@
+{
+  "matches": [
+    {
+      "id": 1,
+      "home_team": "Ctrl+Z FC",
+      "away_team": "Reverse Cards",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 6 (Day 53)",
+      "time": "11:30",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "home_team": "The Moonwalkers",
+      "away_team": "Marcha Atrás",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 6 (Day 53)",
+      "time": "11:30",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 3,
+      "home_team": "Ctrl+Z FC",
+      "away_team": "Marcha Atrás",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 12 (Day 55)",
+      "time": "11:30",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 4,
+      "home_team": "Reverse Cards",
+      "away_team": "The Moonwalkers",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 16 (Day 56)",
+      "time": "11:30",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 5,
+      "home_team": "Ctrl+Z FC",
+      "away_team": "The Moonwalkers",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 18 (Day 57)",
+      "time": "11:30",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 6,
+      "home_team": "Marcha Atrás",
+      "away_team": "Reverse Cards",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 20 (Day 58)",
+      "time": "11:30",
+      "location": "Main Gym",
+      "completed": false
+    }
+  ],
+  "standings": {
+    "Ctrl+Z FC": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Reverse Cards": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "The Moonwalkers": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Marcha Atrás": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    }
+  }
+}
