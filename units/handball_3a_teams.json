@@ -7,8 +7,8 @@
   "baseTeams": [
     {
       "id": 1,
-      "name": "Die Löwen",
-      "logo_id": "lowen",
+      "name": "HCE",
+      "logo_id": "hce",
       "league": "Standard",
       "players": [
         { "id": "3A_13", "name": "Danielle C.", "skill": 3, "compete": 1 },
