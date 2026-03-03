@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Syllabus & Rosters</title>
+    <style>
+        :root { --primary: #0056b3; --bg-color: #f4f7f6; --card-bg: #ffffff; --text-main: #333333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: transparent; color: var(--text-main); margin: 0; padding: 10px; }
+        
+        /* Top Navigation for Classes */
+        .class-nav { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+        .btn-class { background: var(--card-bg); border: 2px solid var(--primary); color: var(--primary); padding: 10px 20px; font-size: 1.1em; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn-class:hover, .btn-class.active { background: var(--primary); color: white; }
+
+        /* Content Containers */
+        .panel { background: var(--card-bg); padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        h2 { color: var(--primary); margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        
+        /* Syllabus Styles */
+        .syllabus-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        @media(max-width: 600px) { .syllabus-grid { grid-template-columns: 1fr; } }
+        .equipment-list { margin: 0; padding-left: 20px; }
+        .equipment-list li { margin-bottom: 5px; }
+        .day-card { border-left: 4px solid var(--primary); background: #f8f9fa; padding: 10px 15px; margin-bottom: 10px; border-radius: 0 4px 4px 0; }
+        .day-card h4 { margin: 0 0 5px 0; color: #333; }
+        .day-card p { margin: 0; font-size: 0.9em; color: #555; }
+
+        /* Tables & Cards for Rosters */
+        .standings-container { overflow-x: auto; margin-bottom: 30px;}
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 10px; border-bottom: 1px solid #ddd; }
+        th { background-color: #f8f9fa; color: #555; }
+        .team-cell { display: flex; align-items: center; gap: 10px; font-weight: bold;}
+        .table-logo { width: 30px; height: 30px; object-fit: contain; }
+
+        .rosters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .team-card { border-radius: 8px; overflow: hidden; border: 1px solid #ddd; border-top: 4px solid var(--primary); }
+        .team-card-header { text-align: center; padding: 10px; background: #f8f9fa; border-bottom: 1px solid #eee; }
+        .team-logo { width: 80px; height: 80px; object-fit: contain; margin-bottom: 5px; }
+        .team-card h3 { margin: 0; font-size: 1.2em; }
+        .player-list { list-style: none; padding: 0; margin: 0; font-size: 0.9em; }
+        .player-list li { padding: 8px 15px; border-bottom: 1px solid #eee; }
+        .player-list li:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+
+    <div class="class-nav" id="classNav">
+        <button class="btn-class active" onclick="showSyllabus()">Unit Plan</button>
+        </div>
+
+<div id="syllabusView" class="panel">
+        <div class="syllabus-grid">
+            <div>
+                <h2>🎒 Equipment</h2>
+                <ul class="equipment-list" id="equipList">Loading...</ul>
+
+                <h2 style="margin-top: 30px;">🗣️ Spanish Vocab</h2>
+                <ul class="equipment-list" id="vocabList">Loading...</ul>
+            </div>
+            <div>
+                <h2>📅 Daily Plan</h2>
+                <div id="dailyPlanContainer">Loading...</div>
+
+                <h2 style="margin-top: 30px;">📜 Game Rules</h2>
+                <ul class="equipment-list" id="rulesList">Loading...</ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="classView" style="display: none;">
+        <div class="panel">
+            <h2>🏆 Standings</h2>
+            <div class="standings-container">
+                <table>
+                    <thead><tr><th>Rk</th><th>Team</th><th>W</th><th>L</th><th>T</th><th>PTS</th></tr></thead>
+                    <tbody id="standingsBody"></tbody>
+                </table>
+            </div>
+            
+            <h2>📋 Official Rosters</h2>
+            <div class="rosters-grid" id="rostersGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // ⚙️ CONFIGURATION - CHANGE THIS FOR EACH PAGE
+        // ==========================================
+        const REPO_BASE_URL = "https://raw.githubusercontent.com/scottscalici/PE/main";
+        
+        // 1. What sport master file should this page read?
+        const SPORT_ID = "handball"; 
+        
+        // 2. What are the active classes for this unit?
+        const CLASSES = [
+            { display: "Class 3A", filePrefix: "handball_3a" },
+            { display: "Class 3B", filePrefix: "handball_3b" }
+        ];
+        // ==========================================
+
+        // Initialize Page
+        window.onload = async () => {
+            buildNavButtons();
+            await fetchSyllabus();
+        };
+
+        function buildNavButtons() {
+            const nav = document.getElementById('classNav');
+            CLASSES.forEach(c => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-class';
+                btn.innerText = c.display;
+                btn.onclick = (e) => loadClassData(c.filePrefix, e.target);
+                nav.appendChild(btn);
+            });
+        }
+
+        function setActiveButton(clickedBtn) {
+            document.querySelectorAll('.btn-class').forEach(b => b.classList.remove('active'));
+            if(clickedBtn) clickedBtn.classList.add('active');
+        }
+
+        function showSyllabus() {
+            setActiveButton(document.querySelector('.btn-class')); // Selects the first button (Unit Plan)
+            document.getElementById('classView').style.display = 'none';
+            document.getElementById('syllabusView').style.display = 'block';
+        }
+
+        async function fetchSyllabus() {
+            const url = `${REPO_BASE_URL}/teams/${SPORT_ID}/${SPORT_ID}.json`;
+            try {
+                const res = await fetch(url);
+                if(!res.ok) throw new Error("Could not find sport JSON");
+                const data = await res.json();
+                
+                // Print Equipment
+                const equipHtml = data.equipment ? data.equipment.map(e => `<li>${e}</li>`).join('') : "<li>None specified</li>";
+                document.getElementById('equipList').innerHTML = equipHtml;
+
+                // Print Daily Plan
+                let planHtml = "";
+                if (data.daily_plan) {
+                    data.daily_plan.forEach(d => {
+                        planHtml += `<div class="day-card"><h4>Day ${d.day}: ${d.title}</h4><p>${d.desc}</p></div>`;
+                    });
+                } else {
+                    planHtml = "<p>Plan coming soon.</p>";
+                }
+                document.getElementById('dailyPlanContainer').innerHTML = planHtml;
+// Print Rules (NEW)
+                if (data.rules) {
+                    const rulesHtml = data.rules.map(r => `<li>${r}</li>`).join('');
+                    document.getElementById('rulesList').innerHTML = rulesHtml;
+                } else {
+                    document.getElementById('rulesList').innerHTML = "<li>Rules coming soon.</li>";
+                }
+              
+            } catch (err) {
+                console.error(err);
+                document.getElementById('dailyPlanContainer').innerHTML = "<p>Error loading unit plan.</p>";
+            }
+        }
+
+        async function loadClassData(filePrefix, btnElement) {
+            setActiveButton(btnElement);
+            document.getElementById('syllabusView').style.display = 'none';
+            document.getElementById('classView').style.display = 'block';
+            
+            const rostersGrid = document.getElementById('rostersGrid');
+            const standingsBody = document.getElementById('standingsBody');
+            rostersGrid.innerHTML = "Loading...";
+            standingsBody.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
+
+            const teamsUrl = `${REPO_BASE_URL}/units/${filePrefix}_teams.json`;
+            const schedUrl = `${REPO_BASE_URL}/units/${filePrefix}_schedule.json`;
+
+            try {
+                const teamRes = await fetch(teamsUrl);
+                if (!teamRes.ok) throw new Error("Could not fetch rosters.");
+                const teamData = await teamRes.json();
+
+                let schedData = null;
+                try {
+                    const schedRes = await fetch(schedUrl);
+                    if (schedRes.ok) schedData = await schedRes.json();
+                } catch(e) {}
+
+                renderClass(teamData, schedData);
+            } catch (err) {
+                rostersGrid.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+                standingsBody.innerHTML = "";
+            }
+        }
+
+        function renderClass(teamData, schedData) {
+            let teams = teamData.baseTeams || [];
+            const rostersGrid = document.getElementById('rostersGrid');
+            const standingsBody = document.getElementById('standingsBody');
+            
+            rostersGrid.innerHTML = '';
+            standingsBody.innerHTML = '';
+
+            if (schedData && schedData.standings) {
+                teams.sort((a, b) => {
+                    let statA = schedData.standings[a.name] || {pts: 0, pd: 0};
+                    let statB = schedData.standings[b.name] || {pts: 0, pd: 0};
+                    if (statB.pts !== statA.pts) return statB.pts - statA.pts;
+                    return statB.pd - statA.pd;
+                });
+            }
+
+            teams.forEach((team, index) => {
+                let logoId = team.logo_id && team.logo_id !== "none" ? team.logo_id : "placeholder";
+                const logoUrl = logoId === "placeholder" ? "https://via.placeholder.com/150?text=Logo" : `${REPO_BASE_URL}/teams/${SPORT_ID}/${logoId}.png`;
+
+                let playerHtml = team.players.map(p => `<li>${p.name}</li>`).join('');
+                rostersGrid.innerHTML += `
+                    <div class="team-card">
+                        <div class="team-card-header">
+                            <img src="${logoUrl}" class="team-logo" onerror="this.src='https://via.placeholder.com/150?text=?'">
+                            <h3>${team.name}</h3>
+                        </div>
+                        <ul class="player-list">${playerHtml}</ul>
+                    </div>`;
+
+                let stats = (schedData && schedData.standings && schedData.standings[team.name]) ? schedData.standings[team.name] : { w: 0, l: 0, t: 0, pts: 0 };
+                standingsBody.innerHTML += `
+                    <tr>
+                        <td><strong>${index + 1}</strong></td>
+                        <td><div class="team-cell"><img src="${logoUrl}" class="table-logo" onerror="this.src='https://via.placeholder.com/40?text=?'"> ${team.name}</div></td>
+                        <td>${stats.w}</td><td>${stats.l}</td><td>${stats.t}</td>
+                        <td style="color: var(--primary);"><strong>${stats.pts}</strong></td>
+                    </tr>`;
+            });
+        }
+    </script>
+</body>
+</html>
