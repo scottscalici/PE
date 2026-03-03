@@ -7,24 +7,24 @@
     "Indoor Goals (Turned backwards!)",
     "Cones for boundaries"
   ],
-  "vocabulary": [
-    { "word": "El Fútbol", "translation": "Soccer" },
-    { "word": "Hacia Atrás", "translation": "Backwards" },
-    { "word": "Las Manos", "translation": "Hands" },
-    { "word": "El Portero / La Portera", "translation": "Goalkeeper" },
-    { "word": "El Gol", "translation": "Goal" }
-  ],
   "rules": [
     "Nets are turned completely backwards (facing the wall).",
     "Field players MUST use their hands to strike the ball (no grabbing, catching, or picking it up).",
     "Goalies CANNOT use their hands! They must use their feet or body to block the ball.",
     "No traditional soccer kicking allowed by field players."
   ],
-  "daily_plan": [
+  "key_terms": [
+    { "term": "Communication", "definition": "Talking with teammates since you can't see behind you." },
+    { "term": "Spatial Awareness", "definition": "Knowing where you are on the court without looking." }
+  ],
+  "unit_plan": [
     { 
       "day": 1, 
-      "title": "Workout & Match Day", 
-      "desc": "1. Daily workout (unrelated to game).\n2. Rule Explanation: Everything is backwards!\n3. Split: Competitive League plays in the Main Gym. Rec League plays in the Aux Gym." 
+      "topic": "Intro & Safety", 
+      "workout": "Dynamic Warmup",
+      "skills": "Moving backwards safely, partner passing",
+      "games": "Open Gym / Backwards Passing",
+      "discussion": "Why is communication important when you lack vision?"
     }
   ],
   "available_teams": [
