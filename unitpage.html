@@ -52,23 +52,19 @@
 
 <div id="syllabusView" class="panel">
         <div class="syllabus-grid">
-            <div>
+            <div id="leftColumn">
                 <h2>🎒 Equipment</h2>
                 <ul class="equipment-list" id="equipList">Loading...</ul>
 
-                <h2 style="margin-top: 30px;">🗣️ Spanish Vocab</h2>
-                <ul class="equipment-list" id="vocabList">Loading...</ul>
+                <div id="rulesContainer"></div>
+                <div id="termsContainer"></div>
             </div>
             <div>
-                <h2>📅 Daily Plan</h2>
-                <div id="dailyPlanContainer">Loading...</div>
-
-                <h2 style="margin-top: 30px;">📜 Game Rules</h2>
-                <ul class="equipment-list" id="rulesList">Loading...</ul>
+                <h2>📅 Unit Plan</h2>
+                <div id="unitPlanContainer">Loading...</div>
             </div>
         </div>
     </div>
-
     <div id="classView" style="display: none;">
         <div class="panel">
             <h2>🏆 Standings</h2>
@@ -128,7 +124,7 @@
             document.getElementById('syllabusView').style.display = 'block';
         }
 
-        async function fetchSyllabus() {
+async function fetchSyllabus() {
             const url = `${REPO_BASE_URL}/teams/${SPORT_ID}/${SPORT_ID}.json`;
             try {
                 const res = await fetch(url);
@@ -139,30 +135,44 @@
                 const equipHtml = data.equipment ? data.equipment.map(e => `<li>${e}</li>`).join('') : "<li>None specified</li>";
                 document.getElementById('equipList').innerHTML = equipHtml;
 
-                // Print Daily Plan
+                // Print Rules (Only if they exist)
+                if (data.rules && data.rules.length > 0) {
+                    document.getElementById('rulesContainer').innerHTML = `<h2 style="margin-top: 30px;">📜 Game Rules</h2><ul class="equipment-list">${data.rules.map(r => `<li>${r}</li>`).join('')}</ul>`;
+                } else {
+                    document.getElementById('rulesContainer').innerHTML = "";
+                }
+
+                // Print Key Terms (Only if they exist)
+                if (data.key_terms && data.key_terms.length > 0) {
+                    document.getElementById('termsContainer').innerHTML = `<h2 style="margin-top: 30px;">🗣️ Key Terms</h2><ul class="equipment-list">${data.key_terms.map(v => `<li><strong>${v.term}</strong>: ${v.definition}</li>`).join('')}</ul>`;
+                } else {
+                    document.getElementById('termsContainer').innerHTML = "";
+                }
+
+                // Print Unit Plan (Supports the new spreadsheet columns)
                 let planHtml = "";
-                if (data.daily_plan) {
-                    data.daily_plan.forEach(d => {
-                        planHtml += `<div class="day-card"><h4>Day ${d.day}: ${d.title}</h4><p>${d.desc}</p></div>`;
+                let planData = data.unit_plan || data.daily_plan; // backwards compatible
+                if (planData && planData.length > 0) {
+                    planData.forEach(d => {
+                        planHtml += `<div class="day-card">
+                            <h4>Day ${d.day}${d.topic ? `: ${d.topic}` : ''}</h4>`;
+                        if(d.workout) planHtml += `<p style="margin-top: 5px;"><strong>Workout:</strong> ${d.workout}</p>`;
+                        if(d.skills) planHtml += `<p><strong>Skills:</strong> ${d.skills}</p>`;
+                        if(d.games) planHtml += `<p><strong>Games:</strong> ${d.games}</p>`;
+                        if(d.discussion) planHtml += `<p><strong>Discussion:</strong> ${d.discussion}</p>`;
+                        if(d.desc) planHtml += `<p style="margin-top: 5px;">${d.desc}</p>`; // for old formats
+                        planHtml += `</div>`;
                     });
                 } else {
                     planHtml = "<p>Plan coming soon.</p>";
                 }
-                document.getElementById('dailyPlanContainer').innerHTML = planHtml;
-// Print Rules (NEW)
-                if (data.rules) {
-                    const rulesHtml = data.rules.map(r => `<li>${r}</li>`).join('');
-                    document.getElementById('rulesList').innerHTML = rulesHtml;
-                } else {
-                    document.getElementById('rulesList').innerHTML = "<li>Rules coming soon.</li>";
-                }
-              
+                document.getElementById('unitPlanContainer').innerHTML = planHtml;
+
             } catch (err) {
                 console.error(err);
-                document.getElementById('dailyPlanContainer').innerHTML = "<p>Error loading unit plan.</p>";
+                document.getElementById('unitPlanContainer').innerHTML = "<p>Error loading unit plan.</p>";
             }
         }
-
         async function loadClassData(filePrefix, btnElement) {
             setActiveButton(btnElement);
             document.getElementById('syllabusView').style.display = 'none';
