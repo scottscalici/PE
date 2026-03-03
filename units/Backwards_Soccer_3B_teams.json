@@ -1,6 +1,7 @@
 {
   "unit_id": "U_1772461118953",
   "unit_name": "Backwards Soccer 3B",
+  "sport_type": "backwards_soccer",
   "class_id": "3B",
   "has_leagues": true,
   "baseTeams": [
