@@ -2,8 +2,8 @@
   "matches": [
     {
       "id": 1,
-      "home_team": "Wild Boys",
-      "away_team": "Füchse",
+      "home_team": "Stuttgart Wild Boys",
+      "away_team": "Füchse Berlin",
       "home_score": 7,
       "away_score": 4,
       "date_str": "March 2 (Day 51)",
@@ -18,101 +18,101 @@
       "home_score": 8,
       "away_score": 8,
       "date_str": "March 2 (Day 51)",
-      "time": "11:28",
+      "time": "09:13",
       "location": "Main Gym",
       "completed": true
     },
     {
       "id": 3,
-      "home_team": "HCE",
-      "away_team": "Füchse",
+      "home_team": "Handball Club Erlangen (HCE)",
+      "away_team": "Füchse Berlin",
       "home_score": 4,
       "away_score": 7,
       "date_str": "March 2 (Day 51)",
-      "time": "11:41",
+      "time": "09:26",
       "location": "Main Gym",
       "completed": true
     },
     {
       "id": 4,
-      "home_team": "Wild Boys",
+      "home_team": "Stuttgart Wild Boys",
       "away_team": "Zebras",
       "home_score": 6,
       "away_score": 4,
       "date_str": "March 2 (Day 51)",
-      "time": "11:54",
+      "time": "09:39",
       "location": "Main Gym",
       "completed": true
     },
     {
       "id": 5,
-      "home_team": "HCE",
+      "home_team": "Handball Club Erlangen (HCE)",
       "away_team": "Die Recken",
       "home_score": 4,
       "away_score": 7,
       "date_str": "March 2 (Day 51)",
-      "time": "00:07",
+      "time": "09:52",
       "location": "Main Gym",
       "completed": true
     },
     {
       "id": 6,
-      "home_team": "Füchse",
+      "home_team": "Füchse Berlin",
       "away_team": "Zebras",
       "home_score": null,
       "away_score": null,
       "date_str": "March 4 (Day 52)",
-      "time": "11:15",
+      "time": "09:00",
       "location": "Main Gym",
       "completed": false
     },
     {
       "id": 7,
-      "home_team": "HCE",
+      "home_team": "Handball Club Erlangen (HCE)",
       "away_team": "Zebras",
       "home_score": null,
       "away_score": null,
       "date_str": "March 4 (Day 52)",
-      "time": "11:28",
+      "time": "09:13",
       "location": "Main Gym",
       "completed": false
     },
     {
       "id": 8,
       "home_team": "Die Recken",
-      "away_team": "Wild Boys",
+      "away_team": "Stuttgart Wild Boys",
       "home_score": null,
       "away_score": null,
       "date_str": "March 4 (Day 52)",
-      "time": "11:41",
+      "time": "09:26",
       "location": "Main Gym",
       "completed": false
     },
     {
       "id": 9,
-      "home_team": "HCE",
-      "away_team": "Wild Boys",
+      "home_team": "Handball Club Erlangen (HCE)",
+      "away_team": "Stuttgart Wild Boys",
       "home_score": null,
       "away_score": null,
       "date_str": "March 4 (Day 52)",
-      "time": "11:54",
+      "time": "09:39",
       "location": "Main Gym",
       "completed": false
     },
     {
       "id": 10,
       "home_team": "Die Recken",
-      "away_team": "Füchse",
+      "away_team": "Füchse Berlin",
       "home_score": null,
       "away_score": null,
       "date_str": "March 4 (Day 52)",
-      "time": "12:07",
+      "time": "09:52",
       "location": "Main Gym",
       "completed": false
     }
   ],
   "standings": {
-    "Wild Boys": {
+    "Stuttgart Wild Boys": {
       "w": 2,
       "l": 0,
       "t": 0,
@@ -121,7 +121,7 @@
       "pd": 5,
       "pts": 6
     },
-    "Füchse": {
+    "Füchse Berlin": {
       "w": 1,
       "l": 1,
       "t": 0,
@@ -148,7 +148,7 @@
       "pd": 3,
       "pts": 4
     },
-    "HCE": {
+    "Handball Club Erlangen (HCE)": {
       "w": 0,
       "l": 2,
       "t": 0,
