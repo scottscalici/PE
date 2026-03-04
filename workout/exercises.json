@@ -1,6 +1,18 @@
 {
     "exercises": [
         {
+            "id": "1_2_3_knee",
+            "name": "1-2-3 Knee",
+            "category": [
+                "lateral",
+                "warmup",
+                "agility"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": "Modify: Step it out"
+        },
+        {
             "id": "arm_circles_01",
             "name": "Arm Circles",
             "category": [
@@ -135,6 +147,17 @@
             "instructions": "Deep breaths and hydrate.",
             "gifUrl": "",
             "safetyCues": ""
+        },
+        {
+            "id": "touch_the_floor",
+            "name": "Touch the Floor",
+            "category": [
+                "cardio",
+                "warmup"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": "Modify: step out, touch floor, center, step to the other side, touch..."
         },
         {
             "id": "chair_dips_01",
