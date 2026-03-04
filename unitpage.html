@@ -78,7 +78,7 @@
         </details>
 
         <details>
-            <summary>📅 Daily Unit Plan</summary>
+            <summary>📅 Daily Plan</summary>
             <div class="details-content" id="unitPlanContainer"></div>
         </details>
 
@@ -139,18 +139,25 @@
             document.getElementById('vocabList').innerHTML = unitData.key_terms.map(v => `<li><strong>${v.term}</strong>: ${v.definition}</li>`).join('');
             document.getElementById('discussionList').innerHTML = unitData.unit_plan.map(d => d.discussion ? `<li>${d.discussion}</li>` : '').join('');
 
-            let planHtml = "";
-            unitData.unit_plan.forEach(d => {
-                planHtml += `
-                    <div style="border-bottom: 2px solid #eee; padding: 15px 0;">
-                        <strong>Day ${d.day}: ${d.topic}</strong>
-                        <p style="font-size: 0.9em; margin: 5px 0;">Skills: ${d.skills} | Games: ${d.games}</p>
-                        ${d.workout_iframe ? `<details style="margin-top:10px;"><summary style="font-size:0.85em; padding:8px; background:#f9f9f9;">🏋️ View Daily Workout</summary><div class="details-content" style="padding:0;"><a href="${d.workout_iframe}" target="_blank" style="display: block; padding: 15px; background: var(--primary); color: white; text-align: center; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 10px;">
-    🚀 Open Daily Workout (Full Screen)
-</a></div></details>` : ''}
-                    </div>`;
-            });
-            document.getElementById('unitPlanContainer').innerHTML = planHtml;
+
+let planHtml = "";
+unitData.unit_plan.forEach(d => {
+    planHtml += `
+        <div style="border-bottom: 2px solid #eee; padding: 15px 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <div>
+                    <strong>Day ${d.day}: ${d.topic}</strong>
+                    <p style="font-size: 0.9em; margin: 5px 0;">Skills: ${d.skills} | Games: ${d.games}</p>
+                </div>
+                ${d.workout_iframe ? `
+                    <a href="${d.workout_iframe}" target="_blank" style="padding: 10px 15px; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85em; display: flex; align-items: center; gap: 5px;">
+                        🚀 Open Workout
+                    </a>
+                ` : ''}
+            </div>
+        </div>`;
+});
+document.getElementById('unitPlanContainer').innerHTML = planHtml;
 
             if(unitData.global_connections) {
                 let vidId = unitData.global_connections.highlights_video.split('v=')[1];
