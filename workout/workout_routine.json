@@ -18,7 +18,14 @@
       "id": "beta_02",
       "workoutName": "Cardio Core Beta",
       "rounds": 2,
-      "circuits": [
+      "circuits": [ 
+        {
+          "circuitId": "A",
+          "sequence": [
+            { "exerciseId": "jumping_jacks_01", "duration": 10, "type": "work" },
+            { "exerciseId": "rest_01", "duration": 5, "type": "rest" }
+          ]
+        }
       ]
     },
     {
