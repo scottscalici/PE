@@ -1,92 +1,150 @@
 {
-  "exercises": [
-    {
-      "id": "push_ups_01",
-      "name": "Push-Ups",
-      "category": ["upper body", "strength", "bilateral"],
-      "instructions": "Keep your core tight and butt even with your back",
-      "gifUrl": "assets/gifs/pushups.gif",
-      "safetyCues": "Don't let your lower back sag."
-    },
-    {
-      "id": "jumping_jacks_01",
-      "name": "Jumping Jacks",
-      "category": ["cardio", "full body"],
-      "instructions": "Standard jumping jacks, maintain a steady rhythm.",
-      "gifUrl": "assets/gifs/jacks.gif",
-      "safetyCues": "Land softly on the balls of your feet."
-    },
-    {
-      "id": "rest_01",
-      "name": "Recovery",
-      "category": ["rest"],
-      "instructions": "Deep breaths and hydrate.",
-      "gifUrl": "",
-      "safetyCues": ""
-    },
-    {
-      "id": "crunches_01",
-      "name": "Crunches",
-      "category": ["core"],
-      "instructions": "Short, controlled movements.",
-      "gifUrl": "",
-      "safetyCues": "Don't pull on your neck."
-    },
-    {
-      "id": "plank_01",
-      "name": "Forearm Plank",
-      "category": ["core", "isometric"],
-      "instructions": "Hold a straight line from head to heels.",
-      "gifUrl": "",
-      "safetyCues": "Keep your hips level, no sagging."
-    },
-    {
-      "id": "flutter_kicks_01",
-      "name": "Flutter Kicks",
-      "category": ["core", "lower body"],
-      "instructions": "Keep legs straight and alternate small kicks.",
-      "gifUrl": "",
-      "safetyCues": "Press your lower back firmly into the floor."
-    },
-    {
-      "id": "high_knees_01",
-      "name": "High Knees",
-      "category": ["cardio"],
-      "instructions": "Drive your knees up to waist height.",
-      "gifUrl": "",
-      "safetyCues": "Land softly on the balls of your feet."
-    },
-    {
-      "id": "burpees_01",
-      "name": "Burpees",
-      "category": ["cardio", "full body"],
-      "instructions": "Drop to a plank, push-up, jump up.",
-      "gifUrl": "",
-      "safetyCues": "Maintain core control during the jump back."
-    },
-    {
-      "id": "mountain_climbers_01",
-      "name": "Mountain Climbers",
-      "category": ["cardio", "core"],
-      "instructions": "In a plank position, drive knees to chest alternately.",
-      "gifUrl": "",
-      "safetyCues": "Keep your shoulders directly over your wrists."
-    },
-    {
-      "id": "chair_dips_01",
-      "name": "Tricep Dips",
-      "category": ["upper body"],
-      "instructions": "Use a bench or chair, lower body until elbows are at 90 degrees.",
-      "gifUrl": "",
-      "safetyCues": "Keep your back close to the bench."
-    },
-    {
-      "id": "arm_circles_01",
-      "name": "Arm Circles",
-      "category": ["upper body", "mobility"],
-      "instructions": "Small, controlled circles forward, then backward.",
-      "gifUrl": "",
-      "safetyCues": "Keep your shoulders pulled down and back."
-    }
-  ]
+    "exercises": [
+        {
+            "id": "arm_circles_01",
+            "name": "Arm Circles",
+            "category": [
+                "upper body",
+                "mobility"
+            ],
+            "instructions": "Small, controlled circles forward, then backward.",
+            "gifUrl": "",
+            "safetyCues": "Keep your shoulders pulled down and back."
+        },
+        {
+            "id": "burpees_01",
+            "name": "Burpees",
+            "category": [
+                "cardio",
+                "full body"
+            ],
+            "instructions": "Drop to a plank, push-up, jump up.",
+            "gifUrl": "",
+            "safetyCues": "Maintain core control during the jump back."
+        },
+        {
+            "id": "butt_kicks",
+            "name": "Butt Kicks",
+            "category": [],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": "Modify: Keep one foot grounded, slight forward lean"
+        },
+        {
+            "id": "crunches_01",
+            "name": "Crunches",
+            "category": [
+                "core"
+            ],
+            "instructions": "Short, controlled movements.",
+            "gifUrl": "",
+            "safetyCues": "Don't pull on your neck."
+        },
+        {
+            "id": "flutter_kicks_01",
+            "name": "Flutter Kicks",
+            "category": [
+                "core",
+                "lower body"
+            ],
+            "instructions": "Keep legs straight and alternate small kicks.",
+            "gifUrl": "",
+            "safetyCues": "Press your lower back firmly into the floor."
+        },
+        {
+            "id": "plank_01",
+            "name": "Forearm Plank",
+            "category": [
+                "core",
+                "isometric"
+            ],
+            "instructions": "Hold a straight line from head to heels.",
+            "gifUrl": "",
+            "safetyCues": "Keep your hips level, no sagging."
+        },
+        {
+            "id": "high_knees_01",
+            "name": "High Knees",
+            "category": [
+                "cardio",
+                "warmup"
+            ],
+            "instructions": "Drive your knees up to waist height.",
+            "gifUrl": "",
+            "safetyCues": "Modify: Drive one knee up at a time, keep other foot grounded"
+        },
+        {
+            "id": "jog",
+            "name": "Jog",
+            "category": [
+                "warrmup",
+                "cardio"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": "Modify: just step, always keep one foot on the ground"
+        },
+        {
+            "id": "jumping_jacks_01",
+            "name": "Jumping Jacks",
+            "category": [
+                "cardio",
+                "warmup"
+            ],
+            "instructions": "Standard jumping jacks, maintain a steady rhythm.",
+            "gifUrl": "assets/gifs/jacks.gif",
+            "safetyCues": "Modify: Step out, keep one foot in the center, no jump"
+        },
+        {
+            "id": "high_knees_lateral",
+            "name": "Lateral High Knees",
+            "category": [],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": "Modify: don't leave the ground, side step, drive knee up"
+        },
+        {
+            "id": "mountain_climbers_01",
+            "name": "Mountain Climbers",
+            "category": [
+                "cardio",
+                "core"
+            ],
+            "instructions": "In a plank position, drive knees to chest alternately.",
+            "gifUrl": "",
+            "safetyCues": "Keep your shoulders directly over your wrists."
+        },
+        {
+            "id": "push_ups_01",
+            "name": "Push-Ups",
+            "category": [
+                "upper body",
+                "strength",
+                "bilateral"
+            ],
+            "instructions": "Keep your core tight and butt even with your back",
+            "gifUrl": "assets/gifs/pushups.gif",
+            "safetyCues": "Don't let your lower back sag."
+        },
+        {
+            "id": "rest_01",
+            "name": "Recovery",
+            "category": [
+                "rest"
+            ],
+            "instructions": "Deep breaths and hydrate.",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "chair_dips_01",
+            "name": "Tricep Dips",
+            "category": [
+                "upper body"
+            ],
+            "instructions": "Use a bench or chair, lower body until elbows are at 90 degrees.",
+            "gifUrl": "",
+            "safetyCues": "Keep your back close to the bench."
+        }
+    ]
 }
