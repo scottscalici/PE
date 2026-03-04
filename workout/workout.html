@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Workout Player</title>
+    <style>
+        /* Industrial Aesthetic Styling */
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Arial Black', Impact, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: repeating-linear-gradient(45deg, #1a1a1a 25%, transparent 25%, transparent 75%, #1a1a1a 75%, #1a1a1a), repeating-linear-gradient(45deg, #1a1a1a 25%, #121212 25%, #121212 75%, #1a1a1a 75%, #1a1a1a);
+            background-size: 20px 20px;
+        }
+
+        #app-container {
+            width: 90%;
+            max-width: 1000px;
+            height: 85vh;
+            background: linear-gradient(135deg, #2a2a2a, #111);
+            border: 6px solid #444;
+            border-radius: 12px;
+            position: relative;
+            box-shadow: inset 0 0 30px #000, 0 10px 30px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Top: Current Exercise */
+        #current-exercise-container {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border-bottom: 2px solid #333;
+        }
+        
+        #current-exercise {
+            font-size: 5rem;
+            text-transform: uppercase;
+            color: #d4d4d4; /* Silver/Steel */
+            text-shadow: 3px 3px 5px #000;
+            margin: 0;
+            letter-spacing: 3px;
+        }
+
+        /* Middle: Next Up */
+        #up-next-container {
+            flex-grow: 1;
+            padding: 30px;
+            text-align: center;
+        }
+
+        #up-next-container h3 {
+            color: #777;
+            text-transform: uppercase;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        #next-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 2rem;
+            color: #999;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+        }
+
+        #next-list li {
+            margin-bottom: 10px;
+        }
+
+        /* Bottom Left: Safety Cues */
+        #safety-cues {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 25px;
+            border-left: 6px solid #ff5722;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+            max-width: 50%;
+            display: none; /* Hidden by default */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+        }
+
+        /* Bottom Right: Timer Widget */
+        #timer-widget {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 250px;
+            background: #0a0a0a;
+            border: 4px solid #555;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.9);
+            text-align: center;
+        }
+
+        #time-display {
+            font-size: 5rem;
+            color: #fff;
+            margin-bottom: 15px;
+            font-family: monospace;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        /* The Shrinking Bar */
+        #progress-track {
+            width: 100%;
+            height: 25px;
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px #000;
+        }
+
+        #progress-fill {
+            height: 100%;
+            width: 100%;
+            background: #e0e0e0; /* Bright Silver */
+            transition: width 1s linear, background-color 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        /* Dynamic Colors */
+        .rest-text { color: #ff4500 !important; }
+        .glow-orange { 
+            background: #ff4500 !important; 
+            box-shadow: 0 0 15px #ff4500; 
+        }
+
+        /* Start Button overlay */
+        #start-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        button {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 3rem;
+            padding: 20px 50px;
+            background: #222;
+            color: #d4d4d4;
+            border: 4px solid #555;
+            cursor: pointer;
+            text-transform: uppercase;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #444; border-color: #888; color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        
+        <div id="start-overlay">
+            <button id="start-btn">Start Workout</button>
+        </div>
+
+        <div id="current-exercise-container">
+            <h1 id="current-exercise">Loading Data...</h1>
+        </div>
+
+        <div id="up-next-container">
+            <h3>Up Next</h3>
+            <ul id="next-list"></ul>
+        </div>
+
+        <div id="safety-cues"></div>
+
+        <div id="timer-widget" style="display: none;">
+            <div id="time-display">00</div>
+            <div id="progress-track">
+                <div id="progress-fill"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // GitHub Raw URLs
+        const EXERCISES_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/exercises.json';
+        const WORKOUT_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/workout_routine.json';
+
+        let exerciseDB = {};
+        let playlist = []; // Will hold the flattened list of all exercises in order
+        let currentIndex = 0;
+        let timeRemaining = 0;
+        let timerInterval;
+
+        // Fetch data and build the playlist
+        async function init() {
+            try {
+                const [exResponse, woResponse] = await Promise.all([
+                    fetch(EXERCISES_URL),
+                    fetch(WORKOUT_URL)
+                ]);
+
+                const exData = await exResponse.json();
+                const woData = await woResponse.json();
+
+                // 1. Map the database for quick lookup
+                exData.exercises.forEach(ex => {
+                    exerciseDB[ex.id] = ex;
+                });
+
+                // 2. Flatten the workout routine based on circuits and rounds
+                const rounds = woData.rounds || 1;
+                for (let r = 0; r < rounds; r++) {
+                    woData.circuits.forEach(circuit => {
+                        circuit.sequence.forEach(block => {
+                            // Combine the routine info (duration, type) with the DB info (name, cues)
+                            const details = exerciseDB[block.exerciseId] || { name: 'Unknown Exercise', safetyCues: '' };
+                            playlist.push({
+                                ...block,
+                                name: details.name,
+                                safetyCues: details.safetyCues
+                            });
+                        });
+                    });
+                }
+
+                document.getElementById('current-exercise').innerText = woData.workoutName || "Workout Ready";
+                
+                // Set up button listener
+                document.getElementById('start-btn').addEventListener('click', startWorkout);
+
+            } catch (error) {
+                console.error("Failed to load JSON files:", error);
+                document.getElementById('current-exercise').innerText = "Error Loading GitHub Data";
+            }
+        }
+
+        function startWorkout() {
+            document.getElementById('start-overlay').style.display = 'none';
+            document.getElementById('timer-widget').style.display = 'block';
+            runBlock(0);
+        }
+
+        function runBlock(index) {
+            if (index >= playlist.length) {
+                finishWorkout();
+                return;
+            }
+
+            currentIndex = index;
+            const currentBlock = playlist[index];
+            timeRemaining = currentBlock.duration;
+
+            updateUI(currentBlock);
+
+            // Timer Logic
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay(currentBlock.duration, currentBlock.type);
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    runBlock(index + 1); // Move to next block
+                }
+            }, 1000);
+        }
+
+        function updateUI(block) {
+            const titleEl = document.getElementById('current-exercise');
+            titleEl.innerText = block.name;
+
+            // Rest styling
+            if (block.type === 'rest') {
+                titleEl.classList.add('rest-text');
+            } else {
+                titleEl.classList.remove('rest-text');
+            }
+
+            // Populate "Up Next" (Next 3 exercises)
+            const nextList = document.getElementById('next-list');
+            nextList.innerHTML = '';
+            for (let i = 1; i <= 3; i++) {
+                if (currentIndex + i < playlist.length) {
+                    let nextBlock = playlist[currentIndex + i];
+                    let li = document.createElement('li');
+                    li.innerText = `${nextBlock.name} - ${nextBlock.duration}s`;
+                    nextList.appendChild(li);
+                }
+            }
+
+            // Safety Cues
+            const cuesEl = document.getElementById('safety-cues');
+            if (block.safetyCues && block.safetyCues.trim() !== "") {
+                cuesEl.innerText = `⚠️ ${block.safetyCues}`;
+                cuesEl.style.display = 'block';
+            } else {
+                cuesEl.style.display = 'none';
+            }
+
+            updateTimerDisplay(block.duration, block.type);
+        }
+
+        function updateTimerDisplay(totalDuration, type) {
+            // Display numbers
+            document.getElementById('time-display').innerText = timeRemaining.toString().padStart(2, '0');
+
+            // Bar Shrinking Logic
+            const percentage = (timeRemaining / totalDuration) * 100;
+            const fillEl = document.getElementById('progress-fill');
+            fillEl.style.width = percentage + '%';
+
+            // Industrial Glow Effect (Rests or last 5 seconds)
+            if (type === 'rest' || timeRemaining <= 5) {
+                fillEl.classList.add('glow-orange');
+            } else {
+                fillEl.classList.remove('glow-orange');
+            }
+        }
+
+        function finishWorkout() {
+            document.getElementById('current-exercise').innerText = "WORKOUT COMPLETE";
+            document.getElementById('current-exercise').classList.remove('rest-text');
+            document.getElementById('timer-widget').style.display = 'none';
+            document.getElementById('up-next-container').style.display = 'none';
+            document.getElementById('safety-cues').style.display = 'none';
+        }
+
+        // Boot it up
+        init();
+    </script>
+</body>
+</html>
