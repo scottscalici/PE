@@ -106,7 +106,7 @@
     <div id="tab-exercises" class="tab-content">
         <div class="panel">
             <h3>Master Exercise Database</h3>
-            <p style="color: #aaa; font-size: 0.9rem;">Edit existing movements, update safety cues, or add new ones to the bottom.</p>
+            <p style="color: #aaa; font-size: 0.9rem;">Exercises are alphabetized automatically. Edit existing movements or add new ones to the bottom.</p>
             
             <div id="exercise-list-container"></div>
             
@@ -144,6 +144,11 @@
 
                 const exData = await exResponse.json();
                 const woData = await woResponse.json();
+
+                // Sort exercises alphabetically by name right as they load
+                if (exData.exercises) {
+                    exData.exercises.sort((a, b) => a.name.localeCompare(b.name));
+                }
 
                 availableExercises = exData.exercises || [];
                 allWorkouts = woData.workouts || [];
@@ -213,13 +218,13 @@
                 const id = card.querySelector('.m-id').value.trim();
                 if (!id) return; // Skip empty IDs
                 
-                // Parse categories safely
+                const name = card.querySelector('.m-name').value.trim();
                 const catString = card.querySelector('.m-cat').value;
                 const catArray = catString ? catString.split(',').map(s => s.trim()) : [];
 
                 updatedExercises.push({
                     id: id,
-                    name: card.querySelector('.m-name').value.trim(),
+                    name: name,
                     category: catArray,
                     instructions: card.querySelector('.m-inst').value.trim(),
                     gifUrl: card.querySelector('.m-gif').value.trim(),
@@ -227,11 +232,15 @@
                 });
             });
 
+            // Sort the newly assembled array alphabetically by name before generating JSON
+            updatedExercises.sort((a, b) => a.name.localeCompare(b.name));
+
             const finalJSON = JSON.stringify({ exercises: updatedExercises }, null, 4);
             copyToClipboard(finalJSON, 'btn-copy-exercises', 'COPIED FULL EXERCISE JSON!');
             
-            // Update local memory so the workout dropdowns stay accurate
+            // Update local memory and re-render the screen so the UI order matches the new JSON
             availableExercises = updatedExercises; 
+            renderExerciseManager();
         }
 
         // ==========================================
@@ -284,12 +293,11 @@
                 circuits: [{ circuitId: "A", sequence: sequence }]
             };
 
-            // Check if we are updating an existing workout or adding a new one
             const existingIndex = allWorkouts.findIndex(w => w.id === id);
             if (existingIndex !== -1) {
-                allWorkouts[existingIndex] = newWorkoutObj; // Update existing
+                allWorkouts[existingIndex] = newWorkoutObj; 
             } else {
-                allWorkouts.push(newWorkoutObj); // Add new
+                allWorkouts.push(newWorkoutObj); 
             }
 
             const finalJSON = JSON.stringify({ workouts: allWorkouts }, null, 4);
