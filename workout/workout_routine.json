@@ -1,0 +1,14 @@
+{
+  "workoutName": "Sample 1",
+  "rounds": 3,
+  "circuits": [
+    {
+      "circuitId": "A",
+      "sequence": [
+        { "exerciseId": "jumping_jacks_01", "duration": 30, "type": "work" },
+        { "exerciseId": "push_ups_01", "duration": 30, "type": "work" },
+        { "exerciseId": "rest_01", "duration": 15, "type": "rest" }
+      ]
+    }
+  ]
+}
