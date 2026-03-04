@@ -20,6 +20,60 @@
       "rounds": 2,
       "circuits": [
       ]
+    },
+    {
+      "id": "finisher_core",
+      "workoutName": "3-Min Core Burnout",
+      "rounds": 1,
+      "circuits": [
+        {
+          "circuitId": "A",
+          "sequence": [
+            { "exerciseId": "crunches_01", "duration": 45, "type": "work" },
+            { "exerciseId": "rest_01", "duration": 15, "type": "rest" },
+            { "exerciseId": "plank_01", "duration": 45, "type": "work" },
+            { "exerciseId": "rest_01", "duration": 15, "type": "rest" },
+            { "exerciseId": "flutter_kicks_01", "duration": 45, "type": "work" },
+            { "exerciseId": "rest_01", "duration": 15, "type": "rest" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "finisher_cardio",
+      "workoutName": "3-Min Cardio Push",
+      "rounds": 1,
+      "circuits": [
+        {
+          "circuitId": "A",
+          "sequence": [
+            { "exerciseId": "high_knees_01", "duration": 45, "type": "work" },
+            { "exerciseId": "rest_01", "duration": 15, "type": "rest" },
+            { "exerciseId": "burpees_01", "duration": 45, "type": "work" },
+            { "exerciseId": "rest_01", "duration": 15, "type": "rest" },
+            { "exerciseId": "mountain_climbers_01", "duration": 45, "type": "work" },
+            { "exerciseId": "rest_01", "duration": 15, "type": "rest" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "finisher_upper",
+      "workoutName": "3-Min Upper Body Blast",
+      "rounds": 1,
+      "circuits": [
+        {
+          "circuitId": "A",
+          "sequence": [
+            { "exerciseId": "push_ups_01", "duration": 45, "type": "work" },
+            { "exerciseId": "rest_01", "duration": 15, "type": "rest" },
+            { "exerciseId": "chair_dips_01", "duration": 45, "type": "work" },
+            { "exerciseId": "rest_01", "duration": 15, "type": "rest" },
+            { "exerciseId": "arm_circles_01", "duration": 45, "type": "work" },
+            { "exerciseId": "rest_01", "duration": 15, "type": "rest" }
+          ]
+        }
+      ]
     }
   ]
 }
