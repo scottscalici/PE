@@ -15,9 +15,12 @@
   ],
   "key_terms": [
     { "term": "Restricted Zone", "definition": "The area inside the 3-point line where only the goalie is allowed to stand." },
-    { "term": "The 3-3-3 Rule", "definition": "3 steps, 3 seconds, 3 meters (distance for defenders on restarts)." },
+    { "term": "The Rule of 3", "definition": "3 steps, 3 seconds, 3 meters (distance for defenders on restarts)." },
     { "term": "Jump Shot", "definition": "A shot taken while jumping into the air, often used to get a better angle over the defense." }
   ],
+  "discussion": [
+    { "question": "What is the Spirit of the Game?"}
+  ]
   "global_connections": {
     "description": "Handball is a massive professional sport in Europe, especially in Germany, Denmark, and France.",
     "highlights_video": "https://www.youtube.com/watch?v=zyZhcvuWrZc"
@@ -29,7 +32,7 @@
       "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/basics-1",
       "skills": "Catching, 3-step footwork, and basic passing",
       "games": "Keep away / Lead-up passing games, scrimmage",
-      "discussion": "Why is the jump shot more effective than a standing shot?"
+      
     },
      {
       "day": 2,
@@ -42,10 +45,10 @@
      {
       "day": 3,
       "topic": "Finish League Play",
-      "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/basics-1",
+      "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/basics-3",
       "skills": "Catching, 3-step footwork, and basic passing",
-      "games": "Keep away / Lead-up passing games",
-      "discussion": "Why is the jump shot more effective than a standing shot?"
+      "games": "Game play",
+      "discussion": ""
     }
   ],
   "available_teams": [
