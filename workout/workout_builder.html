@@ -11,120 +11,253 @@
             font-family: Arial, Helvetica, sans-serif;
             margin: 0; padding: 20px;
         }
-        h1 { color: #ff4500; text-transform: uppercase; font-family: 'Arial Black', Impact, sans-serif; }
-        .panel {
-            background: #222;
-            border: 2px solid #444;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            max-width: 800px;
+        h1 { color: #ff4500; text-transform: uppercase; font-family: 'Arial Black', Impact, sans-serif; margin-bottom: 5px; }
+        .subtitle { color: #777; margin-bottom: 20px; font-style: italic; }
+        
+        /* Tabs */
+        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn {
+            background: #222; color: #aaa; border: 2px solid #444; padding: 10px 20px;
+            font-size: 1.2rem; font-family: 'Arial Black', sans-serif; cursor: pointer;
+            border-radius: 6px 6px 0 0; border-bottom: none;
         }
-        label { font-weight: bold; color: #aaa; display: block; margin-top: 10px; }
+        .tab-btn.active { background: #333; color: #ff4500; border-color: #ff4500; }
+        .tab-content { display: none; background: #333; padding: 20px; border: 2px solid #444; border-radius: 0 6px 6px 6px; }
+        .tab-content.active { display: block; }
+
+        /* Form Elements */
+        label { font-weight: bold; color: #aaa; display: block; margin-top: 10px; font-size: 0.9rem; text-transform: uppercase; }
         input[type="text"], input[type="number"], select {
             width: 100%; padding: 10px; margin-top: 5px;
             background: #111; color: #fff; border: 1px solid #555; border-radius: 4px;
-            box-sizing: border-box;
+            box-sizing: border-box; font-family: Arial, sans-serif;
         }
+        
+        .panel { background: #222; border: 2px solid #444; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        
+        /* Exercise Cards */
+        .ex-card {
+            background: #111; border: 1px solid #444; padding: 15px; border-radius: 6px; margin-bottom: 15px;
+            position: relative;
+        }
+        .ex-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
+        .ex-grid-full { grid-column: span 2; }
+        
+        /* Workout Sequence Rows */
         .sequence-row {
             display: flex; gap: 10px; margin-top: 10px; align-items: center;
             background: #111; padding: 10px; border: 1px solid #333; border-radius: 4px;
         }
         .sequence-row select, .sequence-row input { margin-top: 0; }
-        .remove-btn {
-            background: #500; color: #fff; border: none; padding: 10px; cursor: pointer; border-radius: 4px; font-weight: bold;
-        }
-        .remove-btn:hover { background: #700; }
+        
+        /* Buttons */
+        .remove-btn { background: #600; color: #fff; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+        .remove-btn:hover { background: #800; }
+        .remove-card-btn { position: absolute; top: 10px; right: 10px; }
+        
         button.action-btn {
             background: #ff4500; color: #fff; font-family: 'Arial Black', sans-serif;
-            padding: 10px 20px; border: none; cursor: pointer; margin-top: 15px; border-radius: 4px; font-size: 1.1rem;
+            padding: 15px 25px; border: none; cursor: pointer; margin-top: 15px; border-radius: 4px; font-size: 1.2rem;
+            width: 100%; transition: 0.3s;
         }
         button.action-btn:hover { background: #ff5722; }
-        textarea {
-            width: 100%; height: 300px; background: #0a0a0a; color: #00ff00;
-            font-family: monospace; padding: 15px; border: 2px solid #555;
-            box-sizing: border-box; margin-top: 10px; border-radius: 4px;
-        }
+        button.action-btn.success { background: #28a745; }
+        
+        button.add-btn { background: #444; width: auto; margin-bottom: 20px; }
+        button.add-btn:hover { background: #555; }
     </style>
 </head>
 <body>
 
-    <h1>Workout Builder Dashboard</h1>
+    <h1>Industrial Builder Dashboard</h1>
+    <div class="subtitle">Fetch, Edit, and Generate Full JSON Files</div>
 
-    <div class="panel">
-        <h3>1. Workout Details</h3>
-        <label>Workout ID (e.g., handball_day_01)</label>
-        <input type="text" id="work-id" placeholder="No spaces, use underscores">
-        
-        <label>Workout Name (Display Title)</label>
-        <input type="text" id="work-name" placeholder="e.g., Handball Cardio Push">
-        
-        <label>Total Rounds</label>
-        <input type="number" id="work-rounds" value="3" min="1">
+    <div class="tab-container">
+        <button class="tab-btn active" onclick="switchTab('workouts', this)">WORKOUT BUILDER</button>
+        <button class="tab-btn" onclick="switchTab('exercises', this)">EXERCISE MANAGER</button>
     </div>
 
-    <div class="panel">
-        <h3>2. Build Circuit</h3>
-        <div id="sequence-container">
-            </div>
-        <button class="action-btn" style="background: #444;" onclick="addExerciseRow()">+ ADD EXERCISE</button>
+    <div id="tab-workouts" class="tab-content active">
+        <div class="panel">
+            <h3>1. Workout Details</h3>
+            <label>Workout ID (Must be unique, no spaces)</label>
+            <input type="text" id="work-id" placeholder="e.g., handball_day_01">
+            
+            <label>Workout Name (Display Title)</label>
+            <input type="text" id="work-name" placeholder="e.g., Handball Cardio Push">
+            
+            <label>Total Rounds</label>
+            <input type="number" id="work-rounds" value="3" min="1">
+        </div>
+
+        <div class="panel">
+            <h3>2. Build Circuit</h3>
+            <div id="sequence-container"></div>
+            <button class="action-btn add-btn" onclick="addWorkoutRow()">+ ADD EXERCISE TO CIRCUIT</button>
+        </div>
+
+        <div class="panel">
+            <h3>3. Replace Full File</h3>
+            <p style="color: #aaa; font-size: 0.9rem;">This will append or update this specific workout in your master list and copy the entire file.</p>
+            <button id="btn-copy-workouts" class="action-btn" onclick="generateAndCopyWorkouts()">GENERATE & COPY FULL WORKOUT JSON</button>
+        </div>
     </div>
 
-    <div class="panel">
-        <h3>3. Generate Output</h3>
-        <button class="action-btn" onclick="generateJSON()">GENERATE JSON CODE</button>
-        <label>Copy this and paste it inside the "workouts" array in your workout_routine.json file:</label>
-        <textarea id="json-output" readonly placeholder="Your generated code will appear here..."></textarea>
+    <div id="tab-exercises" class="tab-content">
+        <div class="panel">
+            <h3>Master Exercise Database</h3>
+            <p style="color: #aaa; font-size: 0.9rem;">Edit existing movements, update safety cues, or add new ones to the bottom.</p>
+            
+            <div id="exercise-list-container"></div>
+            
+            <button class="action-btn add-btn" onclick="addBlankExerciseCard()">+ ADD NEW EXERCISE</button>
+        </div>
+
+        <div class="panel">
+            <h3>Replace Full File</h3>
+            <button id="btn-copy-exercises" class="action-btn" onclick="generateAndCopyExercises()">GENERATE & COPY FULL EXERCISE JSON</button>
+        </div>
     </div>
 
     <script>
         const EXERCISES_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/exercises.json';
-        let availableExercises = [];
+        const WORKOUT_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/workout_routine.json';
 
-        // Fetch live exercises from GitHub so your dropdown is always up to date
-        async function loadExercises() {
+        let availableExercises = [];
+        let allWorkouts = [];
+
+        // UI Logic
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        // Fetch Data on Load
+        async function init() {
             try {
-                const response = await fetch(EXERCISES_URL);
-                const data = await response.json();
-                availableExercises = data.exercises;
-                // Add one empty row to start
-                addExerciseRow();
+                const [exResponse, woResponse] = await Promise.all([
+                    fetch(EXERCISES_URL),
+                    fetch(WORKOUT_URL)
+                ]);
+
+                const exData = await exResponse.json();
+                const woData = await woResponse.json();
+
+                availableExercises = exData.exercises || [];
+                allWorkouts = woData.workouts || [];
+
+                renderExerciseManager();
+                addWorkoutRow(); // Add one blank row to the workout builder
             } catch (err) {
-                alert("Could not load exercises from GitHub. Check your internet connection.");
+                alert("Failed to load GitHub data. Check your internet or URLs.");
             }
         }
 
-        function addExerciseRow() {
+        // ==========================================
+        // EXERCISE MANAGER LOGIC
+        // ==========================================
+        function renderExerciseManager() {
+            const container = document.getElementById('exercise-list-container');
+            container.innerHTML = '';
+            availableExercises.forEach(ex => {
+                container.appendChild(createExerciseCard(ex));
+            });
+        }
+
+        function createExerciseCard(ex = {}) {
+            const div = document.createElement('div');
+            div.className = 'ex-card';
+            div.innerHTML = `
+                <button class="remove-btn remove-card-btn" onclick="this.parentElement.remove()">X</button>
+                <div class="ex-grid">
+                    <div>
+                        <label>ID</label>
+                        <input type="text" class="m-id" value="${ex.id || ''}" placeholder="e.g., push_ups_01">
+                    </div>
+                    <div>
+                        <label>Name</label>
+                        <input type="text" class="m-name" value="${ex.name || ''}" placeholder="Display Name">
+                    </div>
+                    <div class="ex-grid-full">
+                        <label>Safety Cues</label>
+                        <input type="text" class="m-cues" value="${ex.safetyCues || ''}" placeholder="e.g., Keep your core tight.">
+                    </div>
+                    <div class="ex-grid-full">
+                        <label>Instructions (Optional)</label>
+                        <input type="text" class="m-inst" value="${ex.instructions || ''}">
+                    </div>
+                    <div class="ex-grid-full">
+                        <label>Categories (Comma separated)</label>
+                        <input type="text" class="m-cat" value="${ex.category ? ex.category.join(', ') : ''}">
+                    </div>
+                    <div class="ex-grid-full">
+                        <label>GIF URL (Optional)</label>
+                        <input type="text" class="m-gif" value="${ex.gifUrl || ''}">
+                    </div>
+                </div>
+            `;
+            return div;
+        }
+
+        function addBlankExerciseCard() {
+            document.getElementById('exercise-list-container').appendChild(createExerciseCard());
+        }
+
+        function generateAndCopyExercises() {
+            const cards = document.querySelectorAll('.ex-card');
+            const updatedExercises = [];
+
+            cards.forEach(card => {
+                const id = card.querySelector('.m-id').value.trim();
+                if (!id) return; // Skip empty IDs
+                
+                // Parse categories safely
+                const catString = card.querySelector('.m-cat').value;
+                const catArray = catString ? catString.split(',').map(s => s.trim()) : [];
+
+                updatedExercises.push({
+                    id: id,
+                    name: card.querySelector('.m-name').value.trim(),
+                    category: catArray,
+                    instructions: card.querySelector('.m-inst').value.trim(),
+                    gifUrl: card.querySelector('.m-gif').value.trim(),
+                    safetyCues: card.querySelector('.m-cues').value.trim()
+                });
+            });
+
+            const finalJSON = JSON.stringify({ exercises: updatedExercises }, null, 4);
+            copyToClipboard(finalJSON, 'btn-copy-exercises', 'COPIED FULL EXERCISE JSON!');
+            
+            // Update local memory so the workout dropdowns stay accurate
+            availableExercises = updatedExercises; 
+        }
+
+        // ==========================================
+        // WORKOUT BUILDER LOGIC
+        // ==========================================
+        function addWorkoutRow() {
             const container = document.getElementById('sequence-container');
             const row = document.createElement('div');
             row.className = 'sequence-row';
 
-            // Exercise Dropdown
-            let selectHTML = `<select class="ex-id">`;
+            let selectHTML = `<select class="w-ex-id">`;
             availableExercises.forEach(ex => {
                 selectHTML += `<option value="${ex.id}">${ex.name} (${ex.id})</option>`;
             });
             selectHTML += `</select>`;
 
             row.innerHTML = `
-                <div style="flex-grow: 2;">${selectHTML}</div>
-                <div style="flex-grow: 1;">
-                    <input type="number" class="ex-duration" value="30" min="5" placeholder="Seconds">
-                </div>
-                <div style="flex-grow: 1;">
-                    <select class="ex-type">
-                        <option value="work">Work</option>
-                        <option value="rest">Rest</option>
-                    </select>
-                </div>
-                <div>
-                    <button class="remove-btn" onclick="this.parentElement.parentElement.remove()">X</button>
-                </div>
+                <div style="flex-grow: 2;"><label>Movement</label>${selectHTML}</div>
+                <div style="flex-grow: 1;"><label>Seconds</label><input type="number" class="w-duration" value="30" min="5"></div>
+                <div style="flex-grow: 1;"><label>Type</label><select class="w-type"><option value="work">Work</option><option value="rest">Rest</option></select></div>
+                <div style="display: flex; align-items: flex-end;"><button class="remove-btn" onclick="this.parentElement.parentElement.remove()">X</button></div>
             `;
             container.appendChild(row);
         }
 
-        function generateJSON() {
+        function generateAndCopyWorkouts() {
             const id = document.getElementById('work-id').value.trim();
             const name = document.getElementById('work-name').value.trim();
             const rounds = parseInt(document.getElementById('work-rounds').value);
@@ -136,41 +269,55 @@
 
             const sequence = [];
             const rows = document.querySelectorAll('.sequence-row');
-            
             rows.forEach(row => {
-                const exId = row.querySelector('.ex-id').value;
-                const duration = parseInt(row.querySelector('.ex-duration').value);
-                const type = row.querySelector('.ex-type').value;
-
                 sequence.push({
-                    exerciseId: exId,
-                    duration: duration,
-                    type: type
+                    exerciseId: row.querySelector('.w-ex-id').value,
+                    duration: parseInt(row.querySelector('.w-duration').value),
+                    type: row.querySelector('.w-type').value
                 });
             });
 
-            // Construct the final object exactly as your app expects it
-            const workoutObject = {
+            const newWorkoutObj = {
                 id: id,
                 workoutName: name,
                 rounds: rounds,
-                circuits: [
-                    {
-                        circuitId: "A",
-                        sequence: sequence
-                    }
-                ]
+                circuits: [{ circuitId: "A", sequence: sequence }]
             };
 
-            // Convert to formatted JSON string
-            const jsonString = JSON.stringify(workoutObject, null, 4);
-            
-            // Add a trailing comma to make copy/pasting into an array easier
-            document.getElementById('json-output').value = jsonString + ",";
+            // Check if we are updating an existing workout or adding a new one
+            const existingIndex = allWorkouts.findIndex(w => w.id === id);
+            if (existingIndex !== -1) {
+                allWorkouts[existingIndex] = newWorkoutObj; // Update existing
+            } else {
+                allWorkouts.push(newWorkoutObj); // Add new
+            }
+
+            const finalJSON = JSON.stringify({ workouts: allWorkouts }, null, 4);
+            copyToClipboard(finalJSON, 'btn-copy-workouts', 'COPIED FULL WORKOUT JSON!');
         }
 
-        // Initialize
-        loadExercises();
+        // ==========================================
+        // UTILITY LOGIC
+        // ==========================================
+        function copyToClipboard(text, buttonId, successText) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById(buttonId);
+                const originalText = btn.innerText;
+                btn.innerText = successText;
+                btn.classList.add('success');
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('success');
+                }, 2000);
+            }).catch(err => {
+                alert("Clipboard copy failed. Check console.");
+                console.error(err);
+            });
+        }
+
+        // Boot up
+        init();
     </script>
 </body>
 </html>
