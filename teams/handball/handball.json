@@ -1,7 +1,7 @@
 {
   "sport": "handball",
   "display_name": "Team Handball",
-  "header_image": "https://raw.githubusercontent.com/scottscalici/PE/main/teams/handball/handball.jpg",
+  "header_image": "https://raw.githubusercontent.com/scottscalici/PE/main/teams/handball/handball.png",
   "equipment": [
     "Softball-sized smushballs",
     "Goal nets"
@@ -25,7 +25,23 @@
   "unit_plan": [
     {
       "day": 1,
-      "topic": "Intro to Handball & Movement",
+      "topic": "Intro to Handball & Movement, Scrimmage",
+      "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/basics-1",
+      "skills": "Catching, 3-step footwork, and basic passing",
+      "games": "Keep away / Lead-up passing games, scrimmage",
+      "discussion": "Why is the jump shot more effective than a standing shot?"
+    },
+     {
+      "day": 2,
+      "topic": "League Play",
+      "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/basics-2",
+      "skills": "Game play",
+      "games": "",
+      "discussion": ""
+    },
+     {
+      "day": 3,
+      "topic": "Finish League Play",
       "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/basics-1",
       "skills": "Catching, 3-step footwork, and basic passing",
       "games": "Keep away / Lead-up passing games",
