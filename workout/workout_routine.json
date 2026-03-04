@@ -1,86 +1,216 @@
 {
-  "workouts": [
-    {
-      "id": "alpha_01",
-      "workoutName": "Industrial Strength Alpha",
-      "rounds": 3,
-      "circuits": [
+    "workouts": [
         {
-          "circuitId": "A",
-          "sequence": [
-            { "exerciseId": "jumping_jacks_01", "duration": 30, "type": "work" },
-            { "exerciseId": "rest_01", "duration": 15, "type": "rest" }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "beta_02",
-      "workoutName": "Cardio Core Beta",
-      "rounds": 2,
-      "circuits": [ 
+            "id": "alpha_01",
+            "workoutName": "Industrial Strength Alpha",
+            "rounds": 3,
+            "circuits": [
+                {
+                    "circuitId": "A",
+                    "sequence": [
+                        {
+                            "exerciseId": "jumping_jacks_01",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 15,
+                            "type": "rest"
+                        }
+                    ]
+                }
+            ]
+        },
         {
-          "circuitId": "A",
-          "sequence": [
-            { "exerciseId": "jumping_jacks_01", "duration": 10, "type": "work" },
-            { "exerciseId": "rest_01", "duration": 5, "type": "rest" }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "finisher_core",
-      "workoutName": "3-Min Core Burnout",
-      "rounds": 1,
-      "circuits": [
+            "id": "beta_02",
+            "workoutName": "Cardio Core Beta",
+            "rounds": 2,
+            "circuits": [
+                {
+                    "circuitId": "A",
+                    "sequence": [
+                        {
+                            "exerciseId": "jumping_jacks_01",
+                            "duration": 10,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 5,
+                            "type": "rest"
+                        }
+                    ]
+                }
+            ]
+        },
         {
-          "circuitId": "A",
-          "sequence": [
-            { "exerciseId": "crunches_01", "duration": 45, "type": "work" },
-            { "exerciseId": "rest_01", "duration": 15, "type": "rest" },
-            { "exerciseId": "plank_01", "duration": 45, "type": "work" },
-            { "exerciseId": "rest_01", "duration": 15, "type": "rest" },
-            { "exerciseId": "flutter_kicks_01", "duration": 45, "type": "work" },
-            { "exerciseId": "rest_01", "duration": 15, "type": "rest" }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "finisher_cardio",
-      "workoutName": "3-Min Cardio Push",
-      "rounds": 1,
-      "circuits": [
+            "id": "finisher_core",
+            "workoutName": "3-Min Core Burnout",
+            "rounds": 1,
+            "circuits": [
+                {
+                    "circuitId": "A",
+                    "sequence": [
+                        {
+                            "exerciseId": "crunches_01",
+                            "duration": 45,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 15,
+                            "type": "rest"
+                        },
+                        {
+                            "exerciseId": "plank_01",
+                            "duration": 45,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 15,
+                            "type": "rest"
+                        },
+                        {
+                            "exerciseId": "flutter_kicks_01",
+                            "duration": 45,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 15,
+                            "type": "rest"
+                        }
+                    ]
+                }
+            ]
+        },
         {
-          "circuitId": "A",
-          "sequence": [
-            { "exerciseId": "high_knees_01", "duration": 45, "type": "work" },
-            { "exerciseId": "rest_01", "duration": 15, "type": "rest" },
-            { "exerciseId": "burpees_01", "duration": 45, "type": "work" },
-            { "exerciseId": "rest_01", "duration": 15, "type": "rest" },
-            { "exerciseId": "mountain_climbers_01", "duration": 45, "type": "work" },
-            { "exerciseId": "rest_01", "duration": 15, "type": "rest" }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "finisher_upper",
-      "workoutName": "3-Min Upper Body Blast",
-      "rounds": 1,
-      "circuits": [
+            "id": "finisher_cardio",
+            "workoutName": "3-Min Cardio Push",
+            "rounds": 1,
+            "circuits": [
+                {
+                    "circuitId": "A",
+                    "sequence": [
+                        {
+                            "exerciseId": "high_knees_01",
+                            "duration": 45,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 15,
+                            "type": "rest"
+                        },
+                        {
+                            "exerciseId": "burpees_01",
+                            "duration": 45,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 15,
+                            "type": "rest"
+                        },
+                        {
+                            "exerciseId": "mountain_climbers_01",
+                            "duration": 45,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 15,
+                            "type": "rest"
+                        }
+                    ]
+                }
+            ]
+        },
         {
-          "circuitId": "A",
-          "sequence": [
-            { "exerciseId": "push_ups_01", "duration": 45, "type": "work" },
-            { "exerciseId": "rest_01", "duration": 15, "type": "rest" },
-            { "exerciseId": "chair_dips_01", "duration": 45, "type": "work" },
-            { "exerciseId": "rest_01", "duration": 15, "type": "rest" },
-            { "exerciseId": "arm_circles_01", "duration": 45, "type": "work" },
-            { "exerciseId": "rest_01", "duration": 15, "type": "rest" }
-          ]
+            "id": "finisher_upper",
+            "workoutName": "3-Min Upper Body Blast",
+            "rounds": 1,
+            "circuits": [
+                {
+                    "circuitId": "A",
+                    "sequence": [
+                        {
+                            "exerciseId": "push_ups_01",
+                            "duration": 45,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 15,
+                            "type": "rest"
+                        },
+                        {
+                            "exerciseId": "chair_dips_01",
+                            "duration": 45,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 15,
+                            "type": "rest"
+                        },
+                        {
+                            "exerciseId": "arm_circles_01",
+                            "duration": 45,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 15,
+                            "type": "rest"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "basics_01",
+            "workoutName": "Basics 1",
+            "rounds": 3,
+            "circuits": [
+                {
+                    "circuitId": "A",
+                    "sequence": [
+                        {
+                            "exerciseId": "jog",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "jumping_jacks_01",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "high_knees_01",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "butt_kicks",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "high_knees_lateral",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 30,
+                            "type": "rest"
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }
