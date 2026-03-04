@@ -172,6 +172,40 @@
             z-index: 10;
         }
 
+        /* Finisher Overlay */
+        #finisher-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 20;
+        }
+        
+        #finisher-overlay h1 {
+            color: #d4d4d4; 
+            font-size: 4rem; 
+            text-shadow: 3px 3px 5px #000; 
+            margin: 0;
+        }
+
+        #finisher-overlay h2 {
+            color: #ff4500; 
+            font-size: 2.5rem; 
+            margin-top: 10px; 
+            margin-bottom: 40px; 
+            letter-spacing: 2px;
+        }
+
+        .finisher-btn-group {
+            display: flex; 
+            gap: 20px; 
+            margin-bottom: 30px;
+        }
+
         select {
             font-family: 'Arial Black', sans-serif;
             font-size: 1.5rem;
@@ -187,8 +221,8 @@
 
         button {
             font-family: 'Arial Black', sans-serif;
-            font-size: 3rem;
-            padding: 20px 50px;
+            font-size: 2.5rem;
+            padding: 20px 40px;
             background: #222;
             color: #d4d4d4;
             border: 4px solid #555;
@@ -199,6 +233,14 @@
         }
 
         button:hover { background: #444; border-color: #888; color: #fff; }
+
+        .small-btn {
+            font-size: 1.2rem; 
+            padding: 10px 20px; 
+            background: #111; 
+            color: #777; 
+            border-color: #333;
+        }
     </style>
 </head>
 <body>
@@ -235,11 +277,30 @@
             </div>
         </div>
 
+        <div id="finisher-overlay">
+            <h1>WORKOUT COMPLETE</h1>
+            <h2>WANT SOME MORE?</h2>
+            
+            <div class="finisher-btn-group">
+                <button onclick="startFinisher('finisher_core')" style="font-size: 1.5rem; padding: 15px 30px;">3-MIN CORE</button>
+                <button onclick="startFinisher('finisher_cardio')" style="font-size: 1.5rem; padding: 15px 30px;">3-MIN CARDIO</button>
+                <button onclick="startFinisher('finisher_upper')" style="font-size: 1.5rem; padding: 15px 30px;">3-MIN UPPER</button>
+            </div>
+            
+            <button onclick="location.reload()" class="small-btn">NO THANKS (RESET)</button>
+        </div>
+
     </div>
 
     <script>
         const EXERCISES_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/exercises.json';
         const WORKOUT_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/workout_routine.json';
+
+        // --- CONFIGURATION ---
+        // To lock this page to a specific workout on Google Sites, enter its ID here (e.g., "alpha_01"). 
+        // To show the dropdown menu so kids can choose, leave it empty ("").
+        const TARGET_WORKOUT_ID = ""; 
+        // ---------------------
 
         let exerciseDB = {};
         let allWorkouts = [];
@@ -268,18 +329,31 @@
                 // Store all workouts
                 allWorkouts = woData.workouts;
 
-                // Build Dropdown
+                // Build Dropdown OR Lock to Specific Workout
                 const selector = document.getElementById('workout-selector');
-                allWorkouts.forEach((wo, index) => {
-                    let option = document.createElement('option');
-                    option.value = index;
-                    option.text = wo.workoutName;
-                    selector.appendChild(option);
-                });
+                
+                if (TARGET_WORKOUT_ID !== "") {
+                    // Locked mode: Hide dropdown, prep the specific workout
+                    const targetIndex = allWorkouts.findIndex(w => w.id === TARGET_WORKOUT_ID);
+                    if (targetIndex !== -1) {
+                        selector.value = targetIndex; // Secretly select it
+                        document.getElementById('current-exercise').innerText = allWorkouts[targetIndex].workoutName;
+                    } else {
+                        document.getElementById('current-exercise').innerText = "Workout ID not found!";
+                    }
+                } else {
+                    // Choice mode: Show dropdown
+                    allWorkouts.forEach((wo, index) => {
+                        let option = document.createElement('option');
+                        option.value = index;
+                        option.text = wo.workoutName;
+                        selector.appendChild(option);
+                    });
+                    selector.style.display = 'block';
+                }
 
-                // Show UI
+                // Show Start UI
                 document.getElementById('loading-text').style.display = 'none';
-                selector.style.display = 'block';
                 document.getElementById('start-btn').style.display = 'block';
 
                 document.getElementById('start-btn').addEventListener('click', prepareWorkout);
@@ -313,8 +387,9 @@
                 });
             }
 
-            // Hide overlay, show timers, start block 0
+            // Hide overlays, show timers, start block 0
             document.getElementById('start-overlay').style.display = 'none';
+            document.getElementById('finisher-overlay').style.display = 'none';
             document.getElementById('timer-widget').style.display = 'block';
             runBlock(0);
         }
@@ -408,11 +483,31 @@
         }
 
         function finishWorkout() {
-            document.getElementById('current-exercise').innerText = "WORKOUT COMPLETE";
-            document.getElementById('current-exercise').classList.remove('rest-text');
+            // Hide the main workout UI
             document.getElementById('timer-widget').style.display = 'none';
             document.getElementById('up-next-container').style.display = 'none';
             document.getElementById('safety-cues').style.display = 'none';
+            document.getElementById('current-exercise-container').style.display = 'none';
+            
+            // Show the Finisher overlay
+            document.getElementById('finisher-overlay').style.display = 'flex';
+        }
+
+        function startFinisher(finisherId) {
+            // Find the finisher workout in your JSON data
+            const targetIndex = allWorkouts.findIndex(w => w.id === finisherId);
+            
+            if (targetIndex !== -1) {
+                // Restore main UI visibility
+                document.getElementById('current-exercise-container').style.display = 'block';
+                document.getElementById('up-next-container').style.display = 'block';
+                
+                // Secretly change the dropdown value to the finisher and hit 'START' again
+                document.getElementById('workout-selector').value = targetIndex;
+                prepareWorkout(); 
+            } else {
+                alert("Hold up! Finisher workout '" + finisherId + "' not found in your JSON yet.");
+            }
         }
 
         init();
