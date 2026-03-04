@@ -5,118 +5,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unit Syllabus & Rosters</title>
     <style>
-        :root { --primary: #0056b3; --bg-color: #f4f7f6; --card-bg: #ffffff; --text-main: #333333; }
+        :root { --primary: #0056b3; --bg-color: #f4f7f6; --card-bg: #ffffff; --text-main: #333333; --accent: #e9ecef; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: transparent; color: var(--text-main); margin: 0; padding: 10px; }
         
-        /* Top Navigation for Classes */
+        /* Navigation */
         .class-nav { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
-        .btn-class { background: var(--card-bg); border: 2px solid var(--primary); color: var(--primary); padding: 10px 20px; font-size: 1.1em; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn-class { background: var(--card-bg); border: 2px solid var(--primary); color: var(--primary); padding: 10px 20px; font-size: 1.1em; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.2s; }
         .btn-class:hover, .btn-class.active { background: var(--primary); color: white; }
 
-        /* Content Containers */
+        /* Panels & Collapsibles */
         .panel { background: var(--card-bg); padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        h2 { color: var(--primary); margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        
-        /* Syllabus Styles */
-        .syllabus-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-        @media(max-width: 600px) { .syllabus-grid { grid-template-columns: 1fr; } }
-        .equipment-list { margin: 0; padding-left: 20px; }
-        .equipment-list li { margin-bottom: 5px; }
-        .day-card { border-left: 4px solid var(--primary); background: #f8f9fa; padding: 10px 15px; margin-bottom: 10px; border-radius: 0 4px 4px 0; }
-        .day-card h4 { margin: 0 0 5px 0; color: #333; }
-        .day-card p { margin: 0; font-size: 0.9em; color: #555; }
+        details { border: 1px solid #ddd; border-radius: 6px; margin-bottom: 10px; background: #fff; }
+        summary { padding: 15px; font-weight: bold; cursor: pointer; background: var(--accent); display: flex; justify-content: space-between; align-items: center; list-style: none; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: '▼'; font-size: 0.8em; color: var(--primary); }
+        details[open] summary::after { content: '▲'; }
+        .details-content { padding: 15px; border-top: 1px solid #ddd; }
 
-        /* Tables & Cards for Rosters */
-        .standings-container { overflow-x: auto; margin-bottom: 30px;}
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th, td { padding: 10px; border-bottom: 1px solid #ddd; }
-        th { background-color: #f8f9fa; color: #555; }
-        .team-cell { display: flex; align-items: center; gap: 10px; font-weight: bold;}
-        .table-logo { width: 30px; height: 30px; object-fit: contain; }
+        /* Unit Page Specifics */
+.unit-header-container { 
+    width: 100%; 
+    height: 300px; /* Adjust this height to your preference */
+    background: #000; 
+    border-radius: 8px; 
+    overflow: hidden; 
+    margin-bottom: 20px; 
+}
 
-        /* Schedule Styles */
-        .schedule-group { margin-bottom: 20px; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; }
-        .schedule-date { background: #e9ecef; color: #333; padding: 8px 15px; font-weight: bold; border-bottom: 2px solid var(--primary); }
-        .match-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid #eee; background: #fff; flex-wrap: wrap; gap: 10px;}
-        .match-row:last-child { border-bottom: none; }
-        .match-row:nth-child(even) { background: #fcfcfc; }
-        .match-time-loc { font-size: 0.85em; color: #666; flex: 1; min-width: 100px;}
-        .match-teams { flex: 3; display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: bold; font-size: 1.05em; min-width: 250px;}
-        .match-score { font-size: 1.2em; color: var(--primary); padding: 0 15px; text-align: center; min-width: 50px; }
-        .team-display { display: flex; align-items: center; gap: 8px; flex: 1; }
-        .team-display.home { justify-content: flex-end; text-align: right; }
-        .team-display.away { justify-content: flex-start; text-align: left; }
+.unit-header-img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; /* This makes it stretch across the full width */
+    object-position: center; 
+}        
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top: 10px; border-radius: 6px; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-        .rosters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
-        .team-card { border-radius: 8px; overflow: hidden; border: 1px solid #ddd; border-top: 4px solid var(--primary); }
-        .team-card-header { text-align: center; padding: 10px; background: #f8f9fa; border-bottom: 1px solid #eee; }
-        .team-logo { width: 80px; height: 80px; object-fit: contain; margin-bottom: 5px; }
-        .team-card h3 { margin: 0; font-size: 1.2em; }
-        .player-list { list-style: none; padding: 0; margin: 0; font-size: 0.9em; }
-        .player-list li { padding: 8px 15px; border-bottom: 1px solid #eee; }
-        .player-list li:last-child { border-bottom: none; }
+        /* Team Logos */
+        .team-logo-sm { width: 24px; height: 24px; object-fit: contain; vertical-align: middle; margin: 0 5px; }
+        .team-logo-md { width: 60px; height: 60px; object-fit: contain; display: block; margin: 0 auto 5px; }
+
+        /* Schedule */
+        .match-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; }
+        .match-row:hover { background: #f0f7ff; }
+        .team-display { display: flex; align-items: center; gap: 8px; flex: 1; font-weight: bold; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 12px; max-width: 500px; width: 90%; position: relative; max-height: 85vh; overflow-y: auto; }
+        .close-modal { position: absolute; right: 15px; top: 10px; font-size: 28px; cursor: pointer; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
     </style>
 </head>
 <body>
 
     <div class="class-nav" id="classNav">
         <button class="btn-class active" onclick="showSyllabus()">Unit Plan</button>
-        </div>
+    </div>
 
     <div id="syllabusView" class="panel">
-        <div class="syllabus-grid">
-            <div id="leftColumn">
-                <h2>🎒 Equipment</h2>
-                <ul class="equipment-list" id="equipList">Loading...</ul>
+        <div id="unitHeader" class="unit-header-container"></div>
+        <h1 id="unitTitle" style="text-align: center; color: var(--primary);"></h1>
+        
+        <details open>
+            <summary>📋 Game Rules & Equipment</summary>
+            <div class="details-content">
+                <h3>🎒 Equipment</h3> <ul id="equipList"></ul>
+                <h3>📜 Rules</h3> <ul id="rulesList"></ul>
+            </div>
+        </details>
 
-                <div id="rulesContainer"></div>
-                <div id="termsContainer"></div>
+        <details>
+            <summary>📅 Daily Unit Plan</summary>
+            <div class="details-content" id="unitPlanContainer"></div>
+        </details>
+
+        <details>
+            <summary>🗣️ Vocab & Discussion</summary>
+            <div class="details-content">
+                <h3>Vocabulary</h3> <ul id="vocabList"></ul>
+                <h3>Discussion Topics</h3> <ul id="discussionList"></ul>
             </div>
-            <div>
-                <h2>📅 Unit Plan</h2>
-                <div id="unitPlanContainer">Loading...</div>
-            </div>
-        </div>
+        </details>
+
+        <details>
+            <summary>🌎 Global Connections & Highlights</summary>
+            <div class="details-content" id="highlightsContent"></div>
+        </details>
     </div>
 
     <div id="classView" style="display: none;">
         <div class="panel">
-            <h2>🏆 Standings</h2>
-            <div class="standings-container">
-                <table>
-                    <thead><tr><th>Rk</th><th>Team</th><th>W</th><th>L</th><th>T</th><th>PD</th><th>PTS</th></tr></thead>
-                    <tbody id="standingsBody"></tbody>
-                </table>
-            </div>
-            
-            <h2 style="margin-top: 40px;">🗓️ Schedule & Results</h2>
-            <div id="scheduleContainer" style="margin-bottom: 40px;">Loading schedule...</div>
-
-            <h2>📋 Official Rosters</h2>
-            <div class="rosters-grid" id="rostersGrid"></div>
+            <details open><summary>🏆 Standings</summary><div class="details-content"><table><thead><tr><th>Rk</th><th>Team</th><th>W-L-T</th><th>PTS</th></tr></thead><tbody id="standingsBody"></tbody></table></div></details>
+            <details open><summary>🗓️ Schedule</summary><div class="details-content" id="scheduleContainer"></div></details>
+            <details><summary>📋 Rosters</summary><div class="details-content"><div id="rostersGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;"></div></div></details>
         </div>
     </div>
 
-    <script>
-        // ==========================================
-        // ⚙️ CONFIGURATION - CHANGE THIS FOR EACH PAGE
-        // ==========================================
-        const REPO_BASE_URL = "https://raw.githubusercontent.com/scottscalici/PE/main";
-        
-        // 1. What sport master file should this page read?
-        const SPORT_ID = "handball"; 
-        
-        // 2. What are the active classes for this unit? (lowercase prefixes!)
-        const CLASSES = [
-            { display: "Class 3A", filePrefix: "handball_3a" },
-            { display: "Class 3B", filePrefix: "handball_3b" }
-        ];
-        // ==========================================
+    <div id="teamModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal()">&times;</span><div id="modalBody"></div></div></div>
 
-        window.onload = async () => {
-            buildNavButtons();
-            await fetchSyllabus();
-        };
+    <script>
+        const REPO_BASE_URL = "https://raw.githubusercontent.com/scottscalici/PE/main";
+        const SPORT_ID = "handball"; 
+        const CLASSES = [{ display: "Class 3A", prefix: "handball_3a" }, { display: "Class 3B", prefix: "handball_3b" }];
+
+        let unitData = null;
+        let currentTeams = [];
+        let currentSchedule = null;
+
+        window.onload = async () => { buildNavButtons(); await fetchSyllabus(); };
 
         function buildNavButtons() {
             const nav = document.getElementById('classNav');
@@ -124,210 +123,110 @@
                 const btn = document.createElement('button');
                 btn.className = 'btn-class';
                 btn.innerText = c.display;
-                btn.onclick = (e) => loadClassData(c.filePrefix, e.target);
+                btn.onclick = (e) => loadClassData(c.prefix, e.target);
                 nav.appendChild(btn);
             });
         }
 
-        function setActiveButton(clickedBtn) {
-            document.querySelectorAll('.btn-class').forEach(b => b.classList.remove('active'));
-            if(clickedBtn) clickedBtn.classList.add('active');
-        }
-
-        function showSyllabus() {
-            setActiveButton(document.querySelector('.btn-class')); 
-            document.getElementById('classView').style.display = 'none';
-            document.getElementById('syllabusView').style.display = 'block';
-        }
-
         async function fetchSyllabus() {
-            // Added ?t= cachebuster so the Unit Plan stays perfectly updated
-            const url = `${REPO_BASE_URL}/teams/${SPORT_ID}/${SPORT_ID}.json?t=${Date.now()}`;
-            try {
-                const res = await fetch(url);
-                if(!res.ok) throw new Error("Could not find sport JSON");
-                const data = await res.json();
-                
-                // Print Equipment
-                const equipHtml = data.equipment ? data.equipment.map(e => `<li>${e}</li>`).join('') : "<li>None specified</li>";
-                document.getElementById('equipList').innerHTML = equipHtml;
+            const res = await fetch(`${REPO_BASE_URL}/teams/${SPORT_ID}/${SPORT_ID}.json?t=${Date.now()}`);
+            unitData = await res.json();
+            
+            if(unitData.header_image) document.getElementById('unitHeader').innerHTML = `<img src="${unitData.header_image}" class="unit-header-img">`;
+            document.getElementById('unitTitle').innerText = unitData.display_name;
+            document.getElementById('equipList').innerHTML = unitData.equipment.map(e => `<li>${e}</li>`).join('');
+            document.getElementById('rulesList').innerHTML = unitData.rules.map(r => `<li>${r}</li>`).join('');
+            document.getElementById('vocabList').innerHTML = unitData.key_terms.map(v => `<li><strong>${v.term}</strong>: ${v.definition}</li>`).join('');
+            document.getElementById('discussionList').innerHTML = unitData.unit_plan.map(d => d.discussion ? `<li>${d.discussion}</li>` : '').join('');
 
-                // Print Rules (Only if they exist)
-                if (data.rules && data.rules.length > 0) {
-                    document.getElementById('rulesContainer').innerHTML = `<h2 style="margin-top: 30px;">📜 Game Rules</h2><ul class="equipment-list">${data.rules.map(r => `<li>${r}</li>`).join('')}</ul>`;
-                } else {
-                    document.getElementById('rulesContainer').innerHTML = "";
-                }
+            let planHtml = "";
+            unitData.unit_plan.forEach(d => {
+                planHtml += `
+                    <div style="border-bottom: 2px solid #eee; padding: 15px 0;">
+                        <strong>Day ${d.day}: ${d.topic}</strong>
+                        <p style="font-size: 0.9em; margin: 5px 0;">Skills: ${d.skills} | Games: ${d.games}</p>
+                        ${d.workout_iframe ? `<details style="margin-top:10px;"><summary style="font-size:0.85em; padding:8px; background:#f9f9f9;">🏋️ View Daily Workout</summary><div class="details-content" style="padding:0;"><iframe src="${d.workout_iframe}" width="100%" height="400px" frameborder="0"></iframe></div></details>` : ''}
+                    </div>`;
+            });
+            document.getElementById('unitPlanContainer').innerHTML = planHtml;
 
-                // Print Key Terms (Only if they exist)
-                if (data.key_terms && data.key_terms.length > 0) {
-                    document.getElementById('termsContainer').innerHTML = `<h2 style="margin-top: 30px;">🗣️ Key Terms</h2><ul class="equipment-list">${data.key_terms.map(v => `<li><strong>${v.term}</strong>: ${v.definition}</li>`).join('')}</ul>`;
-                } else {
-                    document.getElementById('termsContainer').innerHTML = "";
-                }
-
-                // Print Unit Plan
-                let planHtml = "";
-                let planData = data.unit_plan || data.daily_plan; 
-                if (planData && planData.length > 0) {
-                    planData.forEach(d => {
-                        planHtml += `<div class="day-card">
-                            <h4>Day ${d.day}${d.topic ? `: ${d.topic}` : ''}</h4>`;
-                        if(d.workout) planHtml += `<p style="margin-top: 5px;"><strong>Workout:</strong> ${d.workout}</p>`;
-                        if(d.skills) planHtml += `<p><strong>Skills:</strong> ${d.skills}</p>`;
-                        if(d.games) planHtml += `<p><strong>Games:</strong> ${d.games}</p>`;
-                        if(d.discussion) planHtml += `<p><strong>Discussion:</strong> ${d.discussion}</p>`;
-                        if(d.desc) planHtml += `<p style="margin-top: 5px;">${d.desc}</p>`; 
-                        planHtml += `</div>`;
-                    });
-                } else {
-                    planHtml = "<p>Plan coming soon.</p>";
-                }
-                document.getElementById('unitPlanContainer').innerHTML = planHtml;
-
-            } catch (err) {
-                console.error(err);
-                document.getElementById('unitPlanContainer').innerHTML = "<p>Error loading unit plan.</p>";
+            if(unitData.global_connections) {
+                let vidId = unitData.global_connections.highlights_video.split('v=')[1];
+                document.getElementById('highlightsContent').innerHTML = `<p>${unitData.global_connections.description}</p><div class="video-container"><iframe src="https://www.youtube.com/embed/${vidId}" frameborder="0" allowfullscreen></iframe></div>`;
             }
         }
 
-        async function loadClassData(filePrefix, btnElement) {
-            setActiveButton(btnElement);
+        function getLogo(teamName) {
+            const team = unitData.available_teams.find(t => t.display === teamName);
+            return team ? `${REPO_BASE_URL}/teams/${SPORT_ID}/${team.logo}` : '';
+        }
+
+        async function loadClassData(prefix, btn) {
+            document.querySelectorAll('.btn-class').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
             document.getElementById('syllabusView').style.display = 'none';
             document.getElementById('classView').style.display = 'block';
-            
-            const rostersGrid = document.getElementById('rostersGrid');
-            const standingsBody = document.getElementById('standingsBody');
-            const scheduleContainer = document.getElementById('scheduleContainer');
-            
-            rostersGrid.innerHTML = "Loading...";
-            standingsBody.innerHTML = "<tr><td colspan='7'>Loading...</td></tr>";
-            scheduleContainer.innerHTML = "Loading...";
 
-            const teamsUrl = `${REPO_BASE_URL}/units/${filePrefix}_teams.json?t=${Date.now()}`;
-            const schedUrl = `${REPO_BASE_URL}/units/${filePrefix}_schedule.json?t=${Date.now()}`;
+            const [tRes, sRes] = await Promise.all([
+                fetch(`${REPO_BASE_URL}/units/${prefix}_teams.json?t=${Date.now()}`),
+                fetch(`${REPO_BASE_URL}/units/${prefix}_schedule.json?t=${Date.now()}`)
+            ]);
+            currentTeams = (await tRes.json()).baseTeams;
+            currentSchedule = await sRes.json();
 
-            try {
-                const teamRes = await fetch(teamsUrl);
-                if (!teamRes.ok) throw new Error("Could not fetch rosters.");
-                const teamData = await teamRes.json();
-
-                let schedData = null;
-                try {
-                    const schedRes = await fetch(schedUrl);
-                    if (schedRes.ok) schedData = await schedRes.json();
-                } catch(e) {}
-
-                renderClass(teamData, schedData);
-            } catch (err) {
-                rostersGrid.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
-                standingsBody.innerHTML = "";
-                scheduleContainer.innerHTML = "";
-            }
+            renderStandings(); renderSchedule(); renderRosters();
         }
 
-        function renderClass(teamData, schedData) {
-            let teams = teamData.baseTeams || [];
-            const rostersGrid = document.getElementById('rostersGrid');
-            const standingsBody = document.getElementById('standingsBody');
-            const scheduleContainer = document.getElementById('scheduleContainer');
-            
-            rostersGrid.innerHTML = '';
-            standingsBody.innerHTML = '';
+        function renderStandings() {
+            let sorted = [...currentTeams].sort((a,b) => (currentSchedule.standings[b.name]?.pts || 0) - (currentSchedule.standings[a.name]?.pts || 0));
+            document.getElementById('standingsBody').innerHTML = sorted.map((t, i) => {
+                let s = currentSchedule.standings[t.name] || {w:0, l:0, t:0, pts:0};
+                return `<tr><td>${i+1}</td><td><img src="${getLogo(t.name)}" class="team-logo-sm"> ${t.name}</td><td>${s.w}-${s.l}-${s.t}</td><td><strong>${s.pts}</strong></td></tr>`;
+            }).join('');
+        }
 
-            // Map Team Logos for easy lookup in the schedule
-            let teamLogos = {};
-            teams.forEach(t => {
-                let logoId = t.logo_id && t.logo_id !== "none" ? t.logo_id : "placeholder";
-                teamLogos[t.name] = logoId === "placeholder" ? "https://via.placeholder.com/30?text=?" : `${REPO_BASE_URL}/teams/${SPORT_ID}/${logoId}.png`;
-            });
-
-            // 1. Sort & Render Standings
-            if (schedData && schedData.standings) {
-                teams.sort((a, b) => {
-                    let statA = schedData.standings[a.name] || {pts: 0, pd: 0};
-                    let statB = schedData.standings[b.name] || {pts: 0, pd: 0};
-                    if (statB.pts !== statA.pts) return statB.pts - statA.pts;
-                    return statB.pd - statA.pd;
-                });
-            }
-
-            teams.forEach((team, index) => {
-                let logoUrl = teamLogos[team.name];
-                
-                // Rosters
-                let playerHtml = team.players.map(p => `<li>${p.name}</li>`).join('');
-                rostersGrid.innerHTML += `
-                    <div class="team-card">
-                        <div class="team-card-header">
-                            <img src="${logoUrl}" class="team-logo" onerror="this.src='https://via.placeholder.com/150?text=?'">
-                            <h3>${team.name}</h3>
-                        </div>
-                        <ul class="player-list">${playerHtml}</ul>
+        function renderSchedule() {
+            let html = ""; let dates = {};
+            currentSchedule.matches.forEach(m => { if(!dates[m.date_str]) dates[m.date_str] = []; dates[m.date_str].push(m); });
+            for(let d in dates) {
+                html += `<div style="margin-bottom:15px;"><div style="background:#f0f0f0; padding:8px; font-weight:bold; border-radius:4px;">${d}</div>`;
+                dates[d].forEach(m => {
+                    html += `<div class="match-row" onclick="showTeamInfo('${m.home_team}', '${m.away_team}')">
+                        <div class="team-display"><img src="${getLogo(m.home_team)}" class="team-logo-sm"> ${m.home_team}</div>
+                        <div style="color:var(--primary); font-weight:bold;">${m.completed ? m.home_score + '-' + m.away_score : 'vs'}</div>
+                        <div class="team-display" style="justify-content:flex-end;">${m.away_team} <img src="${getLogo(m.away_team)}" class="team-logo-sm"></div>
                     </div>`;
-
-                // Standings
-                let stats = (schedData && schedData.standings && schedData.standings[team.name]) ? schedData.standings[team.name] : { w: 0, l: 0, t: 0, pd: 0, pts: 0 };
-                let pdDisplay = stats.pd > 0 ? `+${stats.pd}` : stats.pd;
-                standingsBody.innerHTML += `
-                    <tr>
-                        <td><strong>${index + 1}</strong></td>
-                        <td><div class="team-cell"><img src="${logoUrl}" class="table-logo" onerror="this.src='https://via.placeholder.com/40?text=?'"> ${team.name}</div></td>
-                        <td>${stats.w}</td><td>${stats.l}</td><td>${stats.t}</td><td>${pdDisplay}</td>
-                        <td style="color: var(--primary);"><strong>${stats.pts}</strong></td>
-                    </tr>`;
-            });
-
-            // 2. Render Schedule
-            if (schedData && schedData.matches && schedData.matches.length > 0) {
-                let scheduleHtml = '';
-                let datesObj = {};
-                
-                // Group matches by date string
-                schedData.matches.forEach(m => {
-                    if(!datesObj[m.date_str]) datesObj[m.date_str] = [];
-                    datesObj[m.date_str].push(m);
                 });
-
-                for (let date in datesObj) {
-                    scheduleHtml += `<div class="schedule-group"><div class="schedule-date">${date}</div>`;
-                    
-                    datesObj[date].forEach(m => {
-                        let scoreDisplay = m.completed ? `${m.home_score} - ${m.away_score}` : 'vs';
-                        let homeLogo = teamLogos[m.home_team] || "https://via.placeholder.com/30?text=?";
-                        let awayLogo = teamLogos[m.away_team] || "https://via.placeholder.com/30?text=?";
-                        
-                        // Handle 'BYE' formatting beautifully
-                        if (m.home_team === "BYE" || m.away_team === "BYE") {
-                            let actualTeam = m.home_team === "BYE" ? m.away_team : m.home_team;
-                            let actualLogo = teamLogos[actualTeam];
-                            scheduleHtml += `
-                            <div class="match-row">
-                                <div class="match-time-loc"><i>No Game Scheduled</i></div>
-                                <div class="match-teams" style="color:#666; font-weight:normal;">
-                                    <div class="team-display home">${actualTeam} <img src="${actualLogo}" class="table-logo"></div>
-                                    <div class="match-score" style="color:#999; font-size: 1em;">BYE</div>
-                                    <div class="team-display away"></div>
-                                </div>
-                            </div>`;
-                        } else {
-                            scheduleHtml += `
-                            <div class="match-row">
-                                <div class="match-time-loc">⏱️ ${m.time}<br>📍 ${m.location}</div>
-                                <div class="match-teams">
-                                    <div class="team-display home">${m.home_team} <img src="${homeLogo}" class="table-logo"></div>
-                                    <div class="match-score">${scoreDisplay}</div>
-                                    <div class="team-display away"><img src="${awayLogo}" class="table-logo"> ${m.away_team}</div>
-                                </div>
-                            </div>`;
-                        }
-                    });
-                    scheduleHtml += `</div>`;
-                }
-                scheduleContainer.innerHTML = scheduleHtml;
-            } else {
-                scheduleContainer.innerHTML = "<p>No matches scheduled yet.</p>";
+                html += `</div>`;
             }
+            document.getElementById('scheduleContainer').innerHTML = html;
+        }
+
+        function renderRosters() {
+            document.getElementById('rostersGrid').innerHTML = currentTeams.map(t => `
+                <div style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; text-align:center;">
+                    <img src="${getLogo(t.name)}" class="team-logo-md">
+                    <strong style="color:var(--primary); font-size:1.1em;">${t.name}</strong>
+                    <ul style="font-size:0.9em; text-align:left; margin-top:10px;">${t.players.map(p => `<li>${p.name}</li>`).join('')}</ul>
+                </div>`).join('');
+        }
+
+        function showTeamInfo(n1, n2) {
+            const t1 = currentTeams.find(t => t.name === n1);
+            const t2 = currentTeams.find(t => t.name === n2);
+            let h = `<h2>Matchup Rosters</h2>`;
+            if(t1) h += `<h3><img src="${getLogo(t1.name)}" class="team-logo-sm"> ${t1.name}</h3><ul>${t1.players.map(p => `<li>${p.name}</li>`).join('')}</ul>`;
+            if(t2) h += `<h3><img src="${getLogo(t2.name)}" class="team-logo-sm"> ${t2.name}</h3><ul>${t2.players.map(p => `<li>${p.name}</li>`).join('')}</ul>`;
+            document.getElementById('modalBody').innerHTML = h;
+            document.getElementById('teamModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('teamModal').style.display = 'none'; }
+        function showSyllabus() { 
+            document.getElementById('classView').style.display='none'; 
+            document.getElementById('syllabusView').style.display='block';
+            document.querySelectorAll('.btn-class').forEach(b => b.classList.remove('active'));
+            document.querySelector('.btn-class').classList.add('active');
         }
     </script>
 </body>
