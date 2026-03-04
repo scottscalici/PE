@@ -1,0 +1,28 @@
+{
+  "exercises": [
+    {
+      "id": "push_ups_01",
+      "name": "Push-Ups",
+      "category": ["upper body", "strength", "bilateral"],
+      "instructions": "Keep your core tight and butt even with your back",
+      "gifUrl": "assets/gifs/pushups.gif",
+      "safetyCues": "Don't let your lower back sag."
+    },
+    {
+      "id": "jumping_jacks_01",
+      "name": "Jumping Jacks",
+      "category": ["cardio", "full body"],
+      "instructions": "Standard jumping jacks, maintain a steady rhythm.",
+      "gifUrl": "assets/gifs/jacks.gif",
+      "safetyCues": "Land softly on the balls of your feet."
+    },
+    {
+      "id": "rest_01",
+      "name": "Recovery",
+      "category": ["rest"],
+      "instructions": "Deep breaths and hydrate.",
+      "gifUrl": "",
+      "safetyCues": ""
+    }
+  ]
+}
