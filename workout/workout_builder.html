@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Builder Dashboard</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #d4d4d4;
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0; padding: 20px;
+        }
+        h1 { color: #ff4500; text-transform: uppercase; font-family: 'Arial Black', Impact, sans-serif; }
+        .panel {
+            background: #222;
+            border: 2px solid #444;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            max-width: 800px;
+        }
+        label { font-weight: bold; color: #aaa; display: block; margin-top: 10px; }
+        input[type="text"], input[type="number"], select {
+            width: 100%; padding: 10px; margin-top: 5px;
+            background: #111; color: #fff; border: 1px solid #555; border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .sequence-row {
+            display: flex; gap: 10px; margin-top: 10px; align-items: center;
+            background: #111; padding: 10px; border: 1px solid #333; border-radius: 4px;
+        }
+        .sequence-row select, .sequence-row input { margin-top: 0; }
+        .remove-btn {
+            background: #500; color: #fff; border: none; padding: 10px; cursor: pointer; border-radius: 4px; font-weight: bold;
+        }
+        .remove-btn:hover { background: #700; }
+        button.action-btn {
+            background: #ff4500; color: #fff; font-family: 'Arial Black', sans-serif;
+            padding: 10px 20px; border: none; cursor: pointer; margin-top: 15px; border-radius: 4px; font-size: 1.1rem;
+        }
+        button.action-btn:hover { background: #ff5722; }
+        textarea {
+            width: 100%; height: 300px; background: #0a0a0a; color: #00ff00;
+            font-family: monospace; padding: 15px; border: 2px solid #555;
+            box-sizing: border-box; margin-top: 10px; border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Workout Builder Dashboard</h1>
+
+    <div class="panel">
+        <h3>1. Workout Details</h3>
+        <label>Workout ID (e.g., handball_day_01)</label>
+        <input type="text" id="work-id" placeholder="No spaces, use underscores">
+        
+        <label>Workout Name (Display Title)</label>
+        <input type="text" id="work-name" placeholder="e.g., Handball Cardio Push">
+        
+        <label>Total Rounds</label>
+        <input type="number" id="work-rounds" value="3" min="1">
+    </div>
+
+    <div class="panel">
+        <h3>2. Build Circuit</h3>
+        <div id="sequence-container">
+            </div>
+        <button class="action-btn" style="background: #444;" onclick="addExerciseRow()">+ ADD EXERCISE</button>
+    </div>
+
+    <div class="panel">
+        <h3>3. Generate Output</h3>
+        <button class="action-btn" onclick="generateJSON()">GENERATE JSON CODE</button>
+        <label>Copy this and paste it inside the "workouts" array in your workout_routine.json file:</label>
+        <textarea id="json-output" readonly placeholder="Your generated code will appear here..."></textarea>
+    </div>
+
+    <script>
+        const EXERCISES_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/exercises.json';
+        let availableExercises = [];
+
+        // Fetch live exercises from GitHub so your dropdown is always up to date
+        async function loadExercises() {
+            try {
+                const response = await fetch(EXERCISES_URL);
+                const data = await response.json();
+                availableExercises = data.exercises;
+                // Add one empty row to start
+                addExerciseRow();
+            } catch (err) {
+                alert("Could not load exercises from GitHub. Check your internet connection.");
+            }
+        }
+
+        function addExerciseRow() {
+            const container = document.getElementById('sequence-container');
+            const row = document.createElement('div');
+            row.className = 'sequence-row';
+
+            // Exercise Dropdown
+            let selectHTML = `<select class="ex-id">`;
+            availableExercises.forEach(ex => {
+                selectHTML += `<option value="${ex.id}">${ex.name} (${ex.id})</option>`;
+            });
+            selectHTML += `</select>`;
+
+            row.innerHTML = `
+                <div style="flex-grow: 2;">${selectHTML}</div>
+                <div style="flex-grow: 1;">
+                    <input type="number" class="ex-duration" value="30" min="5" placeholder="Seconds">
+                </div>
+                <div style="flex-grow: 1;">
+                    <select class="ex-type">
+                        <option value="work">Work</option>
+                        <option value="rest">Rest</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="remove-btn" onclick="this.parentElement.parentElement.remove()">X</button>
+                </div>
+            `;
+            container.appendChild(row);
+        }
+
+        function generateJSON() {
+            const id = document.getElementById('work-id').value.trim();
+            const name = document.getElementById('work-name').value.trim();
+            const rounds = parseInt(document.getElementById('work-rounds').value);
+
+            if (!id || !name) {
+                alert("Please provide an ID and Name for the workout.");
+                return;
+            }
+
+            const sequence = [];
+            const rows = document.querySelectorAll('.sequence-row');
+            
+            rows.forEach(row => {
+                const exId = row.querySelector('.ex-id').value;
+                const duration = parseInt(row.querySelector('.ex-duration').value);
+                const type = row.querySelector('.ex-type').value;
+
+                sequence.push({
+                    exerciseId: exId,
+                    duration: duration,
+                    type: type
+                });
+            });
+
+            // Construct the final object exactly as your app expects it
+            const workoutObject = {
+                id: id,
+                workoutName: name,
+                rounds: rounds,
+                circuits: [
+                    {
+                        circuitId: "A",
+                        sequence: sequence
+                    }
+                ]
+            };
+
+            // Convert to formatted JSON string
+            const jsonString = JSON.stringify(workoutObject, null, 4);
+            
+            // Add a trailing comma to make copy/pasting into an array easier
+            document.getElementById('json-output').value = jsonString + ",";
+        }
+
+        // Initialize
+        loadExercises();
+    </script>
+</body>
+</html>
