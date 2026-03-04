@@ -1,5 +1,37 @@
 {
   "sport": "handball",
+  "display_name": "Team Handball",
+  "header_image": "https://raw.githubusercontent.com/scottscalici/PE/main/teams/handball/handball.jpg",
+  "equipment": [
+    "Softball-sized smushballs",
+    "Goal nets"
+  ],
+  "rules": [
+    "Three-point line is a restricted zone (except for goalkeepers).",
+    "Players may land inside the zone on a throw as long as the ball is released before landing.",
+    "Dribbling is allowed, but once you stop your dribble, you cannot start again.",
+    "Maximum of 3 steps allowed with the ball.",
+    "3-second limit to pass or shoot (applies to goalies too)."
+  ],
+  "key_terms": [
+    { "term": "Restricted Zone", "definition": "The area inside the 3-point line where only the goalie is allowed to stand." },
+    { "term": "The 3-3-3 Rule", "definition": "3 steps, 3 seconds, 3 meters (distance for defenders on restarts)." },
+    { "term": "Jump Shot", "definition": "A shot taken while jumping into the air, often used to get a better angle over the defense." }
+  ],
+  "global_connections": {
+    "description": "Handball is a massive professional sport in Europe, especially in Germany, Denmark, and France.",
+    "highlights_video": "https://www.youtube.com/watch?v=zyZhcvuWrZc"
+  },
+  "unit_plan": [
+    {
+      "day": 1,
+      "topic": "Intro to Handball & Movement",
+      "workout_iframe": "YOUR_WORKOUT_URL_HERE",
+      "skills": "Catching, 3-step footwork, and basic passing",
+      "games": "Keep away / Lead-up passing games",
+      "discussion": "Why is the jump shot more effective than a standing shot?"
+    }
+  ],
   "available_teams": [
     { "display": "Die Löwen", "id": "lowen", "logo": "lowen.png" },
     { "display": "Zebras", "id": "zebras", "logo": "zebras.png" },
