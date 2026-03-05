@@ -60,7 +60,8 @@
 
         /* Tournament Bracket Styles */
         .bracket-round { display: flex; flex-direction: column; justify-content: space-around; gap: 15px; min-width: 200px; }
-        .bracket-match { background: #f8f9fa; border: 1px solid #ddd; border-radius: 6px; padding: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .bracket-match { background: #f8f9fa; border: 1px solid #ddd; border-radius: 6px; padding: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer; transition: background 0.2s; }
+        .bracket-match:hover { background: #e2eeff; border-color: var(--primary); }
         .bracket-team { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 0.9em; font-weight: bold; }
         .bracket-team:first-child { border-bottom: 1px solid #eee; margin-bottom: 5px; padding-bottom: 10px; }
         .bracket-score { color: var(--primary); font-size: 1.1em; }
@@ -352,10 +353,10 @@ function renderBracket() {
                     let logo1 = m.team1 === "TBD" || m.team1 === "" ? "" : `<img src="${getLogo(m.team1)}" class="team-logo-sm">`;
                     let logo2 = m.team2 === "TBD" || m.team2 === "" ? "" : `<img src="${getLogo(m.team2)}" class="team-logo-sm">`;
 
-                    html += `
-                        <div class="bracket-match">
+                  html += `
+                        <div class="bracket-match" onclick="showTeamInfo('${m.team1}', '${m.team2}')">
                             <div class="bracket-team ${t1Winner}">
-                                <span>${logo1} ${m.team1 || 'TBD'}</span>
+                                    <span>${logo1} ${m.team1 || 'TBD'}</span>
                                 <span class="bracket-score">${s1}</span>
                             </div>
                             <div class="bracket-team ${t2Winner}">
