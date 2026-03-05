@@ -157,5 +157,39 @@
       "pd": -3,
       "pts": 4
     }
-  }
+  },
+  "tournament": [
+    {
+      "id": 1772683296892,
+      "round_name": "Play In",
+      "team1": "Handball Club Erlangen (HCE)",
+      "score1": null,
+      "team2": "Zebras",
+      "score2": null
+    },
+    {
+      "id": 1772683307811,
+      "round_name": "Semifinal",
+      "team1": "Füchse Berlin",
+      "score1": null,
+      "team2": "TBD",
+      "score2": null
+    },
+    {
+      "id": 1772683322514,
+      "round_name": "Semifinal",
+      "team1": "Die Recken",
+      "score1": null,
+      "team2": "Stuttgart Wild Boys",
+      "score2": null
+    },
+    {
+      "id": 1772683332800,
+      "round_name": "Final",
+      "team1": "TBD",
+      "score1": null,
+      "team2": "TBD",
+      "score2": null
+    }
+  ]
 }
