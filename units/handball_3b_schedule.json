@@ -59,12 +59,12 @@
       "id": 6,
       "home_team": "Stuttgart Wild Boys",
       "away_team": "Die Löwen",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 7,
+      "away_score": 2,
       "date_str": "March 5 (Day 52)",
       "time": "11:30",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     }
   ],
   "standings": {
@@ -79,11 +79,11 @@
     },
     "Die Löwen": {
       "w": 0,
-      "l": 2,
+      "l": 3,
       "t": 0,
-      "pf": 5,
-      "pa": 19,
-      "pd": -14,
+      "pf": 7,
+      "pa": 26,
+      "pd": -19,
       "pts": 0
     },
     "Die Recken": {
@@ -96,13 +96,13 @@
       "pts": 3
     },
     "Stuttgart Wild Boys": {
-      "w": 2,
+      "w": 3,
       "l": 0,
       "t": 0,
-      "pf": 16,
-      "pa": 10,
-      "pd": 6,
-      "pts": 6
+      "pf": 23,
+      "pa": 12,
+      "pd": 11,
+      "pts": 9
     }
   },
   "tournament": []
