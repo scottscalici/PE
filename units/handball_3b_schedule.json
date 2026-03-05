@@ -48,12 +48,12 @@
       "id": 5,
       "home_team": "Zebras",
       "away_team": "Die Recken",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 8,
+      "away_score": 5,
       "date_str": "March 5 (Day 52)",
       "time": "11:15",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 6,
@@ -69,13 +69,13 @@
   ],
   "standings": {
     "Zebras": {
-      "w": 1,
+      "w": 2,
       "l": 1,
       "t": 0,
-      "pf": 19,
-      "pa": 14,
-      "pd": 5,
-      "pts": 3
+      "pf": 27,
+      "pa": 19,
+      "pd": 8,
+      "pts": 6
     },
     "Die Löwen": {
       "w": 0,
@@ -88,11 +88,11 @@
     },
     "Die Recken": {
       "w": 1,
-      "l": 1,
+      "l": 2,
       "t": 0,
-      "pf": 10,
-      "pa": 7,
-      "pd": 3,
+      "pf": 15,
+      "pa": 15,
+      "pd": 0,
       "pts": 3
     },
     "Stuttgart Wild Boys": {
@@ -104,5 +104,6 @@
       "pd": 6,
       "pts": 6
     }
-  }
+  },
+  "tournament": []
 }
