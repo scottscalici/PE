@@ -128,42 +128,99 @@
             });
         }
 
-        async function fetchSyllabus() {
-            const res = await fetch(`${REPO_BASE_URL}/teams/${SPORT_ID}/${SPORT_ID}.json?t=${Date.now()}`);
-            unitData = await res.json();
+async function fetchSyllabus() {
+    const res = await fetch(`${REPO_BASE_URL}/teams/${SPORT_ID}/${SPORT_ID}.json?t=${Date.now()}`);
+    unitData = await res.json();
+    
+    // 1. Header & Title
+    if(unitData.header_image) {
+        document.getElementById('unitHeader').innerHTML = `<img src="${unitData.header_image}" class="unit-header-img">`;
+    }
+    document.getElementById('unitTitle').innerText = unitData.display_name || "Unit Plan";
+
+    // 2. Equipment & Rules
+    const equipList = document.getElementById('equipList');
+    const rulesList = document.getElementById('rulesList');
+    let hasEquip = unitData.equipment && unitData.equipment.length > 0;
+    let hasRules = unitData.rules && unitData.rules.length > 0;
+    
+    if (!hasEquip && !hasRules) {
+        equipList.closest('details').style.display = 'none'; // Hides the whole dropdown
+    } else {
+        if (hasEquip) equipList.innerHTML = unitData.equipment.map(e => `<li>${e}</li>`).join('');
+        else equipList.previousElementSibling.style.display = 'none'; // Hides the <h3> tag
+        
+        if (hasRules) rulesList.innerHTML = unitData.rules.map(r => `<li>${r}</li>`).join('');
+        else rulesList.previousElementSibling.style.display = 'none'; // Hides the <h3> tag
+    }
+
+    // 3. Vocab & Discussion
+    const vocabList = document.getElementById('vocabList');
+    const discussionList = document.getElementById('discussionList');
+    let hasVocab = unitData.key_terms && unitData.key_terms.length > 0;
+    
+    // Check if any daily plans actually have discussion questions
+    let discussions = (unitData.unit_plan || []).filter(d => d.discussion).map(d => `<li>${d.discussion}</li>`);
+    let hasDiscussion = discussions.length > 0;
+
+    if (!hasVocab && !hasDiscussion) {
+        vocabList.closest('details').style.display = 'none'; 
+    } else {
+        if (hasVocab) vocabList.innerHTML = unitData.key_terms.map(v => `<li><strong>${v.term}</strong>: ${v.definition}</li>`).join('');
+        else vocabList.previousElementSibling.style.display = 'none';
+
+        if (hasDiscussion) discussionList.innerHTML = discussions.join('');
+        else discussionList.previousElementSibling.style.display = 'none';
+    }
+
+    // 4. Daily Unit Plan
+    let planHtml = "";
+    if (unitData.unit_plan && unitData.unit_plan.length > 0) {
+        unitData.unit_plan.forEach(d => {
+            // Only add Skills and Games if they exist
+            let detailsArr = [];
+            if (d.skills) detailsArr.push(`<strong>Skills:</strong> ${d.skills}`);
+            if (d.games) detailsArr.push(`<strong>Games:</strong> ${d.games}`);
             
-            if(unitData.header_image) document.getElementById('unitHeader').innerHTML = `<img src="${unitData.header_image}" class="unit-header-img">`;
-            document.getElementById('unitTitle').innerText = unitData.display_name;
-            document.getElementById('equipList').innerHTML = unitData.equipment.map(e => `<li>${e}</li>`).join('');
-            document.getElementById('rulesList').innerHTML = unitData.rules.map(r => `<li>${r}</li>`).join('');
-            document.getElementById('vocabList').innerHTML = unitData.key_terms.map(v => `<li><strong>${v.term}</strong>: ${v.definition}</li>`).join('');
-            document.getElementById('discussionList').innerHTML = unitData.unit_plan.map(d => d.discussion ? `<li>${d.discussion}</li>` : '').join('');
+            // Join them with a " | " only if there's more than one
+            let detailsHtml = detailsArr.length > 0 ? `<p style="font-size: 0.9em; margin: 5px 0;">${detailsArr.join(' | ')}</p>` : '';
 
+            planHtml += `
+                <div style="border-bottom: 2px solid #eee; padding: 15px 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <strong>Day ${d.day}${d.topic ? `: ${d.topic}` : ''}</strong>
+                            ${detailsHtml}
+                        </div>
+                        ${d.workout_iframe ? `
+                            <a href="${d.workout_iframe}" target="_blank" style="padding: 10px 15px; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85em; display: flex; align-items: center; gap: 5px;">
+                                🚀 Open Workout
+                            </a>
+                        ` : ''}
+                    </div>
+                </div>`;
+        });
+        document.getElementById('unitPlanContainer').innerHTML = planHtml;
+    } else {
+        document.getElementById('unitPlanContainer').closest('details').style.display = 'none';
+    }
 
-let planHtml = "";
-unitData.unit_plan.forEach(d => {
-    planHtml += `
-        <div style="border-bottom: 2px solid #eee; padding: 15px 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                <div>
-                    <strong>Day ${d.day}: ${d.topic}</strong>
-                    <p style="font-size: 0.9em; margin: 5px 0;">Skills: ${d.skills} | Games: ${d.games}</p>
-                </div>
-                ${d.workout_iframe ? `
-                    <a href="${d.workout_iframe}" target="_blank" style="padding: 10px 15px; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85em; display: flex; align-items: center; gap: 5px;">
-                        🚀 Open Workout
-                    </a>
-                ` : ''}
-            </div>
-        </div>`;
-});
-document.getElementById('unitPlanContainer').innerHTML = planHtml;
-
-            if(unitData.global_connections) {
-                let vidId = unitData.global_connections.highlights_video.split('v=')[1];
-                document.getElementById('highlightsContent').innerHTML = `<p>${unitData.global_connections.description}</p><div class="video-container"><iframe src="https://www.youtube.com/embed/${vidId}" frameborder="0" allowfullscreen></iframe></div>`;
+    // 5. Global Connections
+    const highlightsContent = document.getElementById('highlightsContent');
+    if(unitData.global_connections && (unitData.global_connections.description || unitData.global_connections.highlights_video)) {
+        let vidHtml = '';
+        if (unitData.global_connections.highlights_video) {
+            let vidId = unitData.global_connections.highlights_video.split('v=')[1];
+            if (vidId) {
+                vidHtml = `<div class="video-container"><iframe src="https://www.youtube.com/embed/${vidId}" frameborder="0" allowfullscreen></iframe></div>`;
             }
         }
+        let descHtml = unitData.global_connections.description ? `<p>${unitData.global_connections.description}</p>` : '';
+        highlightsContent.innerHTML = descHtml + vidHtml;
+    } else {
+        highlightsContent.closest('details').style.display = 'none';
+    }
+}
 
         function getLogo(teamName) {
             const team = unitData.available_teams.find(t => t.display === teamName);
