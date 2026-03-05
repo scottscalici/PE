@@ -185,12 +185,12 @@
                 <button class="btn-outline no-print" style="width: auto; margin: 0;" onclick="window.print()">🖨️ Print Active Tab</button>
             </div>
             
-            <div style="display: flex; gap: 5px; border-bottom: 2px solid #ccc; margin-bottom: 20px;" class="no-print">
-                <button class="tab-btn active" onclick="switchTab('standingsTab', this)">📊 Standings</button>
-                <button class="tab-btn" onclick="switchTab('matchesTab', this)">🏟️ Matches</button>
-                <button class="tab-btn" onclick="switchTab('playersTab', this)">🧑‍🎓 Player View</button>
-            </div>
-
+           <div style="display: flex; gap: 5px; border-bottom: 2px solid #ccc; margin-bottom: 20px;" class="no-print">
+    <button class="tab-btn active" onclick="switchTab('standingsTab', this)">📊 Standings</button>
+    <button class="tab-btn" onclick="switchTab('matchesTab', this)">🏟️ Matches</button>
+    <button class="tab-btn" onclick="switchTab('playersTab', this)">🧑‍🎓 Player View</button>
+    <button class="tab-btn" onclick="switchTab('tournamentTab', this)" style="background: #ffc107; color: #000;">🏆 Tournament</button>
+</div>
             <div id="standingsTab" class="tab-content active">
                 <div id="standingsContainer"><i>Load a unit and generate a schedule to see standings.</i></div>
             </div>
@@ -203,6 +203,11 @@
             <div id="playersTab" class="tab-content">
                 <div id="playersContainer"><i>Load a unit and generate a schedule to see personalized player schedules.</i></div>
             </div>
+
+            <div id="tournamentTab" class="tab-content">
+    <div id="tournamentContainer"><i>No tournament generated.</i></div>
+    <button class="btn-outline no-print" style="margin-top: 15px; border: 2px solid #ffc107; color: #b38600; font-weight: bold;" onclick="addTournamentMatch()">➕ Add Tournament Match</button>
+</div>
         </div>
     </div>
 
@@ -312,47 +317,53 @@
             } catch (error) { alert("Error: " + error.message); }
         }
 
-        async function loadSelectedGitHubUnit() {
-            const url = document.getElementById('githubUnitsSelect').value;
-            if (!url) return;
-            
-            const res = await fetch(url);
-            currentUnit = await res.json();
-            
-            let displayTitle = currentUnit.unit_name.includes(currentUnit.class_id) 
-                ? currentUnit.unit_name : `${currentUnit.unit_name} (${currentUnit.class_id})`;
-            
-            document.getElementById('workspaceTitle').innerText = `${displayTitle} - Schedule`;
-            document.getElementById('generatorPanel').style.opacity = '1';
-            document.getElementById('generatorPanel').style.pointerEvents = 'auto';
-            
-            const token = document.getElementById('ghToken').value.trim();
-            let folder = document.getElementById('ghFolder').value.trim();
-            
-            const cleanName = currentUnit.unit_name.replace(/\s+/g, '_').toLowerCase();
-            const schedUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${cleanName}_schedule.json?t=${Date.now()}`;
-            
-            try {
-                const schedRes = await fetch(schedUrl, { headers: { 'Accept': 'application/vnd.github.v3.raw', 'Authorization': `Bearer ${token}` } });
-                if (schedRes.ok) {
-                    scheduleData = await schedRes.json();
-                    recalculateStandings(); 
-                    renderMatches();
-                    renderPlayers();
-                } else {
-                    scheduleData = { matches: [], standings: {} };
-                    recalculateStandings();
-                    renderMatches();
-                    renderPlayers();
-                }
-            } catch (e) {
-                scheduleData = { matches: [], standings: {} };
-                recalculateStandings();
-                renderMatches();
-                renderPlayers();
-            }
+async function loadSelectedGitHubUnit() {
+    const url = document.getElementById('githubUnitsSelect').value;
+    if (!url) return;
+    
+    const res = await fetch(url);
+    currentUnit = await res.json();
+    
+    let displayTitle = currentUnit.unit_name.includes(currentUnit.class_id) 
+        ? currentUnit.unit_name : `${currentUnit.unit_name} (${currentUnit.class_id})`;
+    
+    document.getElementById('workspaceTitle').innerText = `${displayTitle} - Schedule`;
+    document.getElementById('generatorPanel').style.opacity = '1';
+    document.getElementById('generatorPanel').style.pointerEvents = 'auto';
+    
+    const token = document.getElementById('ghToken').value.trim();
+    let folder = document.getElementById('ghFolder').value.trim();
+    if (!folder.endsWith('/')) folder += '/';
+    
+    // THE FIX: Grab the exact text from the dropdown (e.g. "handball_3a")
+    const select = document.getElementById('githubUnitsSelect');
+    const filePrefix = select.options[select.selectedIndex].text;
+    const schedUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${filePrefix}_schedule.json?t=${Date.now()}`;
+    
+    try {
+        const schedRes = await fetch(schedUrl, { headers: { 'Accept': 'application/vnd.github.v3.raw', 'Authorization': `Bearer ${token}` } });
+        if (schedRes.ok) {
+            scheduleData = await schedRes.json();
+            if (!scheduleData.tournament) scheduleData.tournament = []; // Ensure tournament array exists
+            recalculateStandings(); 
+            renderMatches();
+            renderPlayers();
+            renderTournamentAdmin();
+        } else {
+            scheduleData = { matches: [], standings: {}, tournament: [] };
+            recalculateStandings();
+            renderMatches();
+            renderPlayers();
+            renderTournamentAdmin();
         }
-
+    } catch (e) {
+        scheduleData = { matches: [], standings: {}, tournament: [] };
+        recalculateStandings();
+        renderMatches();
+        renderPlayers();
+        renderTournamentAdmin();
+    }
+}
         function generateSchedule() {
             if (!currentUnit) return alert("Load a unit first!");
             if (fullCalendar.length === 0) return alert("Calendar data not loaded yet. Try again in a second.");
@@ -672,54 +683,121 @@
             btn.classList.add('active');
         }
 
-        async function saveScheduleToGitHub() {
-            const token = document.getElementById('ghToken').value.trim();
-            const folder = document.getElementById('ghFolder').value.trim();
-            if (!token || !currentUnit) return alert("Missing info to save.");
+async function saveScheduleToGitHub() {
+    const token = document.getElementById('ghToken').value.trim();
+    let folder = document.getElementById('ghFolder').value.trim();
+    if (!folder.endsWith('/')) folder += '/';
+    
+    if (!token || !currentUnit) return alert("Missing info to save.");
 
-            const btn = document.querySelector('.btn-github');
-            btn.innerText = "⏳ Pushing...";
+    const btn = document.querySelector('.btn-github');
+    btn.innerText = "⏳ Pushing...";
 
-            const cleanName = currentUnit.unit_name.replace(/\s+/g, '_').toLowerCase();
-            const filename = `${cleanName}_schedule.json`;
-            const apiUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${filename}?t=${Date.now()}`;
+    // THE FIX: Save using the exact dropdown name
+    const select = document.getElementById('githubUnitsSelect');
+    const filePrefix = select.options[select.selectedIndex].text;
+    const filename = `${filePrefix}_schedule.json`;
+    const apiUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${filename}?t=${Date.now()}`;
 
-            try {
-                let sha = null;
-                const getRes = await fetch(apiUrl, { headers: { 'Authorization': `Bearer ${token}` } });
-                if (getRes.ok) {
-                    sha = (await getRes.json()).sha;
-                }
-
-                const payload = {
-                    message: `Update schedule: ${currentUnit.unit_name}`,
-                    content: btoa(unescape(encodeURIComponent(JSON.stringify(scheduleData, null, 2))))
-                };
-                if (sha) payload.sha = sha;
-
-                const putUrl = `https://api.github.com/repos/scottscalici/PE/contents/${folder}${filename}`;
-                
-                const putRes = await fetch(putUrl, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                
-                if (!putRes.ok) {
-                    const errorData = await putRes.json();
-                    throw new Error(`Save failed! GitHub says: ${errorData.message}`);
-                }
-                
-                btn.innerText = "✅ Saved!";
-                btn.style.background = "#28a745";
-                setTimeout(() => { btn.innerText = "☁️ Push Schedule to GitHub"; btn.style.background = "#24292e"; }, 3000);
-            } catch (error) {
-                alert(error.message);
-                btn.innerText = "❌ Push Failed";
-                btn.style.background = "#dc3545";
-                setTimeout(() => { btn.innerText = "☁️ Push Schedule to GitHub"; btn.style.background = "#24292e"; }, 3000);
-            }
+    try {
+        let sha = null;
+        const getRes = await fetch(apiUrl, { headers: { 'Authorization': `Bearer ${token}` } });
+        if (getRes.ok) {
+            sha = (await getRes.json()).sha;
         }
+
+        const payload = {
+            message: `Update schedule & tournament: ${filePrefix}`,
+            content: btoa(unescape(encodeURIComponent(JSON.stringify(scheduleData, null, 2))))
+        };
+        if (sha) payload.sha = sha;
+
+        const putRes = await fetch(apiUrl, {
+            method: 'PUT',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        if (!putRes.ok) throw new Error("Save failed!");
+        
+        btn.innerText = "✅ Saved!";
+        btn.style.background = "#28a745";
+        setTimeout(() => { btn.innerText = "☁️ Push Schedule to GitHub"; btn.style.background = "#24292e"; }, 3000);
+    } catch (error) {
+        alert(error.message);
+        btn.innerText = "❌ Push Failed";
+        btn.style.background = "#dc3545";
+        setTimeout(() => { btn.innerText = "☁️ Push Schedule to GitHub"; btn.style.background = "#24292e"; }, 3000);
+    }
+}
+        // --- TOURNAMENT ADMIN LOGIC ---
+function addTournamentMatch() {
+    if (!scheduleData.tournament) scheduleData.tournament = [];
+    
+    scheduleData.tournament.push({
+        id: Date.now(), // unique ID
+        round_name: "Semifinal",
+        team1: "",
+        score1: null,
+        team2: "",
+        score2: null
+    });
+    renderTournamentAdmin();
+}
+
+function updateTournamentField(matchId, field, value) {
+    let match = scheduleData.tournament.find(m => m.id === matchId);
+    if(match) {
+        if (field === 'score1' || field === 'score2') {
+            match[field] = value !== "" ? parseInt(value) : null;
+        } else {
+            match[field] = value;
+        }
+    }
+}
+
+function deleteTournamentMatch(matchId) {
+    if(!confirm("Delete this tournament match?")) return;
+    scheduleData.tournament = scheduleData.tournament.filter(m => m.id !== matchId);
+    renderTournamentAdmin();
+}
+
+function renderTournamentAdmin() {
+    const container = document.getElementById('tournamentContainer');
+    if (!scheduleData.tournament || scheduleData.tournament.length === 0) { 
+        container.innerHTML = "<i>Click the button below to start building your bracket.</i>"; 
+        return; 
+    }
+    
+    let html = '';
+    scheduleData.tournament.forEach(m => {
+        let s1 = m.score1 !== null ? m.score1 : '';
+        let s2 = m.score2 !== null ? m.score2 : '';
+        
+        html += `
+        <div class="match-card" style="border-left: 5px solid #ffc107;">
+            <div class="match-info" style="justify-content: space-between;">
+                <div>
+                    <strong>Round:</strong> 
+                    <input type="text" value="${m.round_name}" placeholder="e.g. Semifinal" onchange="updateTournamentField(${m.id}, 'round_name', this.value)" style="font-weight:bold; width: 120px;">
+                </div>
+                <button class="btn-outline no-print" style="padding: 2px 8px; color:#dc3545; border-color:#dc3545;" onclick="deleteTournamentMatch(${m.id})">🗑️ Delete</button>
+            </div>
+            
+            <div class="team-left">
+                <select onchange="updateTournamentField(${m.id}, 'team1', this.value)">${getTeamOptionsHtml(m.team1)}</select>
+            </div>
+            <div class="score-box no-print">
+                <input type="number" value="${s1}" onchange="updateTournamentField(${m.id}, 'score1', this.value)">-
+                <input type="number" value="${s2}" onchange="updateTournamentField(${m.id}, 'score2', this.value)">
+            </div>
+            <div class="team-right">
+                <select onchange="updateTournamentField(${m.id}, 'team2', this.value)">${getTeamOptionsHtml(m.team2)}</select>
+            </div>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
     </script>
 </body>
 </html>
