@@ -7,7 +7,7 @@
   "baseTeams": [
     {
       "id": 1,
-      "name": "HCE",
+      "name": "Handball Club Erlangen (HCE)",
       "logo_id": "hce",
       "league": "Standard",
       "players": [
@@ -22,7 +22,7 @@
     },
     {
       "id": 2,
-      "name": "Wild Boys",
+      "name": "Stuttgart Wild Boys",
       "logo_id": "wild_boys",
       "league": "Standard",
       "players": [
@@ -66,7 +66,7 @@
     },
     {
       "id": 5,
-      "name": "Füchse",
+      "name": "Füchse Berlin",
       "logo_id": "fuchse",
       "league": "Standard",
       "players": [
