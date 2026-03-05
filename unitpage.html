@@ -57,6 +57,15 @@
 
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+
+        /* Tournament Bracket Styles */
+        .bracket-round { display: flex; flex-direction: column; justify-content: space-around; gap: 15px; min-width: 200px; }
+        .bracket-match { background: #f8f9fa; border: 1px solid #ddd; border-radius: 6px; padding: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .bracket-team { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 0.9em; font-weight: bold; }
+        .bracket-team:first-child { border-bottom: 1px solid #eee; margin-bottom: 5px; padding-bottom: 10px; }
+        .bracket-score { color: var(--primary); font-size: 1.1em; }
+        .bracket-winner { color: #28a745; } /* Green text for the winner */
+        
     </style>
 </head>
 <body>
@@ -100,6 +109,13 @@
         <div class="panel">
             <details open><summary>🏆 Standings</summary><div class="details-content"><table><thead><tr><th>Rk</th><th>Team</th><th>W-L-T</th><th>PTS</th></tr></thead><tbody id="standingsBody"></tbody></table></div></details>
             <details open><summary>🗓️ Schedule</summary><div class="details-content" id="scheduleContainer"></div></details>
+            <details id="bracketSection" style="display: none;" open>
+                <summary>🏆 Championship Bracket</summary>
+                <div class="details-content">
+                    <div id="bracketContainer" style="display: flex; gap: 20px; overflow-x: auto; padding: 10px 0;">
+                        </div>
+                </div>
+            </details>
             <details><summary>📋 Rosters</summary><div class="details-content"><div id="rostersGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;"></div></div></details>
         </div>
     </div>
@@ -264,9 +280,10 @@ async function fetchSyllabus() {
                 currentTeams = (await tRes.json()).baseTeams;
                 currentSchedule = await sRes.json();
 
-                renderStandings(); 
+             renderStandings(); 
                 renderSchedule(); 
                 renderRosters();
+                renderBracket();
             } catch (err) {
                 console.error(err);
                 standingsBody.innerHTML = `<tr><td colspan='4' style='color:red;'>🚨 <b>Error:</b> ${err.message}. (If it says "Unexpected token", there is a missing comma or bracket in your JSON file on GitHub!)</td></tr>`;
@@ -298,7 +315,60 @@ async function fetchSyllabus() {
             }
             document.getElementById('scheduleContainer').innerHTML = html;
         }
+function renderBracket() {
+            const bracketSection = document.getElementById('bracketSection');
+            const bracketContainer = document.getElementById('bracketContainer');
+            
+            // If no tournament exists, keep it hidden
+            if (!currentSchedule.tournament || currentSchedule.tournament.length === 0) {
+                bracketSection.style.display = 'none';
+                return;
+            }
 
+            // If a tournament exists, reveal the section and build the rounds
+            bracketSection.style.display = 'block';
+            
+            // Group matches by round name
+            let roundsObj = {};
+            currentSchedule.tournament.forEach(m => {
+                if(!roundsObj[m.round_name]) roundsObj[m.round_name] = [];
+                roundsObj[m.round_name].push(m);
+            });
+
+            let html = "";
+            for (let roundName in roundsObj) {
+                html += `<div class="bracket-round">
+                            <h4 style="text-align: center; margin: 0 0 10px 0; color: var(--primary);">${roundName}</h4>`;
+                
+                roundsObj[roundName].forEach(m => {
+                    let s1 = m.score1 !== null ? m.score1 : '-';
+                    let s2 = m.score2 !== null ? m.score2 : '-';
+                    
+                    // Highlight the winner in green if the match is finished
+                    let t1Winner = (m.score1 !== null && m.score2 !== null && m.score1 > m.score2) ? 'bracket-winner' : '';
+                    let t2Winner = (m.score1 !== null && m.score2 !== null && m.score2 > m.score1) ? 'bracket-winner' : '';
+                    
+                    // Allow "TBD" to just be text without a broken logo
+                    let logo1 = m.team1 === "TBD" || m.team1 === "" ? "" : `<img src="${getLogo(m.team1)}" class="team-logo-sm">`;
+                    let logo2 = m.team2 === "TBD" || m.team2 === "" ? "" : `<img src="${getLogo(m.team2)}" class="team-logo-sm">`;
+
+                    html += `
+                        <div class="bracket-match">
+                            <div class="bracket-team ${t1Winner}">
+                                <span>${logo1} ${m.team1 || 'TBD'}</span>
+                                <span class="bracket-score">${s1}</span>
+                            </div>
+                            <div class="bracket-team ${t2Winner}">
+                                <span>${logo2} ${m.team2 || 'TBD'}</span>
+                                <span class="bracket-score">${s2}</span>
+                            </div>
+                        </div>`;
+                });
+                html += `</div>`;
+            }
+
+            bracketContainer.innerHTML = html;
+        }
         function renderRosters() {
             document.getElementById('rostersGrid').innerHTML = currentTeams.map(t => `
                 <div style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; text-align:center;">
