@@ -105,5 +105,30 @@
       "pts": 9
     }
   },
-  "tournament": []
+  "tournament": [
+    {
+      "id": 1772728680979,
+      "round_name": "Semifinal",
+      "team1": "Stuttgart Wild Boys",
+      "score1": null,
+      "team2": "Die Löwen",
+      "score2": null
+    },
+    {
+      "id": 1772728687801,
+      "round_name": "Semifinal",
+      "team1": "Die Recken",
+      "score1": null,
+      "team2": "Zebras",
+      "score2": null
+    },
+    {
+      "id": 1772728699153,
+      "round_name": "Finals",
+      "team1": "TBD",
+      "score1": null,
+      "team2": "TBD",
+      "score2": null
+    }
+  ]
 }
