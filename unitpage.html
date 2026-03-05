@@ -223,8 +223,19 @@ async function fetchSyllabus() {
 }
 
         function getLogo(teamName) {
-            const team = unitData.available_teams.find(t => t.display === teamName);
-            return team ? `${REPO_BASE_URL}/teams/${SPORT_ID}/${team.logo}` : '';
+            if (!teamName || !unitData.available_teams) return '';
+            
+            // 1. Try exact match
+            let team = unitData.available_teams.find(t => t.display === teamName);
+            
+            // 2. Try fuzzy match (e.g. "Wild Boys" matches "Stuttgart Wild Boys")
+            if (!team) {
+                team = unitData.available_teams.find(t => 
+                    t.display.toLowerCase().includes(teamName.toLowerCase()) || 
+                    teamName.toLowerCase().includes(t.display.toLowerCase())
+                );
+            }
+            return team ? `${REPO_BASE_URL}/teams/${SPORT_ID}/${team.logo}` : 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
         }
 
         async function loadClassData(prefix, btn) {
@@ -233,16 +244,36 @@ async function fetchSyllabus() {
             document.getElementById('syllabusView').style.display = 'none';
             document.getElementById('classView').style.display = 'block';
 
-            const [tRes, sRes] = await Promise.all([
-                fetch(`${REPO_BASE_URL}/units/${prefix}_teams.json?t=${Date.now()}`),
-                fetch(`${REPO_BASE_URL}/units/${prefix}_schedule.json?t=${Date.now()}`)
-            ]);
-            currentTeams = (await tRes.json()).baseTeams;
-            currentSchedule = await sRes.json();
+            const rostersGrid = document.getElementById('rostersGrid');
+            const standingsBody = document.getElementById('standingsBody');
+            const scheduleContainer = document.getElementById('scheduleContainer');
+            
+            rostersGrid.innerHTML = "Loading...";
+            standingsBody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+            scheduleContainer.innerHTML = "Loading...";
 
-            renderStandings(); renderSchedule(); renderRosters();
+            try {
+                const [tRes, sRes] = await Promise.all([
+                    fetch(`${REPO_BASE_URL}/units/${prefix}_teams.json?t=${Date.now()}`),
+                    fetch(`${REPO_BASE_URL}/units/${prefix}_schedule.json?t=${Date.now()}`)
+                ]);
+
+                if (!tRes.ok) throw new Error(`Could not fetch ${prefix}_teams.json`);
+                if (!sRes.ok) throw new Error(`Could not fetch ${prefix}_schedule.json`);
+
+                currentTeams = (await tRes.json()).baseTeams;
+                currentSchedule = await sRes.json();
+
+                renderStandings(); 
+                renderSchedule(); 
+                renderRosters();
+            } catch (err) {
+                console.error(err);
+                standingsBody.innerHTML = `<tr><td colspan='4' style='color:red;'>🚨 <b>Error:</b> ${err.message}. (If it says "Unexpected token", there is a missing comma or bracket in your JSON file on GitHub!)</td></tr>`;
+                scheduleContainer.innerHTML = "";
+                rostersGrid.innerHTML = "";
+            }
         }
-
         function renderStandings() {
             let sorted = [...currentTeams].sort((a,b) => (currentSchedule.standings[b.name]?.pts || 0) - (currentSchedule.standings[a.name]?.pts || 0));
             document.getElementById('standingsBody').innerHTML = sorted.map((t, i) => {
