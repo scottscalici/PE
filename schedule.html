@@ -480,23 +480,34 @@ async function loadSelectedGitHubUnit() {
             renderPlayers();
         }
 
-        function getTeamOptionsHtml(selectedTeam) {
-            let options = `<option value="">-- Select Team --</option>`;
-            let teams = currentUnit ? currentUnit.baseTeams.map(t => t.name) : [];
-            if (!teams.includes("BYE")) teams.push("BYE");
+function getTeamOptionsHtml(selectedTeam) {
+    let html = `<option value="">-- Select Team --</option>`;
+    
+    if (scheduleData && scheduleData.standings) {
+        // 1. Get all teams and sort them by Points, then Point Differential
+        let sortedTeams = Object.keys(scheduleData.standings).sort((a, b) => {
+            let statsA = scheduleData.standings[a];
+            let statsB = scheduleData.standings[b];
             
-            teams.forEach(t => {
-                options += `<option value="${t}" ${t === selectedTeam ? 'selected' : ''}>${t}</option>`;
-            });
-            
-            // Just in case a team name changed but they are still saved in an old match
-            if (selectedTeam && !teams.includes(selectedTeam)) {
-                 options += `<option value="${selectedTeam}" selected>${selectedTeam}</option>`;
+            if (statsB.pts !== statsA.pts) {
+                return statsB.pts - statsA.pts; // Sort by Points
             }
-            return options;
-        }
-        // -------------------------------------
+            return statsB.pd - statsA.pd; // Tie-breaker: Point Differential
+        });
 
+        // 2. Generate the dropdown options with the Rank included
+        sortedTeams.forEach((team, index) => {
+            let rank = index + 1;
+            let isSelected = team === selectedTeam ? 'selected' : '';
+            html += `<option value="${team}" ${isSelected}>#${rank} - ${team}</option>`;
+        });
+    }
+
+    // Add a "TBD" option at the bottom for upcoming championship rounds
+    html += `<option value="TBD" ${selectedTeam === 'TBD' ? 'selected' : ''}>TBD</option>`;
+
+    return html;
+}
         function updateScore(matchId, isHome, value) {
             let match = scheduleData.matches.find(m => m.id === matchId);
             if (isHome) match.home_score = value !== "" ? parseInt(value) : null;
