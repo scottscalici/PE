@@ -14,7 +14,7 @@
     {
       "id": 2,
       "home_team": "Die Recken",
-      "away_team": "Wild Boys",
+      "away_team": "Stuttgart Wild Boys",
       "home_score": 2,
       "away_score": 6,
       "date_str": "March 3 (Day 51)",
@@ -25,7 +25,7 @@
     {
       "id": 3,
       "home_team": "Zebras",
-      "away_team": "Wild Boys",
+      "away_team": "Stuttgart Wild Boys",
       "home_score": 8,
       "away_score": 10,
       "date_str": "March 3 (Day 51)",
@@ -57,7 +57,7 @@
     },
     {
       "id": 6,
-      "home_team": "Wild Boys",
+      "home_team": "Stuttgart Wild Boys",
       "away_team": "Die Löwen",
       "home_score": null,
       "away_score": null,
@@ -95,7 +95,7 @@
       "pd": 3,
       "pts": 3
     },
-    "Wild Boys": {
+    "Stuttgart Wild Boys": {
       "w": 2,
       "l": 0,
       "t": 0,
