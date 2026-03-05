@@ -59,103 +59,103 @@
       "id": 6,
       "home_team": "Füchse Berlin",
       "away_team": "Zebras",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 9,
+      "away_score": 5,
       "date_str": "March 4 (Day 52)",
       "time": "09:00",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 7,
       "home_team": "Handball Club Erlangen (HCE)",
       "away_team": "Zebras",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 8,
+      "away_score": 5,
       "date_str": "March 4 (Day 52)",
       "time": "09:13",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 8,
       "home_team": "Die Recken",
       "away_team": "Stuttgart Wild Boys",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 9,
+      "away_score": 5,
       "date_str": "March 4 (Day 52)",
       "time": "09:26",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 9,
       "home_team": "Handball Club Erlangen (HCE)",
       "away_team": "Stuttgart Wild Boys",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 5,
+      "away_score": 5,
       "date_str": "March 4 (Day 52)",
       "time": "09:39",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 10,
       "home_team": "Die Recken",
       "away_team": "Füchse Berlin",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 5,
+      "away_score": 9,
       "date_str": "March 4 (Day 52)",
       "time": "09:52",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     }
   ],
   "standings": {
     "Stuttgart Wild Boys": {
       "w": 2,
-      "l": 0,
-      "t": 0,
-      "pf": 13,
-      "pa": 8,
-      "pd": 5,
-      "pts": 6
+      "l": 1,
+      "t": 1,
+      "pf": 23,
+      "pa": 22,
+      "pd": 1,
+      "pts": 7
     },
     "Füchse Berlin": {
-      "w": 1,
+      "w": 3,
       "l": 1,
       "t": 0,
-      "pf": 11,
-      "pa": 11,
-      "pd": 0,
-      "pts": 3
+      "pf": 29,
+      "pa": 21,
+      "pd": 8,
+      "pts": 9
     },
     "Zebras": {
       "w": 0,
-      "l": 1,
+      "l": 3,
       "t": 1,
-      "pf": 12,
-      "pa": 14,
-      "pd": -2,
+      "pf": 22,
+      "pa": 31,
+      "pd": -9,
       "pts": 1
     },
     "Die Recken": {
-      "w": 1,
-      "l": 0,
+      "w": 2,
+      "l": 1,
       "t": 1,
-      "pf": 15,
-      "pa": 12,
+      "pf": 29,
+      "pa": 26,
       "pd": 3,
-      "pts": 4
+      "pts": 7
     },
     "Handball Club Erlangen (HCE)": {
-      "w": 0,
+      "w": 1,
       "l": 2,
-      "t": 0,
-      "pf": 8,
-      "pa": 14,
-      "pd": -6,
-      "pts": 0
+      "t": 1,
+      "pf": 21,
+      "pa": 24,
+      "pd": -3,
+      "pts": 4
     }
   }
 }
