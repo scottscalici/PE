@@ -261,7 +261,7 @@
             ],
             "instructions": "Land softly",
             "gifUrl": "",
-            "safetyCues": "Modification: Lose the jump"
+            "safetyCues": "Modification: Lose the jump, reduce ROM"
         },
         {
             "id": "touch_the_floor",
