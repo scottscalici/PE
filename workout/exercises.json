@@ -1,6 +1,17 @@
 {
     "exercises": [
         {
+            "id": "1-2-3_clap",
+            "name": "1-2-3 Clap",
+            "category": [
+                "cardio",
+                "warmup"
+            ],
+            "instructions": "1-2-3 knee, but lift knee high enough to be able to clap underneath",
+            "gifUrl": "",
+            "safetyCues": "Modification: Stay grounded"
+        },
+        {
             "id": "1_2_3_knee",
             "name": "1-2-3 Knee",
             "category": [
@@ -11,6 +22,19 @@
             "instructions": "",
             "gifUrl": "",
             "safetyCues": "Modify: Step it out"
+        },
+        {
+            "id": "squat",
+            "name": "Air Squat",
+            "category": [
+                "lower",
+                "cardio",
+                "quads",
+                "low impact"
+            ],
+            "instructions": "chest up",
+            "gifUrl": "",
+            "safetyCues": "Modification: reduce ROM"
         },
         {
             "id": "arm_circles_01",
@@ -43,6 +67,17 @@
             "safetyCues": "Modify: Keep one foot grounded, slight forward lean"
         },
         {
+            "id": "child_pose",
+            "name": "Child's Pose",
+            "category": [
+                "cooldown",
+                "yoga"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
             "id": "crunches_01",
             "name": "Crunches",
             "category": [
@@ -51,6 +86,29 @@
             "instructions": "Short, controlled movements.",
             "gifUrl": "",
             "safetyCues": "Don't pull on your neck."
+        },
+        {
+            "id": "butt_kick_double",
+            "name": "Double Butt Kicks",
+            "category": [
+                "warmup",
+                "cardio"
+            ],
+            "instructions": "Hop twice on same leg, keep opposite leg bent, foot towards butt",
+            "gifUrl": "",
+            "safetyCues": "Modification: Always keep one foot on ground"
+        },
+        {
+            "id": "high_knee_lateral_double",
+            "name": "Double Lateral High Knee",
+            "category": [
+                "lower",
+                "agility",
+                "warmup"
+            ],
+            "instructions": "Hop to side, lift knee, hop to side again, stay on one leg",
+            "gifUrl": "",
+            "safetyCues": "Modification: Raise knee, step out, raise knee..."
         },
         {
             "id": "flutter_kicks_01",
@@ -127,6 +185,17 @@
             "safetyCues": "Keep your shoulders directly over your wrists."
         },
         {
+            "id": "high_knee_oblique",
+            "name": "Oblique High Knee",
+            "category": [
+                "core",
+                "cardio"
+            ],
+            "instructions": "Connect cross elbow with knee",
+            "gifUrl": "",
+            "safetyCues": "Modification: Lift Knees, don't run"
+        },
+        {
             "id": "push_ups_01",
             "name": "Push-Ups",
             "category": [
@@ -147,6 +216,42 @@
             "instructions": "Deep breaths and hydrate.",
             "gifUrl": "",
             "safetyCues": ""
+        },
+        {
+            "id": "soccer_juggle",
+            "name": "Soccer Juggles",
+            "category": [
+                "cardio",
+                "agility"
+            ],
+            "instructions": "High Knee, Tap Cross Knee x 2, Tap Cross Ankle x 2",
+            "gifUrl": "",
+            "safetyCues": "Modification: lift knee, tap, lift foot, tap, or tap calf"
+        },
+        {
+            "id": "squat_jacks",
+            "name": "Squat Jacks",
+            "category": [
+                "lower",
+                "cardio",
+                "plyo",
+                "quads"
+            ],
+            "instructions": "Land softly",
+            "gifUrl": "",
+            "safetyCues": "Modification: Lose the jump"
+        },
+        {
+            "id": "squat_jack",
+            "name": "Squat Jacks",
+            "category": [
+                "lower",
+                "cardio",
+                "quads"
+            ],
+            "instructions": "Low at center, High when Out",
+            "gifUrl": "",
+            "safetyCues": "Modification: Step out instead of jump out"
         },
         {
             "id": "touch_the_floor",
