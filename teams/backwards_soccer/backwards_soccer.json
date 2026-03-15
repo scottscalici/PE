@@ -21,7 +21,7 @@
     { 
       "day": 1, 
       "topic": "Intro & Safety", 
-      "workout": "Dynamic Warmup",
+      "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/back-to-basics",
       "skills": "Moving backwards safely, partner passing",
       "games": "Open Gym / Backwards Passing",
       "discussion": "Why is communication important when you lack vision?"
