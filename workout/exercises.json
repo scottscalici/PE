@@ -78,6 +78,16 @@
             "safetyCues": ""
         },
         {
+            "id": "cooldown",
+            "name": "Cool Down",
+            "category": [
+                "cooldown"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
             "id": "crunches_01",
             "name": "Crunches",
             "category": [
@@ -229,19 +239,6 @@
             "safetyCues": "Modification: lift knee, tap, lift foot, tap, or tap calf"
         },
         {
-            "id": "squat_jacks",
-            "name": "Squat Jacks",
-            "category": [
-                "lower",
-                "cardio",
-                "plyo",
-                "quads"
-            ],
-            "instructions": "Land softly",
-            "gifUrl": "",
-            "safetyCues": "Modification: Lose the jump"
-        },
-        {
             "id": "squat_jack",
             "name": "Squat Jacks",
             "category": [
@@ -252,6 +249,19 @@
             "instructions": "Low at center, High when Out",
             "gifUrl": "",
             "safetyCues": "Modification: Step out instead of jump out"
+        },
+        {
+            "id": "squat_jumps",
+            "name": "Squat Jumps",
+            "category": [
+                "lower",
+                "cardio",
+                "plyo",
+                "quads"
+            ],
+            "instructions": "Land softly",
+            "gifUrl": "",
+            "safetyCues": "Modification: Lose the jump"
         },
         {
             "id": "touch_the_floor",
