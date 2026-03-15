@@ -268,6 +268,93 @@
                     ]
                 }
             ]
+        },
+        {
+            "id": "backwards_soccer",
+            "workoutName": "Back to Basics +",
+            "rounds": 1,
+            "circuits": [
+                {
+                    "circuitId": "A",
+                    "sequence": [
+                        {
+                            "exerciseId": "jog",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "jumping_jacks_01",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "high_knees_lateral",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "high_knees_01",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "butt_kicks",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 60,
+                            "type": "rest"
+                        },
+                        {
+                            "exerciseId": "squat",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "1_2_3_knee",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 30,
+                            "type": "rest"
+                        },
+                        {
+                            "exerciseId": "squat_jacks",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "1-2-3_clap",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "rest_01",
+                            "duration": 30,
+                            "type": "rest"
+                        },
+                        {
+                            "exerciseId": "squat_jumps",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "soccer_juggle",
+                            "duration": 30,
+                            "type": "work"
+                        },
+                        {
+                            "exerciseId": "cooldown",
+                            "duration": 60,
+                            "type": "rest"
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
