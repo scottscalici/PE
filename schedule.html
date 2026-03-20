@@ -644,61 +644,64 @@ function getTeamOptionsHtml(selectedTeam) {
             return options;
         }
 
-        function renderMatches() {
-            const container = document.getElementById('matchesContainer');
-            if (!scheduleData.matches || !scheduleData.matches.length) { container.innerHTML = "<i>No matches generated.</i>"; return; }
-            
-            let html = '';
-            scheduleData.matches.forEach(m => {
-                let hScore = m.home_score !== null ? m.home_score : '';
-                let aScore = m.away_score !== null ? m.away_score : '';
-                
-                html += `
-                <div class="match-card">
-                    <div class="match-info">
-                        🗓️ <select onchange="updateMatchField(${m.id}, 'date_str', this.value)">${getCalendarOptionsHtml(m.date_str)}</select>
-                        ⏱️ <input type="time" value="${m.time || ''}" onchange="updateMatchField(${m.id}, 'time', this.value)">
-                        📍 <input type="text" value="${m.location}" onchange="updateMatchField(${m.id}, 'location', this.value)">
-                        <button class="btn-outline no-print" style="width:auto; margin:0; padding:2px 8px; margin-left:auto; color:#dc3545; border-color:#dc3545;" title="Delete Match" onclick="deleteMatch(${m.id})">🗑️ Delete</button>
-                    </div>
-                    <div class="team-left">
-                        <select onchange="updateMatchField(${m.id}, 'home_team', this.value)">
-                            ${getTeamOptionsHtml(m.home_team)}
-                        </select>
-                    </div>
-                    <div class="score-box no-print">
-                        <input type="number" value="${hScore}" onchange="updateScore(${m.id}, true, this.value)">-
-                        <input type="number" value="${aScore}" onchange="updateScore(${m.id}, false, this.value)">
-                    </div>
-                    <div class="score-box" style="display:none;" media="print"> VS </div>
-                    <div class="team-right">
-                        <select onchange="updateMatchField(${m.id}, 'away_team', this.value)">
-                            ${getTeamOptionsHtml(m.away_team)}
-                        </select>
-                    </div>
-                </div>`;
-            });
-            container.innerHTML = html;
+ function renderMatches() {
+    const container = document.getElementById('matchesContainer');
+    
+    if (!scheduleData.matches || !scheduleData.matches.length) { 
+        container.innerHTML = "<i>No matches generated.</i>"; 
+        return; 
+    }
+    
+    let html = '';
+    scheduleData.matches.forEach(m => {
+        let hScore = m.home_score !== null ? m.home_score : '';
+        let aScore = m.away_score !== null ? m.away_score : '';
+        
+        // Split the team strings (e.g., "Team A & Team B" -> ["Team A", "Team B"])
+        const hTeams = m.home_team ? m.home_team.split(' & ') : [""];
+        const aTeams = m.away_team ? m.away_team.split(' & ') : [""];
 
-            // Inside renderMatches loop:
-const hTeams = m.home_team.split(' & ');
-const aTeams = m.away_team.split(' & ');
+        html += `
+        <div class="match-card">
+            <div class="match-info">
+                🗓️ <select onchange="updateMatchField(${m.id}, 'date_str', this.value)">
+                    ${getCalendarOptionsHtml(m.date_str)}
+                </select>
+                ⏱️ <input type="time" value="${m.time || ''}" onchange="updateMatchField(${m.id}, 'time', this.value)">
+                📍 <input type="text" value="${m.location}" onchange="updateMatchField(${m.id}, 'location', this.value)">
+                <button class="btn-outline no-print" style="width:auto; margin:0; padding:2px 8px; margin-left:auto; color:#dc3545; border-color:#dc3545;" title="Delete Match" onclick="deleteMatch(${m.id})">🗑️ Delete</button>
+            </div>
 
-html += `
-<div class="match-card">
-    <div class="team-left team-group">
-        <select onchange="updateCombinedTeam(${m.id}, 'home', 0, this.value)">${getTeamOptionsHtml(hTeams[0])}</select>
-        <select onchange="updateCombinedTeam(${m.id}, 'home', 1, this.value)">${getTeamOptionsHtml(hTeams[1] || "")}</select>
-    </div>
-    <div class="vs-divider">VS</div>
-    <div class="team-right team-group">
-        <select onchange="updateCombinedTeam(${m.id}, 'away', 0, this.value)">${getTeamOptionsHtml(aTeams[0])}</select>
-        <select onchange="updateCombinedTeam(${m.id}, 'away', 1, this.value)">${getTeamOptionsHtml(aTeams[1] || "")}</select>
-    </div>
-    </div>`;
-            
-        }
+            <div class="team-left team-group">
+                <select onchange="updateCombinedTeam(${m.id}, 'home', 0, this.value)">
+                    ${getTeamOptionsHtml(hTeams[0])}
+                </select>
+                <select onchange="updateCombinedTeam(${m.id}, 'home', 1, this.value)">
+                    ${getTeamOptionsHtml(hTeams[1] || "")}
+                </select>
+            </div>
 
+            <div class="score-box no-print">
+                <input type="number" value="${hScore}" onchange="updateScore(${m.id}, true, this.value)">
+                <span class="vs-divider">vs</span>
+                <input type="number" value="${aScore}" onchange="updateScore(${m.id}, false, this.value)">
+            </div>
+            <div class="score-box" style="display:none;" media="print"> VS </div>
+
+            <div class="team-right team-group">
+                <select onchange="updateCombinedTeam(${m.id}, 'away', 0, this.value)">
+                    ${getTeamOptionsHtml(aTeams[0])}
+                </select>
+                <select onchange="updateCombinedTeam(${m.id}, 'away', 1, this.value)">
+                    ${getTeamOptionsHtml(aTeams[1] || "")}
+                </select>
+            </div>
+        </div>`;
+    });
+
+    container.innerHTML = html;
+}
+        
     function updateCombinedTeam(matchId, side, index, value) {
     let match = scheduleData.matches.find(m => m.id === matchId);
     let field = side === 'home' ? 'home_team' : 'away_team';
