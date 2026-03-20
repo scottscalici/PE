@@ -29,6 +29,21 @@
         button.btn-github:hover { background: #000; }
         button.btn-outline { background: white; color: #333; border: 1px solid #ccc; }
         button.btn-outline:hover { background: #f8f9fa; }
+
+        .vs-divider { 
+    font-weight: bold; 
+    color: #0056b3; 
+    padding: 0 10px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+}
+.team-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
         
         table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; }
         th, td { padding: 10px; border: 1px solid #dee2e6; text-align: center; }
@@ -364,32 +379,32 @@ async function loadSelectedGitHubUnit() {
         renderTournamentAdmin();
     }
 }
-        function generateSchedule() {
-            if (!currentUnit) return alert("Load a unit first!");
-            if (fullCalendar.length === 0) return alert("Calendar data not loaded yet. Try again in a second.");
-            
-            const cycle = document.getElementById('cycleSelect').value;
-            const startDia = parseInt(document.getElementById('startDia').value) || 1;
-            const multiplier = parseInt(document.getElementById('formatSelect').value);
-            
-            const gamesInput = document.getElementById('gamesPerDay').value;
-            let gamesSeq = gamesInput.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n) && n > 0);
-            if (gamesSeq.length === 0) gamesSeq = [3]; 
-            
-            const startTimeVal = document.getElementById('startTime').value || "09:00";
-            const duration = parseInt(document.getElementById('gameDuration').value) || 15;
-            const trans = parseInt(document.getElementById('transDuration').value) || 5;
+function generateSchedule() {
+    if (!currentUnit) return alert("Load a unit first!");
+    
+    // Ask the user if they want 2v2 or 1v1
+    const isCombined = confirm("Pair teams up for 2v2 matches?");
+    
+    let teams = currentUnit.baseTeams.map(t => t.name);
+    if (teams.length % 2 !== 0) teams.push("BYE");
+    
+    // If 2v2, we group teams into pairs first
+    let schedulingUnits = [];
+    if (isCombined) {
+        for (let i = 0; i < teams.length; i += 2) {
+            let p1 = teams[i];
+            let p2 = teams[i+1] || "BYE";
+            schedulingUnits.push(`${p1} & ${p2}`);
+        }
+    } else {
+        schedulingUnits = [...teams];
+    }
+    
+    if (schedulingUnits.length % 2 !== 0) schedulingUnits.push("BYE");
 
-            const locations = document.getElementById('locationsInput').value.split(',').map(l => l.trim());
-            
-            filterCalendarDates(cycle, startDia);
-            
-            let teams = currentUnit.baseTeams.map(t => t.name);
-            if (teams.length % 2 !== 0) teams.push("BYE");
-            
-            let matches = [];
-            let matchId = 1;
-            let totalRounds = teams.length - 1;
+    let matches = [];
+    let matchId = 1;
+             let totalRounds = teams.length - 1;
 
             for (let m = 0; m < multiplier; m++) {
                 let currentTeams = [...teams];
@@ -625,8 +640,43 @@ function getTeamOptionsHtml(selectedTeam) {
                 </div>`;
             });
             container.innerHTML = html;
+
+            // Inside renderMatches loop:
+const hTeams = m.home_team.split(' & ');
+const aTeams = m.away_team.split(' & ');
+
+html += `
+<div class="match-card">
+    <div class="team-left team-group">
+        <select onchange="updateCombinedTeam(${m.id}, 'home', 0, this.value)">${getTeamOptionsHtml(hTeams[0])}</select>
+        <select onchange="updateCombinedTeam(${m.id}, 'home', 1, this.value)">${getTeamOptionsHtml(hTeams[1] || "")}</select>
+    </div>
+    <div class="vs-divider">VS</div>
+    <div class="team-right team-group">
+        <select onchange="updateCombinedTeam(${m.id}, 'away', 0, this.value)">${getTeamOptionsHtml(aTeams[0])}</select>
+        <select onchange="updateCombinedTeam(${m.id}, 'away', 1, this.value)">${getTeamOptionsHtml(aTeams[1] || "")}</select>
+    </div>
+    </div>`;
+            
         }
 
+    function updateCombinedTeam(matchId, side, index, value) {
+    let match = scheduleData.matches.find(m => m.id === matchId);
+    let field = side === 'home' ? 'home_team' : 'away_team';
+    
+    let currentParts = match[field].split(' & ');
+    // Ensure we have two slots
+    if (currentParts.length < 2) currentParts = [currentParts[0] || "", ""];
+    
+    currentParts[index] = value;
+    
+    // Filter out empties and join with ampersand
+    match[field] = currentParts.filter(p => p !== "").join(' & ');
+    
+    recalculateStandings();
+    renderPlayers();
+}
+    
         function renderStandings() {
             const container = document.getElementById('standingsContainer');
             if(!scheduleData.standings) return;
