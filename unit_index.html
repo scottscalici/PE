@@ -130,14 +130,7 @@
                     const btn = document.createElement('button');
                     btn.className = 'btn-class';
                     
-                    // Format classes nicely if they exist in the JSON, e.g., "Kickball (3A, 3B)"
-                    let classesText = "";
-                    if (unit.class) {
-                        let classStr = Array.isArray(unit.class) ? unit.class.join(', ') : unit.class;
-                        classesText = ` (${classStr})`;
-                    }
-                    
-                    btn.innerText = `${unit.display_name}${classesText}`;
+              btn.innerText = unit.display_name;
                     
                     // Convert "backwards_soccer" to "backwards-soccer" for the URL
                     const urlSlug = unit.unit_id.replace(/_/g, '-');
