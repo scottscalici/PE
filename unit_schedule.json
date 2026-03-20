@@ -1,15 +1,27 @@
 {
   "schedule": [
     {
-      "unit_id": "kickball_3a",
+      "unit_id": "kickball",
       "display_name": "Kickball",
       "class": ["3A", "3B"],
       "dias": [58, 59, 60]
     },
+        {
+      "unit_id": "handball",
+      "display_name": "Handball",
+      "class": ["3A", "3B"],
+      "dias": [51, 52, 53]
+    },
+        {
+      "unit_id": "backwards_soccer",
+      "display_name": "Backwards Soccer",
+      "class": ["3A", "3B"],
+      "dias": [57]
+    },
     {
-      "unit_id": "halloween_games_3a",
+      "unit_id": "halloween",
       "display_name": "Spooky Games (3A)",
-      "class": "3A",
+      "class": ["3A", "3B"],
       "dias": [4]
     }
   ]
