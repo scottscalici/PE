@@ -1,0 +1,76 @@
+{
+  "matches": [
+    {
+      "id": 1,
+      "home_team": "Seattle Bulls & Philadelphia Bears",
+      "away_team": "Detroit Seals & New York Knights",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 23 (Day 58)",
+      "time": "11:30",
+      "location": "Full Gym",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "home_team": "Philadelphia Bears & Detroit Seals",
+      "away_team": "New York Knights & Seattle Bulls",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 25 (Day 59)",
+      "time": "11:30",
+      "location": "Full Gym",
+      "completed": false
+    },
+    {
+      "id": 3,
+      "home_team": "Philadelphia Bears & New York Knights",
+      "away_team": "Seattle Bulls & Detroit Seals",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "March 27 (Day 60)",
+      "time": "11:30",
+      "location": "Full Gym",
+      "completed": false
+    }
+  ],
+  "standings": {
+    "Seattle Bulls": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Philadelphia Bears": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Detroit Seals": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "New York Knights": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    }
+  },
+  "tournament": []
+}
