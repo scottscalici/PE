@@ -545,49 +545,70 @@ function getTeamOptionsHtml(selectedTeam) {
             }
         }
 
-        function recalculateStandings() {
-            scheduleData.standings = {};
+  function recalculateStandings() {
+    scheduleData.standings = {};
+    
+    // 1. Identify all unique individual teams
+    let individualTeams = new Set();
+    if (scheduleData.matches) {
+        scheduleData.matches.forEach(m => {
+            // Split by " & " to find individual team names
+            const homeParts = m.home_team ? m.home_team.split(' & ') : [];
+            const awayParts = m.away_team ? m.away_team.split(' & ') : [];
             
-            let activeTeams = new Set();
-            if(scheduleData.matches) {
-                scheduleData.matches.forEach(m => {
-                    // Make sure we don't track empty string blank teams
-                    if(m.home_team && m.home_team !== "BYE") activeTeams.add(m.home_team);
-                    if(m.away_team && m.away_team !== "BYE") activeTeams.add(m.away_team);
-                });
-            }
+            homeParts.forEach(t => { if(t && t !== "BYE" && t !== "TBD") individualTeams.add(t.trim()); });
+            awayParts.forEach(t => { if(t && t !== "BYE" && t !== "TBD") individualTeams.add(t.trim()); });
+        });
+    }
 
-            activeTeams.forEach(t => {
-                scheduleData.standings[t] = { w: 0, l: 0, t: 0, pf: 0, pa: 0, pd: 0, pts: 0 };
+    // 2. Initialize standings for each individual team
+    individualTeams.forEach(t => {
+        scheduleData.standings[t] = { w: 0, l: 0, t: 0, pf: 0, pa: 0, pd: 0, pts: 0 };
+    });
+
+    // 3. Process completed matches
+    if (scheduleData.matches) {
+        scheduleData.matches.filter(m => m.completed).forEach(m => {
+            const homeTeams = m.home_team.split(' & ').map(t => t.trim());
+            const awayTeams = m.away_team.split(' & ').map(t => t.trim());
+            
+            // Determine result
+            let result = "tie";
+            if (m.home_score > m.away_score) result = "homeWin";
+            else if (m.away_score > m.home_score) result = "awayWin";
+
+            // Credit all Home Teams
+            homeTeams.forEach(tName => {
+                let t = scheduleData.standings[tName];
+                if (!t) return;
+                t.pf += m.home_score;
+                t.pa += m.away_score;
+                if (result === "homeWin") { t.w++; t.pts += 3; }
+                else if (result === "awayWin") { t.l++; }
+                else { t.t++; t.pts += 1; }
             });
 
-            if(scheduleData.matches) {
-                scheduleData.matches.filter(m => m.completed).forEach(m => {
-                    let hTeam = scheduleData.standings[m.home_team];
-                    let aTeam = scheduleData.standings[m.away_team];
-                    
-                    if(hTeam && aTeam) {
-                        hTeam.pf += m.home_score; hTeam.pa += m.away_score;
-                        aTeam.pf += m.away_score; aTeam.pa += m.home_score;
-                        
-                        if (m.home_score > m.away_score) {
-                            hTeam.w++; hTeam.pts += 3; aTeam.l++;
-                        } else if (m.home_score < m.away_score) {
-                            aTeam.w++; aTeam.pts += 3; hTeam.l++;
-                        } else {
-                            hTeam.t++; hTeam.pts += 1; aTeam.t++; aTeam.pts += 1;
-                        }
-                    }
-                });
-            }
-
-            Object.keys(scheduleData.standings).forEach(t => {
-                scheduleData.standings[t].pd = scheduleData.standings[t].pf - scheduleData.standings[t].pa;
+            // Credit all Away Teams
+            awayTeams.forEach(tName => {
+                let t = scheduleData.standings[tName];
+                if (!t) return;
+                t.pf += m.away_score;
+                t.pa += m.home_score;
+                if (result === "awayWin") { t.w++; t.pts += 3; }
+                else if (result === "homeWin") { t.l++; }
+                else { t.t++; t.pts += 1; }
             });
-            
-            renderStandings();
-        }
+        });
+    }
 
+    // 4. Calculate Point Differential
+    Object.keys(scheduleData.standings).forEach(t => {
+        scheduleData.standings[t].pd = scheduleData.standings[t].pf - scheduleData.standings[t].pa;
+    });
+    
+    renderStandings();
+}
+        
         function getCalendarOptionsHtml(selectedDateStr) {
             let options = `<option value="TBD">TBD</option>`;
             let cycle = document.getElementById('cycleSelect').value || "A";
