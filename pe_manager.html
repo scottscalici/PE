@@ -554,8 +554,15 @@
         }
 
         function resetWorkspace() { absentIds.clear(); pendingSwap = null; swapHistory = []; }
-        function getDisplayTitle(u) { return `${u.unit_name} (${u.class_id})`; }
-
+     function getDisplayTitle(u) { 
+    if (u.sport_type && u.class_id) {
+        // This splits things like 'ultimate_football', capitalizes them, and removes the underscore
+        let cleanSport = u.sport_type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        return `${cleanSport} ${u.class_id}`;
+    }
+    // Fallback just in case an older file doesn't have a sport_type saved
+    return `${u.unit_name} (${u.class_id})`; 
+}
         function toggleAttendance(id) {
             absentIds.has(id) ? absentIds.delete(id) : absentIds.add(id);
             updateBoard();
