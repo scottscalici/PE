@@ -4,12 +4,12 @@
       "id": 1,
       "home_team": "Dallas Wolves & Detroit Seals",
       "away_team": "New York Knights & Hollywood Eagles",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 6,
+      "away_score": 4,
       "date_str": "March 20 (Day 58)",
       "time": "11:30",
       "location": "Full Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 2,
@@ -36,39 +36,39 @@
   ],
   "standings": {
     "Dallas Wolves": {
-      "w": 0,
+      "w": 1,
       "l": 0,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
+      "pf": 6,
+      "pa": 4,
+      "pd": 2,
+      "pts": 3
     },
     "Detroit Seals": {
-      "w": 0,
+      "w": 1,
       "l": 0,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
+      "pf": 6,
+      "pa": 4,
+      "pd": 2,
+      "pts": 3
     },
     "New York Knights": {
       "w": 0,
-      "l": 0,
+      "l": 1,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
+      "pf": 4,
+      "pa": 6,
+      "pd": -2,
       "pts": 0
     },
     "Hollywood Eagles": {
       "w": 0,
-      "l": 0,
+      "l": 1,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
+      "pf": 4,
+      "pa": 6,
+      "pd": -2,
       "pts": 0
     }
   },
