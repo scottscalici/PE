@@ -379,89 +379,107 @@ async function loadSelectedGitHubUnit() {
         renderTournamentAdmin();
     }
 }
-function generateSchedule() {
+
+    function generateSchedule() {
     if (!currentUnit) return alert("Load a unit first!");
+    if (fullCalendar.length === 0) return alert("Calendar data not loaded yet.");
     
-    // Ask the user if they want 2v2 or 1v1
+    // 1. Gather Settings
     const isCombined = confirm("Pair teams up for 2v2 matches?");
+    const cycle = document.getElementById('cycleSelect').value;
+    const startDia = parseInt(document.getElementById('startDia').value) || 1;
+    const multiplier = parseInt(document.getElementById('formatSelect').value) || 1;
+    const gamesInput = document.getElementById('gamesPerDay').value;
+    let gamesSeq = gamesInput.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n) && n > 0);
+    if (gamesSeq.length === 0) gamesSeq = [1]; 
     
-    let teams = currentUnit.baseTeams.map(t => t.name);
-    if (teams.length % 2 !== 0) teams.push("BYE");
+    const startTimeVal = document.getElementById('startTime').value || "09:00";
+    const duration = parseInt(document.getElementById('gameDuration').value) || 15;
+    const trans = parseInt(document.getElementById('transDuration').value) || 5;
+    const locations = document.getElementById('locationsInput').value.split(',').map(l => l.trim());
+
+    filterCalendarDates(cycle, startDia);
     
-    // If 2v2, we group teams into pairs first
+    // 2. Prepare Teams/Units
+    let baseTeams = currentUnit.baseTeams.map(t => t.name);
     let schedulingUnits = [];
+
     if (isCombined) {
-        for (let i = 0; i < teams.length; i += 2) {
-            let p1 = teams[i];
-            let p2 = teams[i+1] || "BYE";
-            schedulingUnits.push(`${p1} & ${p2}`);
+        // Group into pairs: ["Team 1 & Team 2", "Team 3 & Team 4"]
+        for (let i = 0; i < baseTeams.length; i += 2) {
+            let p1 = baseTeams[i];
+            let p2 = baseTeams[i + 1];
+            schedulingUnits.push(p2 ? `${p1} & ${p2}` : p1);
         }
     } else {
-        schedulingUnits = [...teams];
+        schedulingUnits = [...baseTeams];
     }
     
+    // Round Robin requires an even number of units
     if (schedulingUnits.length % 2 !== 0) schedulingUnits.push("BYE");
 
+    // 3. Round Robin Logic
     let matches = [];
     let matchId = 1;
-             let totalRounds = teams.length - 1;
+    let numUnits = schedulingUnits.length;
+    let roundsPerCycle = numUnits - 1;
 
-            for (let m = 0; m < multiplier; m++) {
-                let currentTeams = [...teams];
-                for (let round = 0; round < totalRounds; round++) {
-                    for (let i = 0; i < currentTeams.length / 2; i++) {
-                        let home = currentTeams[i];
-                        let away = currentTeams[currentTeams.length - 1 - i];
-                        
-                        if (home !== "BYE" && away !== "BYE") {
-                            if (m === 1) [home, away] = [away, home];
-                            
-                            matches.push({
-                                id: matchId++,
-                                home_team: home,
-                                away_team: away,
-                                home_score: null,
-                                away_score: null,
-                                date_str: "", 
-                                time: "",
-                                location: "",
-                                completed: false
-                            });
-                        }
-                    }
-                    currentTeams.splice(1, 0, currentTeams.pop());
+    for (let m = 0; m < multiplier; m++) {
+        let rotation = [...schedulingUnits];
+        for (let round = 0; round < roundsPerCycle; round++) {
+            for (let i = 0; i < numUnits / 2; i++) {
+                let home = rotation[i];
+                let away = rotation[numUnits - 1 - i];
+                
+                if (home !== "BYE" && away !== "BYE") {
+                    matches.push({
+                        id: matchId++,
+                        home_team: m % 2 === 1 ? away : home, // Alternate home/away for 2x formats
+                        away_team: m % 2 === 1 ? home : away,
+                        home_score: null,
+                        away_score: null,
+                        date_str: "", 
+                        time: "",
+                        location: "",
+                        completed: false
+                    });
                 }
             }
+            // Rotate all except the first element
+            rotation.splice(1, 0, rotation.pop());
+        }
+    }
 
-            let dateIndex = 0;
-            let gamesToday = 0;
-            let currentDayMins = timeToMins(startTimeVal);
-            
-            matches.forEach((match) => {
-                let targetGames = gamesSeq[Math.min(dateIndex, gamesSeq.length - 1)];
+    // 4. Assign Dates and Times
+    let dateIndex = 0;
+    let gamesToday = 0;
+    let currentDayMins = timeToMins(startTimeVal);
+    
+    matches.forEach((match) => {
+        let targetGames = gamesSeq[Math.min(dateIndex, gamesSeq.length - 1)];
 
-                if (gamesToday >= targetGames) {
-                    gamesToday = 0;
-                    dateIndex++;
-                    currentDayMins = timeToMins(startTimeVal); 
-                }
-                
-                let calObj = filteredCalendar[dateIndex];
-                match.date_str = calObj ? `${formatFriendlyDate(calObj.fecha)} (Day ${calObj.dia})` : "TBD";
-                match.time = minsToTimeStr(currentDayMins);
-                match.location = locations[gamesToday % locations.length] || locations[0] || "Main Gym";
-                
-                gamesToday++;
-                currentDayMins += duration + trans; 
-            });
-
-            scheduleData.matches = matches;
-            recalculateStandings();
-            renderMatches();
-            renderPlayers();
-            switchTab('matchesTab', document.querySelectorAll('.tab-btn')[1]);
+        if (gamesToday >= targetGames) {
+            gamesToday = 0;
+            dateIndex++;
+            currentDayMins = timeToMins(startTimeVal); 
         }
         
+        let calObj = filteredCalendar[dateIndex];
+        match.date_str = calObj ? `${formatFriendlyDate(calObj.fecha)} (Day ${calObj.dia})` : "TBD";
+        match.time = minsToTimeStr(currentDayMins);
+        match.location = locations[gamesToday % locations.length] || locations[0] || "Main Gym";
+        
+        gamesToday++;
+        currentDayMins += duration + trans; 
+    });
+
+    // 5. Update and Render
+    scheduleData.matches = matches;
+    recalculateStandings();
+    renderMatches();
+    renderPlayers();
+    switchTab('matchesTab', document.querySelectorAll('.tab-btn')[1]);
+}    
         // --- NEW MANUAL OVERRIDE FUNCTIONS ---
         function addCustomMatch() {
             if (!currentUnit) return alert("Load a unit first!");
