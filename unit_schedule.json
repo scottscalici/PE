@@ -1,0 +1,16 @@
+{
+  "schedule": [
+    {
+      "unit_id": "kickball_3a",
+      "display_name": "Kickball",
+      "class": ["3A", "3B"],
+      "dias": [58, 59, 60]
+    },
+    {
+      "unit_id": "halloween_games_3a",
+      "display_name": "Spooky Games (3A)",
+      "class": "3A",
+      "dias": [4]
+    }
+  ]
+}
