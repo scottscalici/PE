@@ -2,8 +2,8 @@
   "matches": [
     {
       "id": 1,
-      "home_team": "Dallas Wolves",
-      "away_team": "New York Knights",
+      "home_team": "Dallas Wolves & Detroit Seals",
+      "away_team": "New York Knights & Hollywood Eagles",
       "home_score": null,
       "away_score": null,
       "date_str": "March 20 (Day 58)",
@@ -13,8 +13,8 @@
     },
     {
       "id": 2,
-      "home_team": "Detroit Seals",
-      "away_team": "Hollywood Eagles",
+      "home_team": "Detroit Seals & New York Knights",
+      "away_team": "Hollywood Eagles & Dallas Wolves",
       "home_score": null,
       "away_score": null,
       "date_str": "March 24 (Day 59)",
@@ -24,44 +24,11 @@
     },
     {
       "id": 3,
-      "home_team": "Dallas Wolves",
-      "away_team": "Hollywood Eagles",
+      "home_team": "Dallas Wolves & New York Knights",
+      "away_team": "Hollywood Eagles & Detroit Seals",
       "home_score": null,
       "away_score": null,
       "date_str": "March 26 (Day 60)",
-      "time": "11:30",
-      "location": "Full Gym",
-      "completed": false
-    },
-    {
-      "id": 4,
-      "home_team": "New York Knights",
-      "away_team": "Detroit Seals",
-      "home_score": null,
-      "away_score": null,
-      "date_str": "April 6 (Day 61)",
-      "time": "11:30",
-      "location": "Full Gym",
-      "completed": false
-    },
-    {
-      "id": 5,
-      "home_team": "Dallas Wolves",
-      "away_team": "Detroit Seals",
-      "home_score": null,
-      "away_score": null,
-      "date_str": "April 8 (Day 62)",
-      "time": "11:30",
-      "location": "Full Gym",
-      "completed": false
-    },
-    {
-      "id": 6,
-      "home_team": "Hollywood Eagles",
-      "away_team": "New York Knights",
-      "home_score": null,
-      "away_score": null,
-      "date_str": "April 10 (Day 63)",
       "time": "11:30",
       "location": "Full Gym",
       "completed": false
@@ -77,7 +44,7 @@
       "pd": 0,
       "pts": 0
     },
-    "New York Knights": {
+    "Detroit Seals": {
       "w": 0,
       "l": 0,
       "t": 0,
@@ -86,7 +53,7 @@
       "pd": 0,
       "pts": 0
     },
-    "Detroit Seals": {
+    "New York Knights": {
       "w": 0,
       "l": 0,
       "t": 0,
