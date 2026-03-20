@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PE Class Portal</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg-color); 
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 20px; 
+            text-align: center;
+        }
+
+        #lobby { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding-top: 5vh; 
+        }
+
+        h1 { 
+            margin: 0 0 10px 0; 
+            color: var(--primary); 
+            font-size: 3em; 
+        }
+
+        .class-btn-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 15px; 
+            margin-top: 40px; 
+        }
+
+        .btn-class { 
+            background: var(--card-bg); 
+            border: 2px solid var(--primary); 
+            color: var(--primary); 
+            padding: 20px; 
+            font-size: 1.3em; 
+            font-weight: bold; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+        }
+
+        .btn-class:hover { 
+            background: var(--primary); 
+            color: white; 
+            transform: translateY(-3px); 
+            box-shadow: 0 6px 12px rgba(0,86,179,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="lobby">
+        <h1>PE Unit Portal</h1>
+        <p style="font-size: 1.2em; color: #555;">Select your active unit below:</p>
+        
+        <div class="class-btn-grid" id="dynamicButtonsGrid">
+            <p>Loading active units...</p>
+        </div>
+    </div>
+
+    <script>
+        // URLs for your scheduling files
+        const CALENDAR_URL = "https://raw.githubusercontent.com/scottscalici/imagenes/main/planes/calendario.json";
+        const UNIT_SCHEDULE_URL = "https://raw.githubusercontent.com/scottscalici/PE/main/unit_schedule.json"; 
+
+        window.onload = loadActiveUnits;
+
+        async function loadActiveUnits() {
+            const grid = document.getElementById('dynamicButtonsGrid');
+            
+            try {
+                // Fetch both the Calendar and the Unit Schedule
+                const [calRes, schedRes] = await Promise.all([
+                    fetch(`${CALENDAR_URL}?t=${Date.now()}`),
+                    fetch(`${UNIT_SCHEDULE_URL}?t=${Date.now()}`)
+                ]);
+
+                if (!calRes.ok || !schedRes.ok) throw new Error("Could not load schedule data.");
+                
+                const calData = await calRes.json();
+                const schedData = await schedRes.json();
+                const fullCalendar = calData.map; 
+
+                // Get today's local date
+                const today = new Date();
+                const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                
+                // Filter active units based on the dia arrays
+                const activeUnits = schedData.schedule.filter(unit => {
+                    if (!unit.dias || unit.dias.length === 0) return false;
+
+                    let unitDates = [];
+                    unit.dias.forEach(dia => {
+                        const matchingDays = fullCalendar.filter(d => d.dia === dia);
+                        matchingDays.forEach(md => unitDates.push(md.fecha));
+                    });
+
+                    if (unitDates.length === 0) return false;
+
+                    unitDates.sort();
+                    const startDateStr = unitDates[0];
+
+                    // Keeps the button active from the first day onward
+                    return todayStr >= startDateStr;
+                });
+
+                if (activeUnits.length === 0) {
+                    grid.innerHTML = "<p>No active units scheduled yet.</p>";
+                    return;
+                }
+
+                grid.innerHTML = '';
+                
+                // Generate a single button per unit 
+                activeUnits.forEach(unit => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-class';
+                    
+                    // Format classes nicely if they exist in the JSON, e.g., "Kickball (3A, 3B)"
+                    let classesText = "";
+                    if (unit.class) {
+                        let classStr = Array.isArray(unit.class) ? unit.class.join(', ') : unit.class;
+                        classesText = ` (${classStr})`;
+                    }
+                    
+                    btn.innerText = `${unit.display_name}${classesText}`;
+                    
+                    // Convert "backwards_soccer" to "backwards-soccer" for the URL
+                    const urlSlug = unit.unit_id.replace(/_/g, '-');
+                    const siteUrl = `https://sites.google.com/view/uais-pe/units/${urlSlug}`;
+                    
+                    // Open the Google Site in a new tab so they don't lose the portal
+                    btn.onclick = () => window.open(siteUrl, '_blank');
+                    
+                    grid.appendChild(btn);
+                });
+
+            } catch (error) {
+                console.error(error);
+                grid.innerHTML = `<p style="color: red;">Error loading units: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
