@@ -270,7 +270,7 @@
             ]
         },
         {
-            "id": "backwards_soccer",
+            "id": "back_to_basics",
             "workoutName": "Back to Basics +",
             "rounds": 1,
             "circuits": [
@@ -323,7 +323,7 @@
                             "type": "rest"
                         },
                         {
-                            "exerciseId": "squat_jacks",
+                            "exerciseId": "squat_jack",
                             "duration": 30,
                             "type": "work"
                         },
