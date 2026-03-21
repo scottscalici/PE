@@ -3,150 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PE Class Portal</title>
+    <title>PE Daily Log</title>
     <style>
-        :root {
-            --primary: #0056b3;
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-main: #333333;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h1 { color: #0056b3; text-align: center; }
         
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: var(--bg-color); 
-            color: var(--text-main); 
-            margin: 0; 
-            padding: 20px; 
-            text-align: center;
-        }
-
-        #lobby { 
-            max-width: 800px; 
-            margin: 0 auto; 
-            padding-top: 5vh; 
-        }
-
-        h1 { 
-            margin: 0 0 10px 0; 
-            color: var(--primary); 
-            font-size: 3em; 
-        }
-
-        .class-btn-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 15px; 
-            margin-top: 40px; 
-        }
-
-        .btn-class { 
-            background: var(--card-bg); 
-            border: 2px solid var(--primary); 
-            color: var(--primary); 
-            padding: 20px; 
-            font-size: 1.3em; 
-            font-weight: bold; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            transition: 0.2s; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
-        }
-
-        .btn-class:hover { 
-            background: var(--primary); 
-            color: white; 
-            transform: translateY(-3px); 
-            box-shadow: 0 6px 12px rgba(0,86,179,0.2);
-        }
+        .controls { text-align: center; margin-bottom: 20px; }
+        .btn-toggle { background: #eee; border: none; padding: 10px 20px; font-size: 1.1em; cursor: pointer; border-radius: 5px; margin: 0 5px; }
+        .btn-toggle.active { background: #0056b3; color: white; font-weight: bold; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f8f9fa; color: #555; }
+        
+        .date-col { width: 15%; font-weight: bold; color: #0056b3; }
+        .unit-col { width: 25%; font-weight: bold; }
+        .topic-col { width: 40%; }
+        .workout-col { width: 20%; }
+        
+        .locked { color: #999; font-style: italic; }
+        .locked-icon { font-size: 0.8em; margin-left: 5px; }
+        .no-school { background-color: #ffeeba; color: #856404; font-style: italic; }
+        
+        a { color: #0056b3; text-decoration: none; font-weight: bold; }
+        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
 
-    <div id="lobby">
-        <h1>PE Unit Portal</h1>
-        <p style="font-size: 1.2em; color: #555;">Select your active unit below:</p>
-        
-        <div class="class-btn-grid" id="dynamicButtonsGrid">
-            <p>Loading active units...</p>
-        </div>
+<div class="container">
+    <h1>Daily Class Log</h1>
+    
+    <div class="controls">
+        <button id="btnA" class="btn-toggle active" onclick="loadLog('A')">Cycle A Schedule</button>
+        <button id="btnB" class="btn-toggle" onclick="loadLog('B')">Cycle B Schedule</button>
     </div>
 
-    <script>
-        // URLs for your scheduling files
-        const CALENDAR_URL = "https://raw.githubusercontent.com/scottscalici/imagenes/main/planes/calendario.json";
-        const UNIT_SCHEDULE_URL = "https://raw.githubusercontent.com/scottscalici/PE/main/unit_schedule.json"; 
+    <table>
+        <thead>
+            <tr>
+                <th>Date / Day</th>
+                <th>Unit</th>
+                <th>Daily Plan</th>
+                <th>Workout</th>
+            </tr>
+        </thead>
+        <tbody id="logBody">
+            <tr><td colspan="4" style="text-align: center;">Loading calendar...</td></tr>
+        </tbody>
+    </table>
+</div>
 
-        window.onload = loadActiveUnits;
+<script>
+    // Replace these with your actual raw GitHub URLs
+    const CALENDAR_URL = "https://raw.githubusercontent.com/scottscalici/imagenes/main/planes/calendario.json";
+    const UNIT_SCHEDULE_URL = "https://raw.githubusercontent.com/scottscalici/PE/main/unit_schedule.json"; 
 
-        async function loadActiveUnits() {
-            const grid = document.getElementById('dynamicButtonsGrid');
+    let calendarData = [];
+    let scheduleData = { schedule: [], daily_log: [] };
+
+    window.onload = async () => {
+        try {
+            const [calRes, schedRes] = await Promise.all([
+                fetch(`${CALENDAR_URL}?t=${Date.now()}`),
+                fetch(`${UNIT_SCHEDULE_URL}?t=${Date.now()}`)
+            ]);
             
-            try {
-                // Fetch both the Calendar and the Unit Schedule
-                const [calRes, schedRes] = await Promise.all([
-                    fetch(`${CALENDAR_URL}?t=${Date.now()}`),
-                    fetch(`${UNIT_SCHEDULE_URL}?t=${Date.now()}`)
-                ]);
-
-                if (!calRes.ok || !schedRes.ok) throw new Error("Could not load schedule data.");
-                
-                const calData = await calRes.json();
-                const schedData = await schedRes.json();
-                const fullCalendar = calData.map; 
-
-                // Get today's local date
-                const today = new Date();
-                const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-                
-                // Filter active units based on the dia arrays
-                const activeUnits = schedData.schedule.filter(unit => {
-                    if (!unit.dias || unit.dias.length === 0) return false;
-
-                    let unitDates = [];
-                    unit.dias.forEach(dia => {
-                        const matchingDays = fullCalendar.filter(d => d.dia === dia);
-                        matchingDays.forEach(md => unitDates.push(md.fecha));
-                    });
-
-                    if (unitDates.length === 0) return false;
-
-                    unitDates.sort();
-                    const startDateStr = unitDates[0];
-
-                    // Keeps the button active from the first day onward
-                    return todayStr >= startDateStr;
-                });
-
-                if (activeUnits.length === 0) {
-                    grid.innerHTML = "<p>No active units scheduled yet.</p>";
-                    return;
-                }
-
-                grid.innerHTML = '';
-                
-                // Generate a single button per unit 
-                activeUnits.forEach(unit => {
-                    const btn = document.createElement('button');
-                    btn.className = 'btn-class';
-                    
-              btn.innerText = unit.display_name;
-                    
-                    // Convert "backwards_soccer" to "backwards-soccer" for the URL
-                    const urlSlug = unit.unit_id.replace(/_/g, '-');
-                    const siteUrl = `https://sites.google.com/view/uais-pe/units/${urlSlug}`;
-                    
-                    // Open the Google Site in a new tab so they don't lose the portal
-                    btn.onclick = () => window.open(siteUrl, '_blank');
-                    
-                    grid.appendChild(btn);
-                });
-
-            } catch (error) {
-                console.error(error);
-                grid.innerHTML = `<p style="color: red;">Error loading units: ${error.message}</p>`;
-            }
+            const calJson = await calRes.json();
+            calendarData = calJson.map;
+            scheduleData = await schedRes.json();
+            
+            // Load 'A' Day by default
+            loadLog('A');
+        } catch (error) {
+            document.getElementById('logBody').innerHTML = `<tr><td colspan="4" style="color:red;">Error loading data: ${error.message}</td></tr>`;
         }
-    </script>
+    };
+
+    function loadLog(cycle) {
+        // Highlight active button
+        document.getElementById('btnA').className = cycle === 'A' ? 'btn-toggle active' : 'btn-toggle';
+        document.getElementById('btnB').className = cycle === 'B' ? 'btn-toggle active' : 'btn-toggle';
+
+        const tbody = document.getElementById('logBody');
+        tbody.innerHTML = '';
+
+        // 1. Get dates for the selected cycle OR days with no cycle (like No School days)
+        let cycleDays = calendarData.filter(d => d.ciclo === cycle || d.dia === null);
+
+        // 2. Sort in reverse chronological order (newest at the top)
+        cycleDays.sort((a, b) => b.fecha.localeCompare(a.fecha));
+
+        // Get today's date for the 7-day lock calculation
+        const today = new Date();
+        today.setHours(0,0,0,0);
+
+        cycleDays.forEach(calEntry => {
+            // Check if it's a special day (No School, Snow Day, etc.)
+            if (calEntry.dia === null) {
+                tbody.innerHTML += `
+                    <tr class="no-school">
+                        <td class="date-col">${formatDate(calEntry.fecha)}</td>
+                        <td colspan="3">${calEntry.note || 'No School'}</td>
+                    </tr>`;
+                return; // Skip to next day
+            }
+
+            // --- FIND THE LOG ENTRY ---
+            // Look for a specific override (e.g., dia 57, ciclo B) first
+            let logEntry = scheduleData.daily_log.find(l => l.dia === calEntry.dia && l.ciclo === cycle);
+            
+            // If no specific override, fall back to the generic entry (e.g., dia 57, no ciclo defined)
+            if (!logEntry) {
+                logEntry = scheduleData.daily_log.find(l => l.dia === calEntry.dia && !l.ciclo);
+            }
+
+            // --- FIND THE UNIT ---
+            // Look up which unit this "dia" belongs to in the schedule array
+            let unitData = scheduleData.schedule.find(u => u.dias.includes(calEntry.dia));
+            let unitName = unitData ? unitData.display_name : "TBD";
+            let unitId = unitData ? unitData.unit_id.replace(/_/g, '-') : null;
+
+            // --- 7-DAY LOCK LOGIC ---
+            // Add 'T00:00:00' to prevent time zone shifting errors
+            const eventDate = new Date(calEntry.fecha + 'T00:00:00'); 
+            const diffTime = eventDate.getTime() - today.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            // It is locked if the event is strictly more than 7 days in the future
+            const isLocked = diffDays > 7;
+
+            // Build formatting based on lock status and missing info
+            let unitHtml = unitName;
+            let topicHtml = logEntry ? logEntry.topic : "<em>Details pending</em>";
+            let workoutHtml = (logEntry && logEntry.workout_id) ? logEntry.workout_id : "<em>No workout</em>";
+
+            if (isLocked) {
+                // Keep the text, but style it as locked and remove links
+                unitHtml = `<span class="locked">${unitName} <span class="locked-icon">🔒</span></span>`;
+                if (logEntry) topicHtml = `<span class="locked">${logEntry.topic}</span>`;
+                if (logEntry && logEntry.workout_id) workoutHtml = `<span class="locked">Hidden</span>`;
+            } else {
+                // If unlocked and data exists, turn them into clickable links
+                if (unitId) {
+                    unitHtml = `<a href="https://sites.google.com/view/uais-pe/units/${unitId}" target="_blank">${unitName}</a>`;
+                }
+                // (Workout linking will be handled in the next step when we build the workout player!)
+            }
+
+            // Output the row
+            tbody.innerHTML += `
+                <tr>
+                    <td class="date-col">${formatDate(calEntry.fecha)}<br><span style="font-size:0.8em; color:#666;">Day ${calEntry.dia}</span></td>
+                    <td class="unit-col">${unitHtml}</td>
+                    <td class="topic-col">${topicHtml}</td>
+                    <td class="workout-col">${workoutHtml}</td>
+                </tr>
+            `;
+        });
+    }
+
+    // Helper function to make dates look pretty (e.g., "Mon, Oct 24")
+    function formatDate(dateString) {
+        const date = new Date(dateString + 'T00:00:00');
+        return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    }
+</script>
+
 </body>
 </html>
