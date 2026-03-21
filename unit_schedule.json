@@ -1,5 +1,9 @@
 {
   "schedule": [
+    { "unit_id": "", "display_name": "Workout Rotations", "dias": [42] },
+    { "unit_id": "", "display_name": "Open Gym", "dias": [42], "ciclo": "B" },
+    { "unit_id": "hockey", "display_name": "Hockey", "dias": [43, 44] },
+    { "unit_id": "longball_chaos", "display_name": "Longball Chaos", "dias": [45, 46] },
     { "unit_id": "mission_impossible", "display_name": "Mission Impossible", "dias": [47] },
     { "unit_id": "ultimate_football", "display_name": "Ultimate Football", "dias": [48] },
     { "unit_id": "handball", "display_name": "Handball", "dias": [50, 51, 52] },
