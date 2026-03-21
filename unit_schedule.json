@@ -1,13 +1,15 @@
 {
   "schedule": [
     { "unit_id": "handball", "display_name": "Handball", "dias": [51, 52, 53] },
+    { "unit_id": "handball", "display_name": "Handball", "dias": [51, 52, 53] },
     { "unit_id": "open_gym", "display_name": "Open Gym", "dias": [54, 55, 56] },
     { "unit_id": "backwards_soccer", "display_name": "Backwards Soccer", "dias": [57] },
     { "unit_id": "kickball", "display_name": "Kickball", "dias": [58, 59, 60] }
    
   ],
-  "workouts": [
+ "workouts": [
     { "workout_id": "basics_01", "display_name": "Basics 1", "dias": [2, 57] },
-    { "workout_id": "alpha_01", "display_name": "Industrial Strength Alpha", "dias": [58] }
+    { "workout_id": "", "display_name": "Cardio Game", "dias": [60] },
+    { "workout_id": "", "display_name": "Agility", "dias": [5] }
   ]
 }
