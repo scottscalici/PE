@@ -103,13 +103,15 @@
             const isPast = calEntry.fecha < todayStr;
             const rowClass = isPast ? 'past-date' : '';
 
-            // UNIT LOGIC
-            let unitData = scheduleData.schedule.find(u => u.dias.includes(calEntry.dia));
+           // NEW UNIT LOGIC (Looks for a specific cycle match first, then falls back to the default)
+            let unitData = scheduleData.schedule.find(u => u.dias.includes(calEntry.dia) && u.ciclo === cycle) 
+            || scheduleData.schedule.find(u => u.dias.includes(calEntry.dia) && !u.ciclo);
             let unitName = unitData ? unitData.display_name : "TBD";
             let unitSlug = unitData ? unitData.unit_id.replace(/_/g, '-') : null;
 
-            // WORKOUT LOGIC
-            let workoutData = (scheduleData.workouts || []).find(w => w.dias && w.dias.includes(calEntry.dia));
+// NEW WORKOUT LOGIC (Looks for a specific cycle match first, then falls back to the default)
+let workoutData = (scheduleData.workouts || []).find(w => w.dias && w.dias.includes(calEntry.dia) && w.ciclo === cycle)
+               || (scheduleData.workouts || []).find(w => w.dias && w.dias.includes(calEntry.dia) && !w.ciclo);
             
             // 1. Change the default text here if there is no entry in the JSON
             let workoutName = workoutData ? workoutData.display_name : "<em>Class Warmup & Gameplay</em>";
