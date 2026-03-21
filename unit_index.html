@@ -18,13 +18,12 @@
         th { background: #f8f9fa; color: #555; }
         
         .date-col { width: 15%; font-weight: bold; color: #0056b3; }
-        .unit-col { width: 25%; font-weight: bold; }
-        .topic-col { width: 40%; }
-        .workout-col { width: 20%; }
+        .unit-col { width: 42.5%; font-weight: bold; }
+        .workout-col { width: 42.5%; }
         
         .locked { color: #999; font-style: italic; }
         .locked-icon { font-size: 0.8em; margin-left: 5px; }
-        .no-school { background-color: #ffeeba; color: #856404; font-style: italic; }
+        .past-date { opacity: 0.6; } 
         
         a { color: #0056b3; text-decoration: none; font-weight: bold; }
         a:hover { text-decoration: underline; }
@@ -43,25 +42,23 @@
     <table>
         <thead>
             <tr>
-                <th>Date / Day</th>
+                <th>Day</th>
                 <th>Unit</th>
-                <th>Daily Plan</th>
                 <th>Workout</th>
             </tr>
         </thead>
         <tbody id="logBody">
-            <tr><td colspan="4" style="text-align: center;">Loading calendar...</td></tr>
+            <tr><td colspan="3" style="text-align: center;">Loading calendar...</td></tr>
         </tbody>
     </table>
 </div>
 
 <script>
-    // Replace these with your actual raw GitHub URLs
     const CALENDAR_URL = "https://raw.githubusercontent.com/scottscalici/imagenes/main/planes/calendario.json";
     const UNIT_SCHEDULE_URL = "https://raw.githubusercontent.com/scottscalici/PE/main/unit_schedule.json"; 
 
     let calendarData = [];
-    let scheduleData = { schedule: [], daily_log: [] };
+    let scheduleData = { schedule: [], workouts: [] };
 
     window.onload = async () => {
         try {
@@ -74,100 +71,83 @@
             calendarData = calJson.map;
             scheduleData = await schedRes.json();
             
-            // Load 'A' Day by default
             loadLog('A');
         } catch (error) {
-            document.getElementById('logBody').innerHTML = `<tr><td colspan="4" style="color:red;">Error loading data: ${error.message}</td></tr>`;
+            document.getElementById('logBody').innerHTML = `<tr><td colspan="3" style="color:red;">Error loading data: ${error.message}</td></tr>`;
         }
     };
 
     function loadLog(cycle) {
-        // Highlight active button
         document.getElementById('btnA').className = cycle === 'A' ? 'btn-toggle active' : 'btn-toggle';
         document.getElementById('btnB').className = cycle === 'B' ? 'btn-toggle active' : 'btn-toggle';
 
         const tbody = document.getElementById('logBody');
         tbody.innerHTML = '';
 
-        // 1. Get dates for the selected cycle OR days with no cycle (like No School days)
-        let cycleDays = calendarData.filter(d => d.ciclo === cycle || d.dia === null);
+        let cycleDays = calendarData.filter(d => d.ciclo === cycle && d.dia !== null);
 
-        // 2. Sort in reverse chronological order (newest at the top)
-        cycleDays.sort((a, b) => b.fecha.localeCompare(a.fecha));
+        const todayStr = new Date().toISOString().split('T')[0]; 
+        
+        let upcoming = cycleDays.filter(d => d.fecha >= todayStr);
+        let past = cycleDays.filter(d => d.fecha < todayStr);
 
-        // Get today's date for the 7-day lock calculation
-        const today = new Date();
-        today.setHours(0,0,0,0);
+        upcoming.sort((a, b) => a.fecha.localeCompare(b.fecha));
+        past.sort((a, b) => a.fecha.localeCompare(b.fecha));
 
-        cycleDays.forEach(calEntry => {
-            // Check if it's a special day (No School, Snow Day, etc.)
-            if (calEntry.dia === null) {
-                tbody.innerHTML += `
-                    <tr class="no-school">
-                        <td class="date-col">${formatDate(calEntry.fecha)}</td>
-                        <td colspan="3">${calEntry.note || 'No School'}</td>
-                    </tr>`;
-                return; // Skip to next day
-            }
+        const sortedDays = [...upcoming, ...past];
 
-            // --- FIND THE LOG ENTRY ---
-            // Look for a specific override (e.g., dia 57, ciclo B) first
-            let logEntry = scheduleData.daily_log.find(l => l.dia === calEntry.dia && l.ciclo === cycle);
-            
-            // If no specific override, fall back to the generic entry (e.g., dia 57, no ciclo defined)
-            if (!logEntry) {
-                logEntry = scheduleData.daily_log.find(l => l.dia === calEntry.dia && !l.ciclo);
-            }
+        const todayDateObj = new Date();
+        todayDateObj.setHours(0,0,0,0);
 
-            // --- FIND THE UNIT ---
-            // Look up which unit this "dia" belongs to in the schedule array
+        sortedDays.forEach(calEntry => {
+            const isPast = calEntry.fecha < todayStr;
+            const rowClass = isPast ? 'past-date' : '';
+
+            // UNIT LOGIC
             let unitData = scheduleData.schedule.find(u => u.dias.includes(calEntry.dia));
             let unitName = unitData ? unitData.display_name : "TBD";
-            let unitId = unitData ? unitData.unit_id.replace(/_/g, '-') : null;
+            let unitSlug = unitData ? unitData.unit_id.replace(/_/g, '-') : null;
 
-            // --- 7-DAY LOCK LOGIC ---
-            // Add 'T00:00:00' to prevent time zone shifting errors
-            const eventDate = new Date(calEntry.fecha + 'T00:00:00'); 
-            const diffTime = eventDate.getTime() - today.getTime();
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            // WORKOUT LOGIC
+            let workoutData = (scheduleData.workouts || []).find(w => w.dias && w.dias.includes(calEntry.dia));
             
-            // It is locked if the event is strictly more than 7 days in the future
+            // 1. Change the default text here if there is no entry in the JSON
+            let workoutName = workoutData ? workoutData.display_name : "<em>Class Warmup & Gameplay</em>";
+            
+            // 2. Only create a slug if a valid workout_id exists
+            let workoutSlug = (workoutData && workoutData.workout_id) ? workoutData.workout_id.replace(/_/g, '-') : null;
+
+            // 7-DAY LOCK LOGIC
+            const eventDate = new Date(calEntry.fecha + 'T00:00:00'); 
+            const diffTime = eventDate.getTime() - todayDateObj.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             const isLocked = diffDays > 7;
 
-            // Build formatting based on lock status and missing info
             let unitHtml = unitName;
-            let topicHtml = logEntry ? logEntry.topic : "<em>Details pending</em>";
-            let workoutHtml = (logEntry && logEntry.workout_id) ? logEntry.workout_id : "<em>No workout</em>";
+            let workoutHtml = workoutName;
 
             if (isLocked) {
-                // Keep the text, but style it as locked and remove links
                 unitHtml = `<span class="locked">${unitName} <span class="locked-icon">🔒</span></span>`;
-                if (logEntry) topicHtml = `<span class="locked">${logEntry.topic}</span>`;
-                if (logEntry && logEntry.workout_id) workoutHtml = `<span class="locked">Hidden</span>`;
+                if (workoutData) workoutHtml = `<span class="locked">${workoutName}</span>`;
             } else {
-                // If unlocked and data exists, turn them into clickable links
-                if (unitId) {
-                    unitHtml = `<a href="https://sites.google.com/view/uais-pe/units/${unitId}" target="_blank">${unitName}</a>`;
+                if (unitSlug) {
+                    unitHtml = `<a href="https://sites.google.com/view/uais-pe/units/${unitSlug}" target="_blank">${unitName}</a>`;
                 }
-                // (Workout linking will be handled in the next step when we build the workout player!)
+                
+                // 3. If there is a slug, make it a link. Otherwise, it stays as plain text!
+                if (workoutSlug) {
+                    workoutHtml = `<a href="https://sites.google.com/view/uais-pe/workouts/${workoutSlug}" target="_blank">${workoutName}</a>`;
+                }
             }
 
-            // Output the row
             tbody.innerHTML += `
-                <tr>
-                    <td class="date-col">${formatDate(calEntry.fecha)}<br><span style="font-size:0.8em; color:#666;">Day ${calEntry.dia}</span></td>
+                <tr class="${rowClass}">
+                    <td class="date-col">Day ${calEntry.dia}</td>
                     <td class="unit-col">${unitHtml}</td>
-                    <td class="topic-col">${topicHtml}</td>
                     <td class="workout-col">${workoutHtml}</td>
                 </tr>
             `;
         });
-    }
-
-    // Helper function to make dates look pretty (e.g., "Mon, Oct 24")
-    function formatDate(dateString) {
-        const date = new Date(dateString + 'T00:00:00');
-        return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     }
 </script>
 
