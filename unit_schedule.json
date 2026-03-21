@@ -23,7 +23,19 @@
     { "unit_id": "handball", "display_name": "Handball", "dias": [50, 51, 52] },
     { "unit_id": "open_gym", "display_name": "Open Gym", "dias": [20, 27, 34, 36, 40, 41, 49, 53, 54, 55, 56] },
     { "unit_id": "backwards_soccer", "display_name": "Backwards Soccer", "dias": [57] },
-    { "unit_id": "kickball", "display_name": "Kickball", "dias": [58, 59, 60] }
+    { "unit_id": "kickball", "display_name": "Kickball", "dias": [58, 59, 60] },
+    { "unit_id": "smushball", "display_name": "Smushball", "dias": [61, 62] },
+    { "unit_id": "rugby", "display_name": "Rugby", "dias": [63, 64, 65] },
+    { "unit_id": "game_of_thrones", "display_name": "Game of Thrones", "dias": [66] },
+    { "unit_id": "dynamoball", "display_name": "DynamoBall", "dias": [67] },
+    { "unit_id": "quidditch", "display_name": "Quidditch", "dias": [68, 69] },
+    { "unit_id": "human_foosball", "display_name": "Human Foosball", "dias": [71, 72] },
+    { "unit_id": "lacrosse", "display_name": "Lacrosse", "dias": [73] },
+    { "unit_id": "ki_o_rahi", "display_name": "Ki-O-Rahi", "dias": [74, 75, 76] },
+    { "unit_id": "just_dance", "display_name": "Just Dance", "dias": [77] },
+    { "unit_id": "tchoukball", "display_name": "Tchoukball", "dias": [78] },
+    { "unit_id": "pickleball", "display_name": "Pickleball", "dias": [79] },
+    { "unit_id": "loco_game", "display_name": "Loco Game", "dias": [70] }
    
   ],
  "workouts": [
@@ -31,6 +43,11 @@
     { "workout_id": "basics_02", "display_name": "Basics 2", "dias": [3] },
     { "workout_id": "basics_03", "display_name": "Basics 3", "dias": [4] },
     { "workout_id": "basics_04", "display_name": "Basics 4", "dias": [5] },
+    { "workout_id": "basics_05", "display_name": "Basics 5", "dias": [6] },
+    { "workout_id": "basics_06", "display_name": "Basics 6", "dias": [7] },
+    { "workout_id": "basics_07", "display_name": "Basics 7", "dias": [8] },
+    { "workout_id": "basics_08", "display_name": "Basics 8", "dias": [9] },
+
     { "workout_id": "back_to_basics", "display_name": "Back to Basics +", "dias": [58] },
     { "workout_id": "", "display_name": "Cardio Game", "dias": [60] },
     { "workout_id": "", "display_name": "Agility", "dias": [6] }
