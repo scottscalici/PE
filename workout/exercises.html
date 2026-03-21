@@ -1,0 +1,89 @@
+<script>
+    const CALENDAR_URL = "https://raw.githubusercontent.com/scottscalici/imagenes/main/planes/calendario.json";
+    const UNIT_SCHEDULE_URL = "https://raw.githubusercontent.com/scottscalici/PE/main/unit_schedule.json"; 
+    // Point this to your existing file!
+    const WORKOUT_DB_URL = "https://raw.githubusercontent.com/scottscalici/PE/main/workout/workout_routine.json"; 
+
+    window.onload = async () => {
+        try {
+            const [calRes, schedRes, dbRes] = await Promise.all([
+                fetch(`${CALENDAR_URL}?t=${Date.now()}`),
+                fetch(`${UNIT_SCHEDULE_URL}?t=${Date.now()}`),
+                fetch(`${WORKOUT_DB_URL}?t=${Date.now()}`)
+            ]);
+            
+            const calendarData = (await calRes.json()).map;
+            const scheduleData = await schedRes.json();
+            const workoutDB = await dbRes.json();
+            
+            buildCumulativeList(calendarData, scheduleData, workoutDB);
+        } catch (error) {
+            document.getElementById('statusText').innerHTML = `<span style="color:red;">Error loading data: ${error.message}</span>`;
+            document.getElementById('statusText').className = "";
+        }
+    };
+
+    function buildCumulativeList(calendarData, scheduleData, workoutDB) {
+        const todayStr = new Date().toISOString().split('T')[0]; 
+        
+        // 1. Find completed days
+        const pastDays = calendarData.filter(d => d.fecha <= todayStr && d.dia !== null);
+        const completedDayNumbers = pastDays.map(d => d.dia);
+
+        // 2. Find which workouts were taught
+        let pastWorkoutIds = [];
+        (scheduleData.workouts || []).forEach(scheduledWorkout => {
+            const wasTaught = scheduledWorkout.dias.some(day => completedDayNumbers.includes(day));
+            // Notice we use workout_id from your schedule JSON, matching the 'id' in your routine JSON
+            if (wasTaught && scheduledWorkout.workout_id) {
+                pastWorkoutIds.push(scheduledWorkout.workout_id);
+            }
+        });
+
+        // 3. Dig into the nested workout_routine.json
+        let cumulativeExercises = new Set(); 
+
+        pastWorkoutIds.forEach(id => {
+            // Find the matching workout in your 'workouts' array
+            const dbEntry = workoutDB.workouts.find(w => w.id === id);
+            
+            if (dbEntry && dbEntry.circuits) {
+                dbEntry.circuits.forEach(circuit => {
+                    circuit.sequence.forEach(item => {
+                        // Ignore anything marked as rest, cooldown, or containing the word rest
+                        if (item.type !== "rest" && !item.exerciseId.includes("rest") && !item.exerciseId.includes("cooldown")) {
+                            
+                            // CLEAN UP THE ID FOR DISPLAY (e.g., "jumping_jacks_01" -> "Jumping Jacks")
+                            let cleanName = item.exerciseId;
+                            cleanName = cleanName.replace(/_\d+$/, ''); // Removes "_01", "_02" at the end
+                            cleanName = cleanName.replace(/_/g, ' ');   // Replaces underscores with spaces
+                            cleanName = cleanName.replace(/-/g, ' ');   // Replaces dashes with spaces
+                            
+                            // Capitalize the first letter of each word
+                            cleanName = cleanName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                            
+                            cumulativeExercises.add(cleanName);
+                        }
+                    });
+                });
+            }
+        });
+
+        // 4. Render the alphabetized list
+        const exerciseArray = Array.from(cumulativeExercises).sort();
+        const listContainer = document.getElementById('exerciseBox');
+        
+        if (exerciseArray.length === 0) {
+            document.getElementById('statusText').innerText = "No exercises logged yet this year.";
+            return;
+        }
+
+        document.getElementById('statusText').innerText = `You have learned ${exerciseArray.length} exercises so far!`;
+        
+        exerciseArray.forEach(exercise => {
+            const li = document.createElement('li');
+            li.textContent = exercise;
+            listContainer.appendChild(li);
+        });
+    }
+</script>
