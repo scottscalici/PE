@@ -9,8 +9,12 @@
    
   ],
  "workouts": [
-    { "workout_id": "basics_01", "display_name": "Basics 1", "dias": [2, 57] },
+    { "workout_id": "basics_01", "display_name": "Basics 1", "dias": [2] },
+    { "workout_id": "basics_02", "display_name": "Basics 2", "dias": [3] },
+    { "workout_id": "basics_03", "display_name": "Basics 3", "dias": [4] },
+    { "workout_id": "basics_04", "display_name": "Basics 4", "dias": [5] },
+    { "workout_id": "back_to_basics", "display_name": "Back to Basics +", "dias": [58] },
     { "workout_id": "", "display_name": "Cardio Game", "dias": [60] },
-    { "workout_id": "", "display_name": "Agility", "dias": [5] }
+    { "workout_id": "", "display_name": "Agility", "dias": [6] }
   ]
 }
