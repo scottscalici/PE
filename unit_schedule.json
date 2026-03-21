@@ -1,26 +1,11 @@
 {
   "schedule": [
-    { "unit_id": "kickball", "display_name": "Kickball", "class": [], "dias": [57, 58, 59, 60] },
-    { "unit_id": "handball", "display_name": "Handball", "class": ["3A", "3B"], "dias": [51, 52, 53] },
-    { "unit_id": "backwards_soccer", "display_name": "Backwards Soccer", "class": ["3A", "3B"], "dias": [57] },
-    { "unit_id": "halloween", "display_name": "Spooky Games", "class": ["3A", "3B"], "dias": [4] }
+    { "unit_id": "kickball", "display_name": "Kickball", "dias": [57, 58, 59, 60] },
+    { "unit_id": "handball", "display_name": "Handball", "dias": [51, 52, 53] },
+    { "unit_id": "backwards_soccer", "display_name": "Backwards Soccer", "dias": [57] }
   ],
-  "daily_log": [
-    {
-      "dia": 51,
-      "topic": "Handball: Throwing Mechanics",
-      "workout_id": "basics_01"
-    },
-    {
-      "dia": 57,
-      "topic": "Backwards Soccer: Introduction",
-      "workout_id": "alpha_01"
-    },
-    {
-      "dia": 57,
-      "ciclo": "B", 
-      "topic": "Schedule Screwed Up: Classroom Health Lesson",
-      "workout_id": null
-    }
+  "workouts": [
+    { "workout_id": "basics_01", "display_name": "Basics 1", "dias": [2, 57] },
+    { "workout_id": "alpha_01", "display_name": "Industrial Strength Alpha", "dias": [58] }
   ]
 }
