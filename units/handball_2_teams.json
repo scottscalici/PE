@@ -21,7 +21,7 @@
     {
       "id": 2,
       "name": "Die Recken",
-      "logo_id": "recken",
+      "logo_id": "die_recken",
       "league": "",
       "players": [
         { "id": "3B_21", "name": "Rahul K.", "skill": 8, "compete": 4 },
