@@ -53,7 +53,7 @@
     {
       "id": 4,
       "name": "Die Recken",
-      "logo_id": "recken",
+      "logo_id": "die_recken",
       "league": "Standard",
       "players": [
         { "id": "3A_07", "name": "Adrian W.", "skill": 8, "compete": 5 },
@@ -67,7 +67,7 @@
     {
       "id": 5,
       "name": "Füchse Berlin",
-      "logo_id": "fuchse",
+      "logo_id": "fuchse_berlin",
       "league": "Standard",
       "players": [
         { "id": "3A_22", "name": "Bodhi S.", "skill": 6, "compete": 4 },
