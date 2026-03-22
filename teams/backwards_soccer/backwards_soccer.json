@@ -13,23 +13,51 @@
     "No traditional soccer kicking allowed by field players."
   ],
   "key_terms": [
-    { "term": "Communication", "definition": "Talking with teammates since you can't see behind you." },
-    { "term": "Spatial Awareness", "definition": "Knowing where you are on the court without looking." }
+    {
+      "term": "Communication",
+      "definition": "Talking with teammates since you can't see behind you."
+    },
+    {
+      "term": "Spatial Awareness",
+      "definition": "Knowing where you are on the court without looking."
+    }
   ],
+  "global_connections": {},
   "unit_plan": [
-    { 
-      "day": 1, 
-      "topic": "Intro & Safety", 
-      "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/back-to-basics",
+    {
+      "day": 1,
+      "topic": "Intro & Safety",
       "skills": "Spatial awareness",
-      "games": "Backwards Soccer",
-      "discussion": "Why is communication important when you lack vision?"
+      "discussion": "Why is communication important when you lack vision?",
+      "activities": [
+        {
+          "name": "Backwards Soccer",
+          "overview": "Just one day",
+          "rules": []
+        }
+      ]
     }
   ],
   "available_teams": [
-    { "display": "Ctrl+Z FC", "id": "ctrl_z_fc", "logo": "ctrl_z_fc.png" },
-    { "display": "Marcha Atrás", "id": "marcha_atras", "logo": "marcha_atras.png" },
-    { "display": "The Moonwalkers", "id": "moonwalkers", "logo": "moonwalkers.png" },
-    { "display": "Reverse Cards", "id": "reverse_cards", "logo": "reverse_cards.png" }
+    {
+      "display": "Ctrl+Z FC",
+      "id": "ctrl_z_fc",
+      "logo": "ctrl_z_fc.png"
+    },
+    {
+      "display": "Marcha Atrás",
+      "id": "marcha_atr_s",
+      "logo": "marcha_atr_s.png"
+    },
+    {
+      "display": "The Moonwalkers",
+      "id": "the_moonwalkers",
+      "logo": "the_moonwalkers.png"
+    },
+    {
+      "display": "Reverse Cards",
+      "id": "reverse_cards",
+      "logo": "reverse_cards.png"
+    }
   ]
 }
