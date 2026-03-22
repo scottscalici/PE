@@ -2,6 +2,10 @@
   "sport": "backwards_soccer",
   "display_name": "Backwards Soccer",
   "header_image": "https://raw.githubusercontent.com/scottscalici/PE/main/teams/backwards_soccer/backwards_soccer.png",
+  "setup_image": {
+    "file": "",
+    "caption": ""
+  },
   "equipment": [
     "Soccer balls",
     "Indoor Goals (Turned backwards!)"
@@ -15,14 +19,29 @@
   "key_terms": [
     {
       "term": "Communication",
-      "definition": "Talking with teammates since you can't see behind you."
+      "definition": "Talking with teammates since you can't see behind you.",
+      "image": {
+        "file": "",
+        "caption": ""
+      }
     },
     {
       "term": "Spatial Awareness",
-      "definition": "Knowing where you are on the court without looking."
+      "definition": "Knowing where you are on the court without looking.",
+      "image": {
+        "file": "",
+        "caption": ""
+      }
     }
   ],
-  "global_connections": {},
+  "global_connections": {
+    "description": "",
+    "highlights_video": "",
+    "image": {
+      "file": "",
+      "caption": ""
+    }
+  },
   "unit_plan": [
     {
       "day": 1,
@@ -33,7 +52,11 @@
         {
           "name": "Backwards Soccer",
           "overview": "Just one day",
-          "rules": []
+          "rules": [],
+          "image": {
+            "file": "",
+            "caption": ""
+          }
         }
       ]
     }
