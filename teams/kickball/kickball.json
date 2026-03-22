@@ -2,11 +2,31 @@
   "sport": "kickball",
   "display_name": "Kickball",
   "header_image": "https://raw.githubusercontent.com/scottscalici/PE/main/teams/kickball/kickball.png",
+  "setup_image": {
+    "file": "",
+    "caption": ""
+  },
   "equipment": [
-    "Indoor soccer ball",
-    "Playground ball (if outdoors)",
-    "Bases (1st, 2nd, 3rd, and Home)",
-    "Pitcher's mound marker"
+    {
+      "name": "Indoor soccer ball",
+      "image_file": "main/equipment/indoor_soccer_ball.png",
+      "caption": "indoor soccer ball"
+    },
+    {
+      "name": "Playground ball (if outdoors)",
+      "image_file": "main/equipment/playground_ball__if_outdoors_.png",
+      "caption": ""
+    },
+    {
+      "name": "Bases (1st, 2nd, 3rd, and Home)",
+      "image_file": "main/equipment/bases__1st__2nd__3rd__and_home_.png",
+      "caption": ""
+    },
+    {
+      "name": "Pitcher's mound marker",
+      "image_file": "main/equipment/pitcher_s_mound_marker.png",
+      "caption": ""
+    }
   ],
   "rules": [
     "The ball must be kicked with the foot or leg.",
@@ -22,32 +42,52 @@
   "key_terms": [
     {
       "term": "Force Out",
-      "definition": "An out made when a runner is forced to move to the next base and the fielder touches that base while holding the ball."
+      "definition": "An out made when a runner is forced to move to the next base and the fielder touches that base while holding the ball.",
+      "image": {
+        "file": "",
+        "caption": ""
+      }
     },
     {
       "term": "The Kicking Order",
-      "definition": "The set sequence in which players on the offensive team must take their turn to kick."
+      "definition": "The set sequence in which players on the offensive team must take their turn to kick.",
+      "image": {
+        "file": "",
+        "caption": ""
+      }
     },
     {
       "term": "Tagging Up",
-      "definition": "When a fly ball is caught, a runner must touch their original base after the catch before trying to advance."
+      "definition": "When a fly ball is caught, a runner must touch their original base after the catch before trying to advance.",
+      "image": {
+        "file": "",
+        "caption": ""
+      }
     }
   ],
   "global_connections": {
     "description": "While popular in American schools, kickball has grown into massive adult social leagues across the United States and is frequently played as a community-building sport.",
-    "highlights_video": "https://www.youtube.com/watch?v=zyZhcvuWrZc"
+    "highlights_video": "https://youtube.com/shorts/Wq_oa0xT6CI?si=l3yRLrb3riLJAZaU",
+    "image": {
+      "file": "",
+      "caption": ""
+    }
   },
   "unit_plan": [
     {
       "day": 1,
       "topic": "Intro to Kickball - Start Game right away 4-5 innings",
       "skills": "Kicking technique, running through 1st base, and force play logic",
-      "discussion": "What is the Spirit of the Game?",
+      "discussion": "",
       "activities": [
         {
           "name": "Learn game while we play",
           "overview": "I'll help with the scenarios each kicker",
-          "rules": []
+          "rules": [],
+          "image": {
+            "file": "detroit_seals.png",
+            "caption": "Placeholder"
+          }
         }
       ]
     },
@@ -60,20 +100,42 @@
         {
           "name": "Game play",
           "overview": "",
-          "rules": []
+          "rules": [],
+          "image": {
+            "file": "",
+            "caption": ""
+          }
         }
       ]
     },
     {
       "day": 3,
-      "topic": "Game 3 (Chaos style)",
+      "topic": "Krazy Kickball",
       "skills": "",
       "discussion": "",
       "activities": [
         {
           "name": "Game play",
           "overview": "",
-          "rules": []
+          "rules": [
+            "Played indoors with large 8'x4' mats for bases and a Scoring Line defined by two cones at home.",
+            "A Charge Line is designated just past 1st and 3rd base.",
+            "There is only ONE out per inning. The moment an out is recorded, the teams switch sides.",
+            "Mercy Rule: An inning automatically ends when the offense scores 15 runs. A home run clearing the bases is the only way to exceed this.",
+            "The pitcher must roll the ball from the outfield, and it must pass exactly between the two scoring line cones.",
+            "Pitching Penalty: If the pitch misses the cones, all active runners advance one base (or the kicker takes 2nd if bases are empty).",
+            "The kicked ball must cross the Charge Line past 1st and 3rd base, otherwise it is a foul ball.",
+            "Pace of Play: The pitcher can roll the instant the defense resets. If the next kicker isn't ready at the cones, they are OUT.",
+            "Multiple runners are allowed on a single base at the same time.",
+            "Baserunners can start running the exact moment the ball is kicked.",
+            "There are absolutely no force outs on the field.",
+            "The entire defense must start in the outfield and cannot cross the Charge Line until the kicked ball crosses it first.",
+            "The single out is achieved by catching a fly ball, tagging a runner, throwing and hitting a runner (pegging), or the next kicker penalty."
+          ],
+          "image": {
+            "file": "",
+            "caption": ""
+          }
         }
       ]
     }
