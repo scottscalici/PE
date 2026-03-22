@@ -226,38 +226,51 @@ async function fetchSyllabus() {
         else discussionList.previousElementSibling.style.display = 'none';
     }
 
-    // 4. Daily Unit Plan
-    let planHtml = "";
-    if (unitData.unit_plan && unitData.unit_plan.length > 0) {
-        unitData.unit_plan.forEach(d => {
-            // Only add Skills and Games if they exist
-            let detailsArr = [];
-            if (d.skills) detailsArr.push(`<strong>Skills:</strong> ${d.skills}`);
-            if (d.games) detailsArr.push(`<strong>Games:</strong> ${d.games}`);
-            
-            // Join them with a " | " only if there's more than one
-            let detailsHtml = detailsArr.length > 0 ? `<p style="font-size: 0.9em; margin: 5px 0;">${detailsArr.join(' | ')}</p>` : '';
+// 4. Daily Unit Plan
+    let planHtml = "";
+    if (unitData.unit_plan && unitData.unit_plan.length > 0) {
+        unitData.unit_plan.forEach(d => {
+            
+            // Keep the skills section if you still use it at the day-level
+            let skillsHtml = d.skills ? `<p style="font-size: 0.9em; margin: 5px 0; color: #555;"><strong>Skills:</strong> ${d.skills}</p>` : '';
+            
+            // Loop through the new activities array
+            let activitiesHtml = "";
+            if (d.activities && d.activities.length > 0) {
+                d.activities.forEach(act => {
+                    
+                    // Build bullet points for specific activity rules
+                    let rulesHtml = "";
+                    if (act.rules && act.rules.length > 0) {
+                        rulesHtml = `<ul style="font-size: 0.9em; margin-top: 5px; padding-left: 20px;">
+                            ${act.rules.map(r => `<li>${r}</li>`).join('')}
+                        </ul>`;
+                    }
+                    
+                    // Create a styled block for each activity
+                    activitiesHtml += `
+                        <div style="background: var(--accent); border-left: 4px solid var(--primary); padding: 10px; margin-top: 10px; border-radius: 4px;">
+                            <strong style="color: var(--primary);">${act.name}</strong>
+                            ${act.overview ? `<p style="font-size: 0.9em; margin: 5px 0;">${act.overview}</p>` : ''}
+                            ${rulesHtml}
+                        </div>`;
+                });
+            }
 
-            planHtml += `
-                <div style="border-bottom: 2px solid #eee; padding: 15px 0;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                        <div>
-                            <strong>Day ${d.day}${d.topic ? `: ${d.topic}` : ''}</strong>
-                            ${detailsHtml}
-                        </div>
-                        ${d.workout_iframe ? `
-                            <a href="${d.workout_iframe}" target="_blank" style="padding: 10px 15px; background: var(--primary); color: white; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.85em; display: flex; align-items: center; gap: 5px;">
-                                🚀 Open Workout
-                            </a>
-                        ` : ''}
-                    </div>
-                </div>`;
-        });
-        document.getElementById('unitPlanContainer').innerHTML = planHtml;
-    } else {
-        document.getElementById('unitPlanContainer').closest('details').style.display = 'none';
-    }
-
+            // Put it all together for the day
+            planHtml += `
+                <div style="border-bottom: 2px solid #eee; padding: 15px 0;">
+                    <div>
+                        <strong style="font-size: 1.1em;">Day ${d.day}${d.topic ? `: ${d.topic}` : ''}</strong>
+                        ${skillsHtml}
+                    </div>
+                    ${activitiesHtml}
+                </div>`;
+        });
+        document.getElementById('unitPlanContainer').innerHTML = planHtml;
+    } else {
+        document.getElementById('unitPlanContainer').closest('details').style.display = 'none';
+    }
     // 5. Global Connections
     const highlightsContent = document.getElementById('highlightsContent');
     if(unitData.global_connections && (unitData.global_connections.description || unitData.global_connections.highlights_video)) {
