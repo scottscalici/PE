@@ -2,6 +2,10 @@
   "sport": "handball",
   "display_name": "Team Handball",
   "header_image": "https://raw.githubusercontent.com/scottscalici/PE/main/teams/handball/handball.png",
+  "setup_image": {
+    "file": "",
+    "caption": ""
+  },
   "equipment": [
     "Softball-sized smushballs",
     "Goal nets"
@@ -14,66 +18,151 @@
     "3-second limit to pass or shoot (applies to goalies too)."
   ],
   "key_terms": [
-    { "term": "Restricted Zone", "definition": "The area inside the 3-point line where only the goalie is allowed to stand." },
-    { "term": "The Rule of 3", "definition": "3 steps, 3 seconds, 3 meters (distance for defenders on restarts)." },
-    { "term": "Jump Shot", "definition": "A shot taken while jumping into the air, often used to get a better angle over the defense." }
+    {
+      "term": "Restricted Zone",
+      "definition": "The area inside the 3-point line where only the goalie is allowed to stand.",
+      "image": {
+        "file": "",
+        "caption": ""
+      }
+    },
+    {
+      "term": "The Rule of 3",
+      "definition": "3 steps, 3 seconds, 3 meters (distance for defenders on restarts).",
+      "image": {
+        "file": "",
+        "caption": ""
+      }
+    },
+    {
+      "term": "Jump Shot",
+      "definition": "A shot taken while jumping into the air, often used to get a better angle over the defense.",
+      "image": {
+        "file": "",
+        "caption": ""
+      }
+    }
   ],
   "global_connections": {
     "description": "Handball is a massive professional sport in Europe, especially in Germany, Denmark, and France.",
-    "highlights_video": "https://www.youtube.com/watch?v=zyZhcvuWrZc"
+    "highlights_video": "https://www.youtube.com/watch?v=zyZhcvuWrZc",
+    "image": {
+      "file": "",
+      "caption": ""
+    }
   },
-"unit_plan": [
-  {
-    "day": 1,
-    "topic": "Intro to Handball & Movement, Scrimmage",
-    "skills": "Catching, 3-step footwork, and basic passing",
-    "discussion": "What is the Spirit of the Game?",
-    "activities": [
-      {
-        "name": "Agility Warm-up",
-        "overview": "Basic agility line drills focusing on quick directional changes.",
-        "rules": []
-      },
-      {
-        "name": "Keep Away",
-        "overview": "A lead-up passing game to practice the 3-second limit under pressure.",
-        "rules": [
-          "No dribbling allowed.",
-          "Must pass the ball within 3 seconds of catching."
-        ]
-      },
-      {
-        "name": "Mini Scrimmage",
-        "overview": "Short, modified game play applying today's skills.",
-        "rules": [
-          "Standard handball rules apply.",
-          "Defense must play at 50% speed."
-        ]
-      }
-    ]
-  },
-  {
+  "unit_plan": [
+    {
+      "day": 1,
+      "topic": "Intro to Handball & Movement, Scrimmage",
+      "skills": "Catching, 3-step footwork, and basic passing",
+      "discussion": "What is the Spirit of the Game?",
+      "activities": [
+        {
+          "name": "Agility Warm-up",
+          "overview": "Basic agility line drills focusing on quick directional changes.",
+          "rules": [],
+          "image": {
+            "file": "",
+            "caption": ""
+          }
+        },
+        {
+          "name": "Keep Away",
+          "overview": "A lead-up passing game to practice the 3-second limit under pressure.",
+          "rules": [
+            "No dribbling allowed.",
+            "Must pass the ball within 3 seconds of catching."
+          ],
+          "image": {
+            "file": "",
+            "caption": ""
+          }
+        },
+        {
+          "name": "Mini Scrimmage",
+          "overview": "Short, modified game play applying today's skills.",
+          "rules": [
+            "Standard handball rules apply.",
+            "Defense must play at 50% speed."
+          ],
+          "image": {
+            "file": "",
+            "caption": ""
+          }
+        }
+      ]
+    },
+    {
       "day": 2,
       "topic": "League Play",
       "skills": "",
-      "games": "Game play",
-      "discussion": ""
+      "discussion": "",
+      "activities": [
+        {
+          "name": "Game play",
+          "overview": "",
+          "rules": [],
+          "image": {
+            "file": "",
+            "caption": ""
+          }
+        }
+      ]
     },
-     {
+    {
       "day": 3,
       "topic": "Finish League Play",
       "skills": "",
-      "games": "Game play",
-      "discussion": ""
+      "discussion": "",
+      "activities": [
+        {
+          "name": "Game play",
+          "overview": "",
+          "rules": [],
+          "image": {
+            "file": "",
+            "caption": ""
+          }
+        }
+      ]
     }
   ],
   "available_teams": [
-    { "display": "Die Löwen", "id": "lowen", "logo": "lowen.png" },
-    { "display": "Zebras", "id": "zebras", "logo": "zebras.png" },
-    { "display": "Füchse Berlin", "id": "fuchse", "logo": "fuchse.png" },
-    { "display": "Die Roten", "id": "roten", "logo": "roten.png" },
-    { "display": "Handball Club Erlangen (HCE)", "id": "hce", "logo": "hce.png" },
-    { "display": "Stuttgart Wild Boys", "id": "wild_boys", "logo": "wild_boys.png" },
-    { "display": "Die Recken", "id": "recken", "logo": "recken.png" }
+    {
+      "display": "Die Löwen",
+      "id": "die_l_wen",
+      "logo": "die_l_wen.png"
+    },
+    {
+      "display": "Zebras",
+      "id": "zebras",
+      "logo": "zebras.png"
+    },
+    {
+      "display": "Füchse Berlin",
+      "id": "f_chse_berlin",
+      "logo": "f_chse_berlin.png"
+    },
+    {
+      "display": "Die Roten",
+      "id": "die_roten",
+      "logo": "die_roten.png"
+    },
+    {
+      "display": "Handball Club Erlangen (HCE)",
+      "id": "handball_club_erlangen__hce_",
+      "logo": "handball_club_erlangen__hce_.png"
+    },
+    {
+      "display": "Stuttgart Wild Boys",
+      "id": "stuttgart_wild_boys",
+      "logo": "stuttgart_wild_boys.png"
+    },
+    {
+      "display": "Die Recken",
+      "id": "die_recken",
+      "logo": "die_recken.png"
+    }
   ]
 }
