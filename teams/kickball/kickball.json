@@ -12,21 +12,9 @@
       "image_file": "main/equipment/indoor_soccer_ball.png",
       "caption": "indoor soccer ball"
     },
-    {
-      "name": "Playground ball (if outdoors)",
-      "image_file": "main/equipment/playground_ball__if_outdoors_.png",
-      "caption": ""
-    },
-    {
-      "name": "Bases (1st, 2nd, 3rd, and Home)",
-      "image_file": "main/equipment/bases__1st__2nd__3rd__and_home_.png",
-      "caption": ""
-    },
-    {
-      "name": "Pitcher's mound marker",
-      "image_file": "main/equipment/pitcher_s_mound_marker.png",
-      "caption": ""
-    }
+    "Playground ball (if outdoors)",
+    "Bases (1st, 2nd, 3rd, and Home)",
+    "Pitcher's mound marker"
   ],
   "rules": [
     "The ball must be kicked with the foot or leg.",
