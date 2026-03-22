@@ -3,7 +3,8 @@
   "display_name": "Kickball",
   "header_image": "https://raw.githubusercontent.com/scottscalici/PE/main/teams/kickball/kickball.png",
   "equipment": [
-    "Rubber playground ball",
+    "Indoor soccer ball",
+    "Playground ball (if outdoors)",
     "Bases (1st, 2nd, 3rd, and Home)",
     "Pitcher's mound marker"
   ],
@@ -11,13 +12,26 @@
     "The ball must be kicked with the foot or leg.",
     "Fielders can get a runner out by tagging them with the ball or hitting them with the ball below the shoulders.",
     "Force outs occur when a runner must advance to the next base and the fielder touches the base with the ball.",
-    "Strikes are called for swings and misses, or pitches that roll through the strike zone without being kicked.",
-    "No leading off or stealing bases; runners must stay on the base until the ball is kicked."
+    "You may not advance on a caught ball ever (No tag ups)",
+    "No strike outs and your team provides your own pitcher; pitcher needs to kick too",
+    "No leading off or stealing bases; runners must stay on the base until the ball is kicked.",
+    "Kick in order (nobody kicks a second time until everyone has kicked once)",
+    "Anything close goes to runner",
+    "Ball must go into main gym before touching anything or anyone or it is a foul ball"
   ],
   "key_terms": [
-    { "term": "Force Out", "definition": "An out made when a runner is forced to move to the next base and the fielder touches that base while holding the ball." },
-    { "term": "The Kicking Order", "definition": "The set sequence in which players on the offensive team must take their turn to kick." },
-    { "term": "Tagging Up", "definition": "When a fly ball is caught, a runner must touch their original base after the catch before trying to advance." }
+    {
+      "term": "Force Out",
+      "definition": "An out made when a runner is forced to move to the next base and the fielder touches that base while holding the ball."
+    },
+    {
+      "term": "The Kicking Order",
+      "definition": "The set sequence in which players on the offensive team must take their turn to kick."
+    },
+    {
+      "term": "Tagging Up",
+      "definition": "When a fly ball is caught, a runner must touch their original base after the catch before trying to advance."
+    }
   ],
   "global_connections": {
     "description": "While popular in American schools, kickball has grown into massive adult social leagues across the United States and is frequently played as a community-building sport.",
@@ -26,36 +40,79 @@
   "unit_plan": [
     {
       "day": 1,
-      "topic": "Intro to Kickball & Base Running",
-      "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/basics-1",
+      "topic": "Intro to Kickball - Start Game right away 4-5 innings",
       "skills": "Kicking technique, running through 1st base, and force play logic",
-      "games": "Base running relays / Lead-up kicking drills, scrimmage",
-      "discussion": "What is the Spirit of the Game?"
+      "discussion": "What is the Spirit of the Game?",
+      "activities": [
+        {
+          "name": "Learn game while we play",
+          "overview": "I'll help with the scenarios each kicker",
+          "rules": []
+        }
+      ]
     },
     {
       "day": 2,
-      "topic": "League Play",
-      "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/basics-2",
+      "topic": "Game 2 (new combination of teams)",
       "skills": "",
-      "games": "Game play",
-      "discussion": ""
+      "discussion": "What is the Spirit of the Game?",
+      "activities": [
+        {
+          "name": "Game play",
+          "overview": "",
+          "rules": []
+        }
+      ]
     },
     {
       "day": 3,
-      "topic": "Finish League Play",
-      "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/basics-3",
+      "topic": "Game 3 (Chaos style)",
       "skills": "",
-      "games": "Game play",
-      "discussion": ""
+      "discussion": "",
+      "activities": [
+        {
+          "name": "Game play",
+          "overview": "",
+          "rules": []
+        }
+      ]
     }
   ],
   "available_teams": [
-    { "display": "Dallas Wolves", "id": "dallas_wolves", "logo": "dallas_wolves.png" },
-    { "display": "DC Dejavu", "id": "dc_dejavu", "logo": "dc_dejavu.png" },
-    { "display": "Detroit Seals", "id": "detroit_seals", "logo": "detroit_seals.png" },
-    { "display": "Hollywood Eagles", "id": "hollywood_eagles", "logo": "hollywood_eagles.png" },
-    { "display": "New York Knights", "id": "new_york_knights", "logo": "new_york_knights.png" },
-    { "display": "Philadelphia Bears", "id": "philadelphia_bears", "logo": "philadelphia_bears.png" },
-    { "display": "Seattle Bulls", "id": "seattle_bulls", "logo": "seattle_bulls.png" }
+    {
+      "display": "Dallas Wolves",
+      "id": "dallas_wolves",
+      "logo": "dallas_wolves.png"
+    },
+    {
+      "display": "DC Dejavu",
+      "id": "dc_dejavu",
+      "logo": "dc_dejavu.png"
+    },
+    {
+      "display": "Detroit Seals",
+      "id": "detroit_seals",
+      "logo": "detroit_seals.png"
+    },
+    {
+      "display": "Hollywood Eagles",
+      "id": "hollywood_eagles",
+      "logo": "hollywood_eagles.png"
+    },
+    {
+      "display": "New York Knights",
+      "id": "new_york_knights",
+      "logo": "new_york_knights.png"
+    },
+    {
+      "display": "Philadelphia Bears",
+      "id": "philadelphia_bears",
+      "logo": "philadelphia_bears.png"
+    },
+    {
+      "display": "Seattle Bulls",
+      "id": "seattle_bulls",
+      "logo": "seattle_bulls.png"
+    }
   ]
 }
