@@ -22,20 +22,39 @@
     "description": "Handball is a massive professional sport in Europe, especially in Germany, Denmark, and France.",
     "highlights_video": "https://www.youtube.com/watch?v=zyZhcvuWrZc"
   },
-  "unit_plan": [
-    {
-      "day": 1,
-      "topic": "Intro to Handball & Movement, Scrimmage",
-      "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/basics-1",
-      "skills": "Catching, 3-step footwork, and basic passing",
-      "games": "Keep away / Lead-up passing games, scrimmage",
-      "discussion": "What is the Spirit of the Game?"
-      
-    },
-     {
+"unit_plan": [
+  {
+    "day": 1,
+    "topic": "Intro to Handball & Movement, Scrimmage",
+    "skills": "Catching, 3-step footwork, and basic passing",
+    "discussion": "What is the Spirit of the Game?",
+    "activities": [
+      {
+        "name": "Agility Warm-up",
+        "overview": "Basic agility line drills focusing on quick directional changes.",
+        "rules": []
+      },
+      {
+        "name": "Keep Away",
+        "overview": "A lead-up passing game to practice the 3-second limit under pressure.",
+        "rules": [
+          "No dribbling allowed.",
+          "Must pass the ball within 3 seconds of catching."
+        ]
+      },
+      {
+        "name": "Mini Scrimmage",
+        "overview": "Short, modified game play applying today's skills.",
+        "rules": [
+          "Standard handball rules apply.",
+          "Defense must play at 50% speed."
+        ]
+      }
+    ]
+  },
+  {
       "day": 2,
       "topic": "League Play",
-      "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/basics-2",
       "skills": "",
       "games": "Game play",
       "discussion": ""
@@ -43,7 +62,6 @@
      {
       "day": 3,
       "topic": "Finish League Play",
-      "workout_iframe": "https://sites.google.com/view/uais-pe/workouts/basics-3",
       "skills": "",
       "games": "Game play",
       "discussion": ""
