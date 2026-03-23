@@ -7,7 +7,7 @@
   "baseTeams": [
     {
       "id": 1,
-      "name": "angels",
+      "name": "White Sox",
       "league": "Standard",
       "players": [
         {
@@ -74,11 +74,11 @@
           "gender": "M"
         }
       ],
-      "logo_id": "angels"
+      "logo_id": "whitesox"
     },
     {
       "id": 2,
-      "name": "redsox",
+      "name": "A's",
       "league": "Standard",
       "players": [
         {
@@ -138,11 +138,11 @@
           "gender": "M"
         }
       ],
-      "logo_id": "Red Sox"
+      "logo_id": "as"
     },
     {
       "id": 3,
-      "name": "bluejays",
+      "name": "Blue Jays",
       "league": "Standard",
       "players": [
         {
@@ -202,11 +202,11 @@
           "gender": "M"
         }
       ],
-      "logo_id": "Blue Jays"
+      "logo_id": "bluejays"
     },
     {
       "id": 4,
-      "name": "orioles",
+      "name": "Red Sox",
       "league": "Standard",
       "players": [
         {
@@ -266,7 +266,7 @@
           "gender": "M"
         }
       ],
-      "logo_id": "orioles"
+      "logo_id": "redsox"
     }
   ]
 }
