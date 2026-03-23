@@ -1,1 +1,195 @@
-
+{
+  "sport": "smushball",
+  "display_name": "smushball",
+  "header_image": "smushball.png",
+  "setup_image": {
+    "file": "",
+    "caption": ""
+  },
+  "equipment": [],
+  "rules": [],
+  "key_terms": [],
+  "global_connections": {
+    "description": "",
+    "highlights_video": "",
+    "image": {
+      "file": "",
+      "caption": ""
+    }
+  },
+  "unit_plan": [
+    {
+      "day": 1,
+      "topic": "First Game",
+      "skills": "Swinging the bat, throwing",
+      "discussion": "Is hitting a baseball really the most difficult skill in sports?",
+      "activities": []
+    },
+    {
+      "day": 2,
+      "topic": "Second Game",
+      "skills": "",
+      "discussion": "",
+      "activities": []
+    },
+    {
+      "day": 3,
+      "topic": "Final Game",
+      "skills": "",
+      "discussion": "",
+      "activities": []
+    }
+  ],
+  "available_teams": [
+    {
+      "display": "angels",
+      "id": "angels",
+      "logo": "angels.png"
+    },
+    {
+      "display": "as",
+      "id": "as",
+      "logo": "as.png"
+    },
+    {
+      "display": "astros",
+      "id": "astros",
+      "logo": "astros.png"
+    },
+    {
+      "display": "bluejays",
+      "id": "Blue Jays",
+      "logo": "Blue Jays.png"
+    },
+    {
+      "display": "braves",
+      "id": "braves",
+      "logo": "braves.png"
+    },
+    {
+      "display": "brewers",
+      "id": "brewers",
+      "logo": "brewers.png"
+    },
+    {
+      "display": "cardinals",
+      "id": "cardinals",
+      "logo": "cardinals.png"
+    },
+    {
+      "display": "cubs",
+      "id": "cubs",
+      "logo": "cubs.png"
+    },
+    {
+      "display": "diamondbacks",
+      "id": "diamondbacks",
+      "logo": "diamondbacks.png"
+    },
+    {
+      "display": "dodgers",
+      "id": "dodgers",
+      "logo": "dodgers.png"
+    },
+    {
+      "display": "giants",
+      "id": "giants",
+      "logo": "giants.png"
+    },
+    {
+      "display": "guardians",
+      "id": "guardians",
+      "logo": "guardians.png"
+    },
+    {
+      "display": "mariners",
+      "id": "mariners",
+      "logo": "mariners.png"
+    },
+    {
+      "display": "marlins",
+      "id": "marlins",
+      "logo": "marlins.png"
+    },
+    {
+      "display": "mets",
+      "id": "mets",
+      "logo": "mets.png"
+    },
+    {
+      "display": "nationals",
+      "id": "nationals",
+      "logo": "nationals.png"
+    },
+    {
+      "display": "orioles",
+      "id": "orioles",
+      "logo": "orioles.png"
+    },
+    {
+      "display": "padres",
+      "id": "padres",
+      "logo": "padres.png"
+    },
+    {
+      "display": "phillies",
+      "id": "phillies",
+      "logo": "phillies.png"
+    },
+    {
+      "display": "pirates",
+      "id": "pirates",
+      "logo": "pirates.png"
+    },
+    {
+      "display": "rangers",
+      "id": "rangers",
+      "logo": "rangers.png"
+    },
+    {
+      "display": "rays",
+      "id": "rays",
+      "logo": "rays.png"
+    },
+    {
+      "display": "reds",
+      "id": "reds",
+      "logo": "reds.png"
+    },
+    {
+      "display": "redsox",
+      "id": "Red Sox",
+      "logo": "Red Sox.png"
+    },
+    {
+      "display": "rockies",
+      "id": "rockies",
+      "logo": "rockies.png"
+    },
+    {
+      "display": "royals",
+      "id": "royals",
+      "logo": "royals.png"
+    },
+    {
+      "display": "tigers",
+      "id": "tigers",
+      "logo": "tigers.png"
+    },
+    {
+      "display": "twins",
+      "id": "twins",
+      "logo": "twins.png"
+    },
+    {
+      "display": "whitesox",
+      "id": "White Sox",
+      "logo": "White Sox.png"
+    },
+    {
+      "display": "yankees",
+      "id": "yankees",
+      "logo": "yankees.png"
+    }
+  ]
+}
