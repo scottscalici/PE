@@ -1,0 +1,54 @@
+{
+  "matches": [
+    {
+      "id": 1,
+      "home_team": "angels & redsox",
+      "away_team": "bluejays & orioles",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "April 6 (Day 61)",
+      "time": "11:30",
+      "location": "Full Gym",
+      "completed": false
+    }
+  ],
+  "standings": {
+    "angels": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "redsox": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "bluejays": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "orioles": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    }
+  },
+  "tournament": []
+}
