@@ -42,152 +42,152 @@
   ],
   "available_teams": [
     {
-      "display": "angels",
+      "display": "Angels",
       "id": "angels",
       "logo": "angels.png"
     },
     {
-      "display": "as",
+      "display": "A's",
       "id": "as",
       "logo": "as.png"
     },
     {
-      "display": "astros",
+      "display": "Astros",
       "id": "astros",
       "logo": "astros.png"
     },
     {
-      "display": "bluejays",
-      "id": "Blue Jays",
-      "logo": "Blue Jays.png"
+      "display": "Blue Jays",
+      "id": "bluejays",
+      "logo": "bluejays.png"
     },
     {
-      "display": "braves",
+      "display": "Braves",
       "id": "braves",
       "logo": "braves.png"
     },
     {
-      "display": "brewers",
+      "display": "Brewers",
       "id": "brewers",
       "logo": "brewers.png"
     },
     {
-      "display": "cardinals",
+      "display": "Cardinals",
       "id": "cardinals",
       "logo": "cardinals.png"
     },
     {
-      "display": "cubs",
+      "display": "Cubs",
       "id": "cubs",
       "logo": "cubs.png"
     },
     {
-      "display": "diamondbacks",
+      "display": "Diamondbacks",
       "id": "diamondbacks",
       "logo": "diamondbacks.png"
     },
     {
-      "display": "dodgers",
+      "display": "Dodgers",
       "id": "dodgers",
       "logo": "dodgers.png"
     },
     {
-      "display": "giants",
+      "display": "Giants",
       "id": "giants",
       "logo": "giants.png"
     },
     {
-      "display": "guardians",
+      "display": "Guardians",
       "id": "guardians",
       "logo": "guardians.png"
     },
     {
-      "display": "mariners",
+      "display": "Mariners",
       "id": "mariners",
       "logo": "mariners.png"
     },
     {
-      "display": "marlins",
+      "display": "Marlins",
       "id": "marlins",
       "logo": "marlins.png"
     },
     {
-      "display": "mets",
+      "display": "Mets",
       "id": "mets",
       "logo": "mets.png"
     },
     {
-      "display": "nationals",
+      "display": "Nationals",
       "id": "nationals",
       "logo": "nationals.png"
     },
     {
-      "display": "orioles",
+      "display": "Orioles",
       "id": "orioles",
       "logo": "orioles.png"
     },
     {
-      "display": "padres",
+      "display": "Padres",
       "id": "padres",
       "logo": "padres.png"
     },
     {
-      "display": "phillies",
+      "display": "Phillies",
       "id": "phillies",
       "logo": "phillies.png"
     },
     {
-      "display": "pirates",
+      "display": "Pirates",
       "id": "pirates",
       "logo": "pirates.png"
     },
     {
-      "display": "rangers",
+      "display": "Rangers",
       "id": "rangers",
       "logo": "rangers.png"
     },
     {
-      "display": "rays",
+      "display": "Rays",
       "id": "rays",
       "logo": "rays.png"
     },
     {
-      "display": "reds",
+      "display": "Reds",
       "id": "reds",
       "logo": "reds.png"
     },
     {
-      "display": "redsox",
-      "id": "Red Sox",
-      "logo": "Red Sox.png"
+      "display": "Red Sox",
+      "id": "redsox",
+      "logo": "redsox.png"
     },
     {
-      "display": "rockies",
+      "display": "Rockies",
       "id": "rockies",
       "logo": "rockies.png"
     },
     {
-      "display": "royals",
+      "display": "Royals",
       "id": "royals",
       "logo": "royals.png"
     },
     {
-      "display": "tigers",
+      "display": "Tigers",
       "id": "tigers",
       "logo": "tigers.png"
     },
     {
-      "display": "twins",
+      "display": "Twins",
       "id": "twins",
       "logo": "twins.png"
     },
     {
-      "display": "whitesox",
-      "id": "White Sox",
-      "logo": "White Sox.png"
+      "display": "White Sox",
+      "id": "whitesox",
+      "logo": "whitesox.png"
     },
     {
-      "display": "yankees",
+      "display": "Yankees",
       "id": "yankees",
       "logo": "yankees.png"
     }
