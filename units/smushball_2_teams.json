@@ -157,7 +157,7 @@
     },
     {
       "id": 4,
-      "name": "Standard Team 4",
+      "name": "Dodgers",
       "league": "Standard",
       "players": [
         {
@@ -195,7 +195,8 @@
           "compete": 4,
           "gender": "M"
         }
-      ]
+      ],
+      "logo_id": "dodgers"
     }
   ]
 }
