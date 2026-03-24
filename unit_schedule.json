@@ -43,13 +43,15 @@
     { "workout_id": "basics_02", "display_name": "Basics 2", "dias": [3] },
     { "workout_id": "basics_03", "display_name": "Basics 3", "dias": [4] },
     { "workout_id": "basics_04", "display_name": "Basics 4", "dias": [5] },
-    { "workout_id": "basics_05", "display_name": "Basics 5", "dias": [6] },
-    { "workout_id": "basics_06", "display_name": "Basics 6", "dias": [7] },
-    { "workout_id": "basics_07", "display_name": "Basics 7", "dias": [8] },
-    { "workout_id": "basics_08", "display_name": "Basics 8", "dias": [9] },
+    { "workout_id": "basics_05", "display_name": "Basics 5", "dias": [9] },
+    { "workout_id": "basics_06", "display_name": "Basics 6", "dias": [10] },
+    { "workout_id": "basics_07", "display_name": "Basics 7", "dias": [11] },
+    { "workout_id": "basics_08", "display_name": "Basics 8", "dias": [12] },
 
     { "workout_id": "back_to_basics", "display_name": "Back to Basics +", "dias": [58] },
+    { "workout_id": "core_basics", "display_name": "Core Basics", "dias": [59] },
     { "workout_id": "", "display_name": "Cardio Game", "dias": [60] },
     { "workout_id": "", "display_name": "Agility", "dias": [6] }
+   
   ]
 }
