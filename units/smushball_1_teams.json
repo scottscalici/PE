@@ -206,7 +206,7 @@
     },
     {
       "id": 4,
-      "name": "Dodgers",
+      "name": "Twins",
       "league": "Standard",
       "players": [
         {
@@ -266,7 +266,7 @@
           "gender": "M"
         }
       ],
-      "logo_id": "dodgers"
+      "logo_id": "twins"
     }
   ]
 }
