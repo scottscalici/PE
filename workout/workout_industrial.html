@@ -39,10 +39,12 @@
             position: absolute;
             top: 15px;
             right: 20px;
-            z-index: 5;
+            z-index: 30; 
+            display: flex;
+            gap: 10px;
         }
 
-        #mute-btn {
+        .control-btn {
             background: #222;
             color: #777;
             border: 2px solid #444;
@@ -51,9 +53,13 @@
             cursor: pointer;
             border-radius: 6px;
             transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        #mute-btn:hover { color: #d4d4d4; border-color: #777; }
+        .control-btn:hover { color: #d4d4d4; border-color: #777; }
+        .active-state { color: #ffcc00 !important; border-color: #ffcc00 !important; }
         .muted-state { color: #ff4500 !important; border-color: #ff4500 !important; }
 
         /* Top: Current Exercise */
@@ -63,6 +69,7 @@
             background: rgba(0, 0, 0, 0.4);
             border-bottom: 2px solid #333;
             margin-top: 20px;
+            min-height: 120px; /* Helps prevent jumping when modifier appears */
         }
         
         #current-exercise {
@@ -72,6 +79,18 @@
             text-shadow: 3px 3px 5px #000;
             margin: 0;
             letter-spacing: 3px;
+        }
+
+        /* Modifier Display */
+        #modifier-display {
+            font-size: 1.5rem;
+            color: #ffcc00;
+            margin-top: 15px;
+            letter-spacing: 2px;
+            display: none; /* Hidden by default */
+            text-transform: uppercase;
+            font-family: Arial, Helvetica, sans-serif;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
         }
 
         /* Middle: Next Up */
@@ -102,9 +121,7 @@
             font-weight: bold;
         }
 
-        #next-list li {
-            margin-bottom: 10px;
-        }
+        #next-list li { margin-bottom: 10px; }
 
         /* Bottom Left: Safety Cues */
         #safety-cues {
@@ -137,45 +154,29 @@
         }
 
         .timer-label {
-            font-size: 1rem;
-            color: #777;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: -5px;
+            font-size: 1rem; color: #777; text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: -5px;
         }
 
         #total-time-display {
-            font-size: 4.5rem;
-            color: #fff;
-            margin-bottom: 10px;
-            font-family: monospace;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            font-size: 4.5rem; color: #fff; margin-bottom: 10px;
+            font-family: monospace; text-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
 
         /* Shrinking Bar Area */
         #progress-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.2rem;
-            color: #aaa;
-            margin-bottom: 5px;
-            font-family: Arial, Helvetica, sans-serif;
+            display: flex; justify-content: space-between; font-size: 1.2rem;
+            color: #aaa; margin-bottom: 5px; font-family: Arial, Helvetica, sans-serif;
         }
 
         #progress-track {
-            width: 100%;
-            height: 25px;
-            background: #1a1a1a;
-            border: 2px solid #333;
-            border-radius: 4px;
-            overflow: hidden;
+            width: 100%; height: 25px; background: #1a1a1a;
+            border: 2px solid #333; border-radius: 4px; overflow: hidden;
             box-shadow: inset 0 0 10px #000;
         }
 
         #progress-fill {
-            height: 100%;
-            width: 100%;
-            background: #e0e0e0; 
+            height: 100%; width: 100%; background: #e0e0e0; 
             transition: width 1s linear, background-color 0.5s ease, box-shadow 0.5s ease;
         }
 
@@ -185,61 +186,42 @@
         .glow-orange { background: #ff4500 !important; box-shadow: 0 0 15px #ff4500; }
 
         /* Overlays */
-        #start-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        #start-overlay { background: rgba(0,0,0,0.9); z-index: 10; }
+        
+        #pause-overlay {
+            background: rgba(0,0,0,0.85); z-index: 20; display: none; text-align: center;
+        }
+        #pause-overlay h1 {
+            color: #ffcc00; font-size: 6rem; letter-spacing: 5px; margin: 0;
+            text-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
         }
 
         #finisher-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            z-index: 20;
+            background: rgba(0,0,0,0.95); display: none; text-align: center; z-index: 25;
         }
-        
         #finisher-overlay h1 { color: #d4d4d4; font-size: 4rem; text-shadow: 3px 3px 5px #000; margin: 0; }
         #finisher-overlay h2 { color: #ff4500; font-size: 2.5rem; margin-top: 10px; margin-bottom: 40px; letter-spacing: 2px; }
         .finisher-btn-group { display: flex; gap: 20px; margin-bottom: 30px; }
 
         select {
-            font-family: 'Arial Black', sans-serif;
-            font-size: 1.5rem;
-            padding: 10px;
-            margin-bottom: 20px;
-            background: #333;
-            color: #fff;
-            border: 3px solid #555;
-            border-radius: 5px;
-            width: 80%;
-            max-width: 400px;
+            font-family: 'Arial Black', sans-serif; font-size: 1.5rem; padding: 10px;
+            margin-bottom: 20px; background: #333; color: #fff; border: 3px solid #555;
+            border-radius: 5px; width: 80%; max-width: 400px;
         }
 
-        button {
-            font-family: 'Arial Black', sans-serif;
-            font-size: 2.5rem;
-            padding: 20px 40px;
-            background: #222;
-            color: #d4d4d4;
-            border: 4px solid #555;
-            cursor: pointer;
-            text-transform: uppercase;
-            border-radius: 8px;
-            transition: 0.3s;
+        button.big-btn {
+            font-family: 'Arial Black', sans-serif; font-size: 2.5rem; padding: 20px 40px;
+            background: #222; color: #d4d4d4; border: 4px solid #555; cursor: pointer;
+            text-transform: uppercase; border-radius: 8px; transition: 0.3s;
         }
 
-        button:hover { background: #444; border-color: #888; color: #fff; }
-        .small-btn { font-size: 1.2rem; padding: 10px 20px; background: #111; color: #777; border-color: #333; }
+        button.big-btn:hover { background: #444; border-color: #888; color: #fff; }
+        .small-btn { font-size: 1.2rem; padding: 10px 20px; background: #111; color: #777; border-color: #333; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -247,17 +229,24 @@
     <div id="app-container">
         
         <div id="top-controls" style="display: none;">
-            <button id="mute-btn">🔊 </button>
+            <button id="modifier-btn" class="control-btn" title="Toggle Modifier">💪</button>
+            <button id="pause-btn" class="control-btn" title="Pause">⏸️</button>
+            <button id="mute-btn" class="control-btn" title="Mute">🔊</button>
         </div>
 
-        <div id="start-overlay">
+        <div id="start-overlay" class="overlay">
             <h2 id="loading-text" style="color: #fff;">Loading Data...</h2>
             <select id="workout-selector" style="display: none;"></select>
-            <button id="start-btn" style="display: none;">START</button>
+            <button id="start-btn" class="big-btn" style="display: none;">START</button>
+        </div>
+
+        <div id="pause-overlay" class="overlay">
+            <h1>PAUSED</h1>
         </div>
 
         <div id="current-exercise-container">
             <h1 id="current-exercise">Get Ready</h1>
+            <div id="modifier-display">Modifier: Option Here</div>
         </div>
 
         <div id="up-next-container">
@@ -280,14 +269,14 @@
             </div>
         </div>
 
-        <div id="finisher-overlay">
+        <div id="finisher-overlay" class="overlay">
             <h1>WORKOUT COMPLETE</h1>
             <h2>WANT SOME MORE?</h2>
             
             <div class="finisher-btn-group">
-                <button onclick="startFinisher('finisher_core')" style="font-size: 1.5rem; padding: 15px 30px;">3-MIN CORE</button>
-                <button onclick="startFinisher('finisher_cardio')" style="font-size: 1.5rem; padding: 15px 30px;">3-MIN CARDIO</button>
-                <button onclick="startFinisher('finisher_upper')" style="font-size: 1.5rem; padding: 15px 30px;">3-MIN UPPER</button>
+                <button class="big-btn" onclick="startFinisher('finisher_core')" style="font-size: 1.5rem; padding: 15px 30px;">3-MIN CORE</button>
+                <button class="big-btn" onclick="startFinisher('finisher_cardio')" style="font-size: 1.5rem; padding: 15px 30px;">3-MIN CARDIO</button>
+                <button class="big-btn" onclick="startFinisher('finisher_upper')" style="font-size: 1.5rem; padding: 15px 30px;">3-MIN UPPER</button>
             </div>
             
             <button onclick="location.reload()" class="small-btn">NO THANKS (RESET)</button>
@@ -300,7 +289,7 @@
         const WORKOUT_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/workout_routine.json';
 
         // --- CONFIGURATION ---
-        const TARGET_WORKOUT_ID = "alpha_01"; 
+        const TARGET_WORKOUT_ID = ""; 
         // ---------------------
 
         let exerciseDB = {};
@@ -312,17 +301,15 @@
         let exerciseTimeRemaining = 0;
         let timerInterval;
 
-        // Audio Setup
+        // Audio & State Setup
         let isMuted = false;
+        let isPaused = false;
+        let showModifier = false; // New Modifier State
         let audioCtx;
 
         function playBeep(type) {
-            if (isMuted) return;
-            
-            // Initialize audio context on first use (browser requirement)
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
+            if (isMuted || isPaused) return; 
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
             const oscillator = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
@@ -332,25 +319,26 @@
 
             if (type === 'short') {
                 oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // A4 note
+                oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
                 gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
                 oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.15); // Very short beep
+                oscillator.stop(audioCtx.currentTime + 0.15);
             } else if (type === 'long') {
                 oscillator.type = 'square';
-                oscillator.frequency.setValueAtTime(600, audioCtx.currentTime); // Higher pitch
+                oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
                 gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
                 oscillator.start();
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8); // Fade out
-                oscillator.stop(audioCtx.currentTime + 0.8); // Longer beep
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+                oscillator.stop(audioCtx.currentTime + 0.8);
             }
         }
 
-        // Toggle Mute
+        // --- Top Controls Event Listeners ---
+        
         document.getElementById('mute-btn').addEventListener('click', function() {
             isMuted = !isMuted;
             if (isMuted) {
-                this.innerText = '🔇 ';
+                this.innerText = '🔇';
                 this.classList.add('muted-state');
             } else {
                 this.innerText = '🔊';
@@ -358,12 +346,40 @@
             }
         });
 
+        document.getElementById('pause-btn').addEventListener('click', function() {
+            isPaused = !isPaused;
+            if (isPaused) {
+                this.innerText = '▶️';
+                this.classList.add('active-state');
+                document.getElementById('pause-overlay').style.display = 'flex';
+            } else {
+                this.innerText = '⏸️';
+                this.classList.remove('active-state');
+                document.getElementById('pause-overlay').style.display = 'none';
+            }
+        });
+
+        // Modifier Toggle Event Listener
+        document.getElementById('modifier-btn').addEventListener('click', function() {
+            showModifier = !showModifier;
+            if (showModifier) {
+                this.classList.add('active-state');
+            } else {
+                this.classList.remove('active-state');
+            }
+            // Trigger a UI update immediately so it shows/hides if there's an active exercise
+            if (playlist.length > 0) {
+                updateUI(playlist[currentIndex]);
+            }
+        });
 
         async function init() {
             try {
+                const noCache = '?t=' + new Date().getTime();
+
                 const [exResponse, woResponse] = await Promise.all([
-                    fetch(EXERCISES_URL),
-                    fetch(WORKOUT_URL)
+                    fetch(EXERCISES_URL + noCache),
+                    fetch(WORKOUT_URL + noCache)
                 ]);
 
                 const exData = await exResponse.json();
@@ -395,7 +411,7 @@
 
                 document.getElementById('loading-text').style.display = 'none';
                 document.getElementById('start-btn').style.display = 'block';
-                document.getElementById('top-controls').style.display = 'block';
+                document.getElementById('top-controls').style.display = 'flex';
 
                 document.getElementById('start-btn').addEventListener('click', prepareWorkout);
 
@@ -416,18 +432,18 @@
             for (let r = 0; r < rounds; r++) {
                 selectedWorkout.circuits.forEach(circuit => {
                     circuit.sequence.forEach(block => {
-                        const details = exerciseDB[block.exerciseId] || { name: 'Unknown', safetyCues: '' };
+                        const details = exerciseDB[block.exerciseId] || { name: 'Unknown', safetyCues: '', modifier: '' };
                         playlist.push({
                             ...block,
                             name: details.name,
-                            safetyCues: details.safetyCues
+                            safetyCues: details.safetyCues,
+                            modifier: details.modifier // Grab the modifier from the JSON database
                         });
                         totalTimeRemaining += block.duration; 
                     });
                 });
             }
 
-            // Audio Context requires a user gesture to start
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
             document.getElementById('start-overlay').style.display = 'none';
@@ -450,10 +466,11 @@
 
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
+                if (isPaused) return; 
+
                 exerciseTimeRemaining--;
                 totalTimeRemaining--;
                 
-                // Audio Triggers
                 if (exerciseTimeRemaining === 3 || exerciseTimeRemaining === 2 || exerciseTimeRemaining === 1) {
                     playBeep('short');
                 } else if (exerciseTimeRemaining === 0) {
@@ -483,6 +500,15 @@
                 titleEl.classList.add('rest-text');
             } else {
                 titleEl.classList.remove('rest-text');
+            }
+
+            // --- Modifier Display Logic ---
+            const modifierEl = document.getElementById('modifier-display');
+            if (block.modifier && block.modifier.trim() !== "") {
+                modifierEl.innerText = `MODIFIER: ${block.modifier}`;
+                modifierEl.style.display = showModifier ? 'block' : 'none';
+            } else {
+                modifierEl.style.display = 'none';
             }
 
             const nextList = document.getElementById('next-list');
