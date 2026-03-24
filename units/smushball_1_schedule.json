@@ -8,7 +8,7 @@
       "away_score": null,
       "date_str": "April 6 (Day 61)",
       "time": "11:30",
-      "location": "Main Gym",
+      "location": "Full Gym",
       "completed": false
     },
     {
@@ -18,8 +18,8 @@
       "home_score": null,
       "away_score": null,
       "date_str": "April 8 (Day 62)",
-      "time": "09:00",
-      "location": "Main Gym",
+      "time": "11:30",
+      "location": "Full Gym",
       "completed": false
     },
     {
@@ -29,8 +29,8 @@
       "home_score": null,
       "away_score": null,
       "date_str": "April 10 (Day 63)",
-      "time": "09:00",
-      "location": "Main Gym",
+      "time": "11:30",
+      "location": "Full Gym",
       "completed": false
     }
   ],
