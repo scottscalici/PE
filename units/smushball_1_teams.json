@@ -7,7 +7,7 @@
   "baseTeams": [
     {
       "id": 1,
-      "name": "White Sox",
+      "name": "Cubs",
       "league": "Standard",
       "players": [
         {
@@ -74,11 +74,11 @@
           "gender": "M"
         }
       ],
-      "logo_id": "whitesox"
+      "logo_id": "cubs"
     },
     {
       "id": 2,
-      "name": "A's",
+      "name": "Tigers",
       "league": "Standard",
       "players": [
         {
@@ -138,7 +138,7 @@
           "gender": "M"
         }
       ],
-      "logo_id": "as"
+      "logo_id": "tigers"
     },
     {
       "id": 3,
@@ -206,7 +206,7 @@
     },
     {
       "id": 4,
-      "name": "Red Sox",
+      "name": "Dodgers",
       "league": "Standard",
       "players": [
         {
@@ -266,7 +266,7 @@
           "gender": "M"
         }
       ],
-      "logo_id": "redsox"
+      "logo_id": "dodgers"
     }
   ]
 }
