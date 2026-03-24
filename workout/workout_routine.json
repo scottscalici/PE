@@ -270,8 +270,6 @@
             ]
         },
         {
-    "workouts": [
-        {
             "id": "alpha_01",
             "workoutName": "Industrial Strength Alpha",
             "rounds": 3,
@@ -728,12 +726,9 @@
                     ]
                 }
             ]
-        }
-    ]
+        
 },
-        {
-    "workouts": [
-        {
+          {
             "id": "alpha_01",
             "workoutName": "Industrial Strength Alpha",
             "rounds": 3,
@@ -1349,8 +1344,6 @@
                     ]
                 }
             ]
-        }
-    ]
 },
         {
     "workouts": [
