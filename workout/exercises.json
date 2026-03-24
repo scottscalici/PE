@@ -48,6 +48,17 @@
             "safetyCues": "Keep your shoulders pulled down and back."
         },
         {
+            "id": "attack",
+            "name": "Attack",
+            "category": [
+                "cardio",
+                "combat"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
             "id": "boxer_jog",
             "name": "Boxer Jog",
             "category": [
@@ -77,6 +88,17 @@
                 "cardio"
             ],
             "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "burpee_jabs",
+            "name": "Burpee Jabs",
+            "category": [
+                "cardio",
+                "combat"
+            ],
+            "instructions": "Burpee, Jump, Land, 4 Jabs...",
             "gifUrl": "",
             "safetyCues": ""
         },
@@ -131,6 +153,30 @@
             "safetyCues": ""
         },
         {
+            "id": "jack_criss_cross",
+            "name": "Criss Cross Jacks",
+            "category": [
+                "agility",
+                "cardio",
+                "warmup"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "jack_cross_squat",
+            "name": "Criss Cross Squat Jack",
+            "category": [
+                "agility",
+                "lower",
+                "cardio"
+            ],
+            "instructions": "home to cross to home to cross to squat to cross...",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
             "id": "cooldown_cross_body_stretch",
             "name": "Cross Body Stretch",
             "category": [
@@ -174,6 +220,24 @@
             "safetyCues": "Modification: Raise knee, step out, raise knee..."
         },
         {
+            "id": "run_easy",
+            "name": "Easy Run",
+            "category": [],
+            "instructions": "half butt kick",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "burpee_firecracker",
+            "name": "Firecracker Burpees",
+            "category": [
+                "cardio"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
             "id": "cooldown_flat_back",
             "name": "Flat Back",
             "category": [
@@ -206,6 +270,65 @@
             "safetyCues": "Keep your hips level, no sagging."
         },
         {
+            "id": "frog_jumps",
+            "name": "Frog Jumps",
+            "category": [
+                "cardio",
+                "lower"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "frog",
+            "name": "Frog Position",
+            "category": [
+                "warmup",
+                "position",
+                "isometric"
+            ],
+            "instructions": "catcher with hands on the ground",
+            "gifUrl": "",
+            "safetyCues": "don't touch ground, reduce ROM"
+        },
+        {
+            "id": "jumps_globe",
+            "name": "Globe Jumps",
+            "category": [
+                "cardio",
+                "lower",
+                "plyometric"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "grapevine",
+            "name": "Grapevine",
+            "category": [
+                "cardio",
+                "agility",
+                "warmup"
+            ],
+            "instructions": "step, cross behind, step, touch",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "tuck_half",
+            "name": "Half Tuck Jumps",
+            "category": [
+                "plyometric",
+                "cardio",
+                "lower"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
             "id": "cooldown_hamstring",
             "name": "Hamstring Stretch",
             "category": [
@@ -225,6 +348,17 @@
             "instructions": "Drive your knees up to waist height.",
             "gifUrl": "",
             "safetyCues": "Modify: Drive one knee up at a time, keep other foot grounded"
+        },
+        {
+            "id": "plank_high",
+            "name": "High Plank",
+            "category": [
+                "core",
+                "warmup"
+            ],
+            "instructions": "pushup position",
+            "gifUrl": "",
+            "safetyCues": ""
         },
         {
             "id": "inchworms",
@@ -248,6 +382,28 @@
             "safetyCues": "Modify: just step, always keep one foot on the ground"
         },
         {
+            "id": "jacks_jr",
+            "name": "Jump Rope Jacks",
+            "category": [
+                "agility",
+                "cardio"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "jack_press",
+            "name": "Jumping Jack Shoulder Press",
+            "category": [
+                "cardio",
+                "warmup"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
             "id": "jumping_jacks_01",
             "name": "Jumping Jacks",
             "category": [
@@ -257,6 +413,17 @@
             "instructions": "Standard jumping jacks, maintain a steady rhythm.",
             "gifUrl": "assets/gifs/jacks.gif",
             "safetyCues": "Modify: Step out, keep one foot in the center, no jump"
+        },
+        {
+            "id": "jacks_around",
+            "name": "Jumping Jacks Around the World",
+            "category": [
+                "cardio",
+                "warmup"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
         },
         {
             "id": "lateral_bounds",
@@ -301,6 +468,17 @@
             "safetyCues": "Keep your shoulders directly over your wrists."
         },
         {
+            "id": "mummy_kicks",
+            "name": "Mummy Kicks",
+            "category": [
+                "warmup",
+                "agility"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
             "id": "high_knee_oblique",
             "name": "Oblique High Knee",
             "category": [
@@ -310,6 +488,29 @@
             "instructions": "Connect cross elbow with knee",
             "gifUrl": "",
             "safetyCues": "Modification: Lift Knees, don't run"
+        },
+        {
+            "id": "pushup_pike",
+            "name": "Pike Pushups",
+            "category": [
+                "upper",
+                "shoulders"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "power_jumps",
+            "name": "Power Jumps",
+            "category": [
+                "explosive",
+                "cardio",
+                "plyometric"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
         },
         {
             "id": "push_ups_01",
@@ -322,6 +523,19 @@
             "instructions": "Keep your core tight and butt even with your back",
             "gifUrl": "assets/gifs/pushups.gif",
             "safetyCues": "Don't let your lower back sag."
+        },
+        {
+            "id": "pushup_jack",
+            "name": "Pushup Jacks",
+            "category": [
+                "upper",
+                "cardio",
+                "arms",
+                "core"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
         },
         {
             "id": "cooldown_quad_stretch",
@@ -380,6 +594,28 @@
             "safetyCues": ""
         },
         {
+            "id": "plank_taps",
+            "name": "Shoulder Taps",
+            "category": [
+                "core",
+                "warmup"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "combo_shuffle_touch",
+            "name": "Shuffle Touch Downs",
+            "category": [
+                "agility",
+                "cardio"
+            ],
+            "instructions": "shuffle x 2-4, touch the floor, shuffle back",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
             "id": "combo_side_lunge_vertical",
             "name": "Side Lunge to Vertical Jump",
             "category": [
@@ -403,6 +639,39 @@
             "safetyCues": ""
         },
         {
+            "id": "step_touch_agility",
+            "name": "Side to Side Step Touch Agility",
+            "category": [
+                "agility",
+                "cardio"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "plank_1_arm",
+            "name": "Single Arm Plank",
+            "category": [
+                "core",
+                "upper"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "skater",
+            "name": "Skaters",
+            "category": [
+                "cardio",
+                "lower"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
             "id": "soccer_juggle",
             "name": "Soccer Juggles",
             "category": [
@@ -412,6 +681,17 @@
             "instructions": "High Knee, Tap Cross Knee x 2, Tap Cross Ankle x 2",
             "gifUrl": "",
             "safetyCues": "Modification: lift knee, tap, lift foot, tap, or tap calf"
+        },
+        {
+            "id": "skater_speed",
+            "name": "Speed Skaters",
+            "category": [
+                "cardio",
+                "lower"
+            ],
+            "instructions": "like skaters, but touch ground, stay low",
+            "gifUrl": "",
+            "safetyCues": ""
         },
         {
             "id": "squat_speed",
@@ -448,6 +728,41 @@
             "instructions": "Land softly",
             "gifUrl": "",
             "safetyCues": "Modification: Lose the jump, reduce ROM"
+        },
+        {
+            "id": "squat_knee_lift",
+            "name": "Squat to Knee Lift",
+            "category": [
+                "cardio",
+                "lower",
+                "stability"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "squat_sumo_reach",
+            "name": "Sumo Squat and Reach",
+            "category": [
+                "cardio",
+                "warmup",
+                "lower"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "jacks_sumo_squat",
+            "name": "Sumo Squat Jacks",
+            "category": [
+                "cardio",
+                "lower"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
         },
         {
             "id": "t-180",
@@ -493,12 +808,36 @@
             "safetyCues": "Keep your back close to the bench."
         },
         {
+            "id": "tuck",
+            "name": "Tuck Jumps",
+            "category": [
+                "plyometric",
+                "cardio",
+                "lower"
+            ],
+            "instructions": "",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
             "id": "walkouts",
             "name": "Walkouts",
             "category": [
                 "warmup"
             ],
             "instructions": "Standing, drop hands, and walk until in plank, walk hands back in",
+            "gifUrl": "",
+            "safetyCues": ""
+        },
+        {
+            "id": "pushup_wide",
+            "name": "Wide Pushups",
+            "category": [
+                "upper",
+                "chest",
+                "arms"
+            ],
+            "instructions": "",
             "gifUrl": "",
             "safetyCues": ""
         }
