@@ -69,7 +69,6 @@
             background: rgba(0, 0, 0, 0.4);
             border-bottom: 2px solid #333;
             margin-top: 20px;
-            min-height: 120px; /* Helps prevent jumping when modifier appears */
         }
         
         #current-exercise {
@@ -79,18 +78,6 @@
             text-shadow: 3px 3px 5px #000;
             margin: 0;
             letter-spacing: 3px;
-        }
-
-        /* Modifier Display */
-        #modifier-display {
-            font-size: 1.5rem;
-            color: #ffcc00;
-            margin-top: 15px;
-            letter-spacing: 2px;
-            display: none; /* Hidden by default */
-            text-transform: uppercase;
-            font-family: Arial, Helvetica, sans-serif;
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
         }
 
         /* Middle: Next Up */
@@ -123,14 +110,14 @@
 
         #next-list li { margin-bottom: 10px; }
 
-        /* Bottom Left: Safety Cues */
+        /* Bottom Left: Safety Cues / Modifier */
         #safety-cues {
             position: absolute;
             bottom: 30px;
             left: 30px;
             background: rgba(0, 0, 0, 0.8);
             padding: 15px 25px;
-            border-left: 6px solid #ff4500;
+            border-left: 6px solid #ffcc00;
             font-family: Arial, Helvetica, sans-serif;
             font-size: 1.5rem;
             color: #fff;
@@ -229,9 +216,12 @@
     <div id="app-container">
         
         <div id="top-controls" style="display: none;">
-            <button id="modifier-btn" class="control-btn" title="Toggle Modifier">💪</button>
-            <button id="pause-btn" class="control-btn" title="Pause">⏸️</button>
-            <button id="mute-btn" class="control-btn" title="Mute">🔊</button>
+            <button id="prev-btn" class="control-btn" title="Previous / Restart (Left Arrow)">⏮️</button>
+            <button id="next-btn" class="control-btn" title="Skip Forward (Right Arrow)">⏭️</button>
+            <button id="pause-btn" class="control-btn" title="Pause (Spacebar)">⏸️</button>
+            <button id="modifier-btn" class="control-btn" title="Toggle Modifier/Cues (S)">💪</button>
+            <button id="mute-btn" class="control-btn" title="Mute (M)">🔊</button>
+            <button id="fullscreen-btn" class="control-btn" title="Toggle Fullscreen (F)">🔲</button>
         </div>
 
         <div id="start-overlay" class="overlay">
@@ -246,7 +236,6 @@
 
         <div id="current-exercise-container">
             <h1 id="current-exercise">Get Ready</h1>
-            <div id="modifier-display">Modifier: Option Here</div>
         </div>
 
         <div id="up-next-container">
@@ -304,7 +293,7 @@
         // Audio & State Setup
         let isMuted = false;
         let isPaused = false;
-        let showModifier = false; // New Modifier State
+        let showModifier = false; 
         let audioCtx;
 
         function playBeep(type) {
@@ -333,8 +322,47 @@
             }
         }
 
-        // --- Top Controls Event Listeners ---
+        // --- Helper: Recalculate Total Time ---
+        function recalculateRemainingTotal(fromIndex) {
+            let total = 0;
+            for (let i = fromIndex; i < playlist.length; i++) {
+                total += playlist[i].duration;
+            }
+            return total;
+        }
+
+        // --- Helper: Force Unpause ---
+        function forceUnpause() {
+            isPaused = false;
+            document.getElementById('pause-btn').innerText = '⏸️';
+            document.getElementById('pause-btn').classList.remove('active-state');
+            document.getElementById('pause-overlay').style.display = 'none';
+        }
+
+        // --- Button Event Listeners ---
         
+        document.getElementById('prev-btn').addEventListener('click', function() {
+            if (playlist.length === 0) return; 
+            clearInterval(timerInterval); 
+            forceUnpause();
+            if (currentIndex > 0) currentIndex--; 
+            totalTimeRemaining = recalculateRemainingTotal(currentIndex);
+            runBlock(currentIndex);
+        });
+
+        document.getElementById('next-btn').addEventListener('click', function() {
+            if (playlist.length === 0 || currentIndex >= playlist.length) return;
+            clearInterval(timerInterval);
+            forceUnpause();
+            currentIndex++;
+            if (currentIndex >= playlist.length) {
+                finishWorkout(); 
+            } else {
+                totalTimeRemaining = recalculateRemainingTotal(currentIndex);
+                runBlock(currentIndex);
+            }
+        });
+
         document.getElementById('mute-btn').addEventListener('click', function() {
             isMuted = !isMuted;
             if (isMuted) {
@@ -353,13 +381,10 @@
                 this.classList.add('active-state');
                 document.getElementById('pause-overlay').style.display = 'flex';
             } else {
-                this.innerText = '⏸️';
-                this.classList.remove('active-state');
-                document.getElementById('pause-overlay').style.display = 'none';
+                forceUnpause();
             }
         });
 
-        // Modifier Toggle Event Listener
         document.getElementById('modifier-btn').addEventListener('click', function() {
             showModifier = !showModifier;
             if (showModifier) {
@@ -367,9 +392,84 @@
             } else {
                 this.classList.remove('active-state');
             }
-            // Trigger a UI update immediately so it shows/hides if there's an active exercise
             if (playlist.length > 0) {
                 updateUI(playlist[currentIndex]);
+            }
+        });
+
+        // --- Updated Fullscreen Logic (with vendor prefixes) ---
+        document.getElementById('fullscreen-btn').addEventListener('click', function() {
+            const docElm = document.documentElement;
+            const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+
+            if (!isFullscreen) {
+                // Request Fullscreen
+                if (docElm.requestFullscreen) {
+                    docElm.requestFullscreen().catch(err => {
+                        alert(`Fullscreen error: ${err.message}. Your browser or testing environment might block this.`);
+                    });
+                } else if (docElm.webkitRequestFullscreen) { /* Safari */
+                    docElm.webkitRequestFullscreen();
+                } else if (docElm.msRequestFullscreen) { /* IE11 */
+                    docElm.msRequestFullscreen();
+                } else {
+                    alert("Fullscreen API is not supported in this browser (or on this device, like iOS).");
+                }
+            } else {
+                // Exit Fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { /* Safari */
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE11 */
+                    document.msExitFullscreen();
+                }
+            }
+        });
+
+        // Listen for fullscreen changes (like hitting Esc) to update the button UI
+        const handleFullscreenChange = () => {
+            const btn = document.getElementById('fullscreen-btn');
+            const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+            
+            if (isFullscreen) {
+                btn.innerText = '✖️'; 
+                btn.classList.add('active-state');
+            } else {
+                btn.innerText = '🔲'; 
+                btn.classList.remove('active-state');
+            }
+        };
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange); // Safari
+
+        // --- Keyboard Shortcuts ---
+        document.addEventListener('keydown', function(event) {
+            // Do not trigger shortcuts if the workout hasn't started yet
+            if (playlist.length === 0) return;
+
+            switch(event.code) {
+                case 'Space':
+                    event.preventDefault(); // Prevents the page from scrolling down
+                    document.getElementById('pause-btn').click();
+                    break;
+                case 'ArrowRight':
+                    event.preventDefault();
+                    document.getElementById('next-btn').click();
+                    break;
+                case 'ArrowLeft':
+                    event.preventDefault();
+                    document.getElementById('prev-btn').click();
+                    break;
+                case 'KeyM':
+                    document.getElementById('mute-btn').click();
+                    break;
+                case 'KeyF':
+                    document.getElementById('fullscreen-btn').click();
+                    break;
+                case 'KeyS':
+                    document.getElementById('modifier-btn').click();
+                    break;
             }
         });
 
@@ -432,12 +532,11 @@
             for (let r = 0; r < rounds; r++) {
                 selectedWorkout.circuits.forEach(circuit => {
                     circuit.sequence.forEach(block => {
-                        const details = exerciseDB[block.exerciseId] || { name: 'Unknown', safetyCues: '', modifier: '' };
+                        const details = exerciseDB[block.exerciseId] || { name: 'Unknown', safetyCues: '' };
                         playlist.push({
                             ...block,
                             name: details.name,
-                            safetyCues: details.safetyCues,
-                            modifier: details.modifier // Grab the modifier from the JSON database
+                            safetyCues: details.safetyCues 
                         });
                         totalTimeRemaining += block.duration; 
                     });
@@ -502,15 +601,6 @@
                 titleEl.classList.remove('rest-text');
             }
 
-            // --- Modifier Display Logic ---
-            const modifierEl = document.getElementById('modifier-display');
-            if (block.modifier && block.modifier.trim() !== "") {
-                modifierEl.innerText = `MODIFIER: ${block.modifier}`;
-                modifierEl.style.display = showModifier ? 'block' : 'none';
-            } else {
-                modifierEl.style.display = 'none';
-            }
-
             const nextList = document.getElementById('next-list');
             nextList.innerHTML = '';
             for (let i = 1; i <= 3; i++) {
@@ -523,8 +613,8 @@
             }
 
             const cuesEl = document.getElementById('safety-cues');
-            if (block.safetyCues && block.safetyCues.trim() !== "") {
-                cuesEl.innerText = `⚠️ ${block.safetyCues}`;
+            if (showModifier && block.safetyCues && block.safetyCues.trim() !== "") {
+                cuesEl.innerText = `💪 MODIFIER: ${block.safetyCues}`;
                 cuesEl.style.display = 'block';
             } else {
                 cuesEl.style.display = 'none';
