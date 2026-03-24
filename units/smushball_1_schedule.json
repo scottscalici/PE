@@ -2,18 +2,40 @@
   "matches": [
     {
       "id": 1,
-      "home_team": "angels & redsox",
-      "away_team": "bluejays & orioles",
+      "home_team": "White Sox & Red Sox",
+      "away_team": "A's & Blue Jays",
       "home_score": null,
       "away_score": null,
       "date_str": "April 6 (Day 61)",
       "time": "11:30",
-      "location": "Full Gym",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "home_team": "White Sox & A's",
+      "away_team": "Red Sox & Blue Jays",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "April 8 (Day 62)",
+      "time": "11:30",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 3,
+      "home_team": "White Sox & Blue Jays",
+      "away_team": "Red Sox & A's",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "April 10 (Day 63)",
+      "time": "11:30",
+      "location": "Main Gym",
       "completed": false
     }
   ],
   "standings": {
-    "angels": {
+    "White Sox": {
       "w": 0,
       "l": 0,
       "t": 0,
@@ -22,7 +44,7 @@
       "pd": 0,
       "pts": 0
     },
-    "redsox": {
+    "Red Sox": {
       "w": 0,
       "l": 0,
       "t": 0,
@@ -31,7 +53,7 @@
       "pd": 0,
       "pts": 0
     },
-    "bluejays": {
+    "A's": {
       "w": 0,
       "l": 0,
       "t": 0,
@@ -40,7 +62,7 @@
       "pd": 0,
       "pts": 0
     },
-    "orioles": {
+    "Blue Jays": {
       "w": 0,
       "l": 0,
       "t": 0,
