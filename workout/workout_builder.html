@@ -35,7 +35,15 @@
         
         .panel { background: #222; border: 2px solid #444; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
         
-        /* Exercise Cards */
+        /* Circuit Builder Blocks */
+        .circuit-block {
+            background: #1a1a1a; border: 2px dashed #555; padding: 15px; 
+            border-radius: 6px; margin-bottom: 20px; position: relative;
+        }
+        .circuit-header { display: flex; gap: 15px; align-items: flex-end; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #333;}
+        .circuit-header input { margin-top: 0; }
+        
+        /* Exercise Cards (Tab 2) */
         .ex-card {
             background: #111; border: 1px solid #444; padding: 15px; border-radius: 6px; margin-bottom: 15px;
             position: relative;
@@ -43,10 +51,10 @@
         .ex-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
         .ex-grid-full { grid-column: span 2; }
         
-        /* Workout Sequence Rows */
+        /* Workout Sequence Rows (Tab 1) */
         .sequence-row {
-            display: flex; gap: 10px; margin-top: 10px; align-items: center;
-            background: #111; padding: 10px; border: 1px solid #333; border-radius: 4px;
+            display: flex; gap: 10px; margin-bottom: 10px; align-items: center;
+            background: #2a2a2a; padding: 10px; border: 1px solid #444; border-radius: 4px;
         }
         .sequence-row select, .sequence-row input { margin-top: 0; }
         
@@ -63,8 +71,10 @@
         button.action-btn:hover { background: #ff5722; }
         button.action-btn.success { background: #28a745; }
         
-        button.add-btn { background: #444; width: auto; margin-bottom: 20px; }
+        button.add-btn { background: #444; width: auto; margin-bottom: 20px; font-size: 0.9rem; padding: 10px 15px; }
         button.add-btn:hover { background: #555; }
+        button.add-circuit-btn { background: #00d2ff; color: #000; width: 100%; font-size: 1.2rem; }
+        button.add-circuit-btn:hover { background: #00b8e6; }
     </style>
 </head>
 <body>
@@ -81,19 +91,19 @@
         <div class="panel">
             <h3>1. Workout Details</h3>
             <label>Workout ID (Must be unique, no spaces)</label>
-            <input type="text" id="work-id" placeholder="e.g., handball_day_01">
+            <input type="text" id="work-id" placeholder="e.g., full_body_01">
             
             <label>Workout Name (Display Title)</label>
-            <input type="text" id="work-name" placeholder="e.g., Handball Cardio Push">
-            
-            <label>Total Rounds</label>
-            <input type="number" id="work-rounds" value="3" min="1">
-        </div>
+            <input type="text" id="work-name" placeholder="e.g., Full Body Burner">
+            </div>
 
         <div class="panel">
-            <h3>2. Build Circuit</h3>
-            <div id="sequence-container"></div>
-            <button class="action-btn add-btn" onclick="addWorkoutRow()">+ ADD EXERCISE TO CIRCUIT</button>
+            <h3>2. Build Circuits</h3>
+            <p style="color: #aaa; font-size: 0.9rem;">Add separate circuits (like Warmup, Circuit A, Finisher) and set how many times each specific block repeats.</p>
+            
+            <div id="circuits-master-container"></div>
+            
+            <button class="action-btn add-circuit-btn" onclick="addCircuitBlock()">+ ADD NEW CIRCUIT BLOCK</button>
         </div>
 
         <div class="panel">
@@ -107,9 +117,7 @@
         <div class="panel">
             <h3>Master Exercise Database</h3>
             <p style="color: #aaa; font-size: 0.9rem;">Exercises are alphabetized automatically. Edit existing movements or add new ones to the bottom.</p>
-            
             <div id="exercise-list-container"></div>
-            
             <button class="action-btn add-btn" onclick="addBlankExerciseCard()">+ ADD NEW EXERCISE</button>
         </div>
 
@@ -125,6 +133,7 @@
 
         let availableExercises = [];
         let allWorkouts = [];
+        let exerciseSelectOptions = ''; // Cached HTML for the dropdowns
 
         // UI Logic
         function switchTab(tabId, btnElement) {
@@ -137,27 +146,38 @@
         // Fetch Data on Load
         async function init() {
             try {
+                const noCache = '?t=' + new Date().getTime();
                 const [exResponse, woResponse] = await Promise.all([
-                    fetch(EXERCISES_URL),
-                    fetch(WORKOUT_URL)
+                    fetch(EXERCISES_URL + noCache),
+                    fetch(WORKOUT_URL + noCache)
                 ]);
 
                 const exData = await exResponse.json();
                 const woData = await woResponse.json();
 
-                // Sort exercises alphabetically by name right as they load
-                if (exData.exercises) {
-                    exData.exercises.sort((a, b) => a.name.localeCompare(b.name));
-                }
+                if (exData.exercises) exData.exercises.sort((a, b) => a.name.localeCompare(b.name));
 
                 availableExercises = exData.exercises || [];
                 allWorkouts = woData.workouts || [];
 
+                updateExerciseSelectCache();
                 renderExerciseManager();
-                addWorkoutRow(); // Add one blank row to the workout builder
+                
+                // Add a default "Warmup" circuit and a "Circuit A" to start the user off
+                addCircuitBlock("Warmup", 1);
+                addCircuitBlock("Circuit A", 3);
             } catch (err) {
                 alert("Failed to load GitHub data. Check your internet or URLs.");
             }
+        }
+
+        // Cache the dropdown HTML so we don't rebuild it 100 times
+        function updateExerciseSelectCache() {
+            exerciseSelectOptions = `<select class="w-ex-id">`;
+            availableExercises.forEach(ex => {
+                exerciseSelectOptions += `<option value="${ex.id}">${ex.name} (${ex.id})</option>`;
+            });
+            exerciseSelectOptions += `</select>`;
         }
 
         // ==========================================
@@ -186,8 +206,8 @@
                         <input type="text" class="m-name" value="${ex.name || ''}" placeholder="Display Name">
                     </div>
                     <div class="ex-grid-full">
-                        <label>Safety Cues</label>
-                        <input type="text" class="m-cues" value="${ex.safetyCues || ''}" placeholder="e.g., Keep your core tight.">
+                        <label>Safety Cues / Modifier</label>
+                        <input type="text" class="m-cues" value="${ex.safetyCues || ''}" placeholder="e.g., Drop to your knees.">
                     </div>
                     <div class="ex-grid-full">
                         <label>Instructions (Optional)</label>
@@ -216,7 +236,7 @@
 
             cards.forEach(card => {
                 const id = card.querySelector('.m-id').value.trim();
-                if (!id) return; // Skip empty IDs
+                if (!id) return; 
                 
                 const name = card.querySelector('.m-name').value.trim();
                 const catString = card.querySelector('.m-cat').value;
@@ -232,65 +252,120 @@
                 });
             });
 
-            // Sort the newly assembled array alphabetically by name before generating JSON
             updatedExercises.sort((a, b) => a.name.localeCompare(b.name));
-
             const finalJSON = JSON.stringify({ exercises: updatedExercises }, null, 4);
             copyToClipboard(finalJSON, 'btn-copy-exercises', 'COPIED FULL EXERCISE JSON!');
             
-            // Update local memory and re-render the screen so the UI order matches the new JSON
             availableExercises = updatedExercises; 
+            updateExerciseSelectCache(); // Update dropdowns to reflect new edits
             renderExerciseManager();
         }
 
         // ==========================================
-        // WORKOUT BUILDER LOGIC
+        // MULTI-CIRCUIT WORKOUT BUILDER LOGIC
         // ==========================================
-        function addWorkoutRow() {
-            const container = document.getElementById('sequence-container');
+        
+        function addCircuitBlock(defaultName = "Circuit", defaultRounds = 1) {
+            const masterContainer = document.getElementById('circuits-master-container');
+            const circuitDiv = document.createElement('div');
+            circuitDiv.className = 'circuit-block';
+            
+            circuitDiv.innerHTML = `
+                <div class="circuit-header">
+                    <div style="flex-grow: 1;">
+                        <label>Circuit Name</label>
+                        <input type="text" class="c-name" value="${defaultName}" placeholder="e.g., Warmup or Circuit A">
+                    </div>
+                    <div>
+                        <label>Rounds (Repeats)</label>
+                        <input type="number" class="c-rounds" value="${defaultRounds}" min="1" style="width: 150px;">
+                    </div>
+                    <button class="remove-btn" onclick="this.parentElement.parentElement.remove()">DELETE CIRCUIT</button>
+                </div>
+                
+                <div class="c-sequence-container">
+                    </div>
+                
+                <button class="action-btn add-btn" onclick="addWorkoutRow(this.previousElementSibling)">+ ADD EXERCISE TO THIS CIRCUIT</button>
+            `;
+            
+            masterContainer.appendChild(circuitDiv);
+            
+            // Auto-add one blank row to this new circuit so it isn't empty
+            const sequenceContainer = circuitDiv.querySelector('.c-sequence-container');
+            addWorkoutRow(sequenceContainer);
+        }
+
+        // Takes a specific container as an argument so it knows *which* circuit to add the row to
+        function addWorkoutRow(targetContainer) {
             const row = document.createElement('div');
             row.className = 'sequence-row';
 
-            let selectHTML = `<select class="w-ex-id">`;
-            availableExercises.forEach(ex => {
-                selectHTML += `<option value="${ex.id}">${ex.name} (${ex.id})</option>`;
-            });
-            selectHTML += `</select>`;
-
             row.innerHTML = `
-                <div style="flex-grow: 2;"><label>Movement</label>${selectHTML}</div>
-                <div style="flex-grow: 1;"><label>Seconds</label><input type="number" class="w-duration" value="30" min="5"></div>
-                <div style="flex-grow: 1;"><label>Type</label><select class="w-type"><option value="work">Work</option><option value="rest">Rest</option></select></div>
-                <div style="display: flex; align-items: flex-end;"><button class="remove-btn" onclick="this.parentElement.parentElement.remove()">X</button></div>
+                <div style="flex-grow: 2;">
+                    <label style="display:none;">Movement</label>
+                    ${exerciseSelectOptions}
+                </div>
+                <div style="flex-grow: 1;">
+                    <label style="display:none;">Seconds</label>
+                    <input type="number" class="w-duration" value="30" min="5">
+                </div>
+                <div style="flex-grow: 1;">
+                    <label style="display:none;">Type</label>
+                    <select class="w-type"><option value="work">Work</option><option value="rest">Rest</option></select>
+                </div>
+                <div>
+                    <button class="remove-btn" onclick="this.parentElement.parentElement.remove()">X</button>
+                </div>
             `;
-            container.appendChild(row);
+            targetContainer.appendChild(row);
         }
 
         function generateAndCopyWorkouts() {
             const id = document.getElementById('work-id').value.trim();
             const name = document.getElementById('work-name').value.trim();
-            const rounds = parseInt(document.getElementById('work-rounds').value);
 
             if (!id || !name) {
                 alert("Please provide an ID and Name for the workout.");
                 return;
             }
 
-            const sequence = [];
-            const rows = document.querySelectorAll('.sequence-row');
-            rows.forEach(row => {
-                sequence.push({
-                    exerciseId: row.querySelector('.w-ex-id').value,
-                    duration: parseInt(row.querySelector('.w-duration').value),
-                    type: row.querySelector('.w-type').value
+            const assembledCircuits = [];
+            const circuitBlocks = document.querySelectorAll('.circuit-block');
+
+            circuitBlocks.forEach(block => {
+                const circuitName = block.querySelector('.c-name').value.trim();
+                const rounds = parseInt(block.querySelector('.c-rounds').value) || 1;
+                
+                const sequence = [];
+                const rows = block.querySelectorAll('.sequence-row');
+                rows.forEach(row => {
+                    sequence.push({
+                        exerciseId: row.querySelector('.w-ex-id').value,
+                        duration: parseInt(row.querySelector('.w-duration').value),
+                        type: row.querySelector('.w-type').value
+                    });
                 });
+
+                // Only add the circuit if it actually has exercises in it
+                if (sequence.length > 0) {
+                    assembledCircuits.push({
+                        circuitId: circuitName,
+                        rounds: rounds, // Rounds are now stored per-circuit!
+                        sequence: sequence
+                    });
+                }
             });
+
+            if (assembledCircuits.length === 0) {
+                alert("Please add at least one circuit with an exercise.");
+                return;
+            }
 
             const newWorkoutObj = {
                 id: id,
                 workoutName: name,
-                rounds: rounds,
-                circuits: [{ circuitId: "A", sequence: sequence }]
+                circuits: assembledCircuits
             };
 
             const existingIndex = allWorkouts.findIndex(w => w.id === id);
