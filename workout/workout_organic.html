@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organic Workout Player</title>
+    <style>
+        /* Light Organic Theme */
+        body {
+            background-color: #fdfbf7; /* Off-white / cream */
+            color: #57636e; /* Dark Slate Gray */
+            font-family: 'Impact', 'Arial Black', sans-serif; /* Thick, condensed look */
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Abstract Background Blobs (Pure CSS) */
+        .bg-blob { position: absolute; border-radius: 50%; z-index: 0; opacity: 0.5; filter: blur(40px); }
+        .bg-blob.b1 { width: 400px; height: 400px; background: #fae3a1; top: -100px; right: -100px; }
+        .bg-blob.b2 { width: 300px; height: 300px; background: #baccd9; bottom: -50px; left: 10%; }
+        .bg-blob.b3 { width: 200px; height: 200px; background: #d58d62; top: 20%; left: -50px; opacity: 0.2; }
+
+        /* App Container */
+        #app-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar: Round Counter & Controls */
+        #top-bar {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            right: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            z-index: 30; /* Must be high to sit above pause overlay */
+        }
+
+        #round-display {
+            font-size: 3.5rem;
+            color: #d58d62; /* Pastel Orange */
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .ctrl-btn {
+            background: rgba(255,255,255,0.8);
+            color: #57636e;
+            border: 2px solid #baccd9;
+            font-size: 1.5rem;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ctrl-btn:hover { background: #fff; border-color: #57636e; }
+        .active-state { color: #d58d62 !important; border-color: #d58d62 !important; }
+
+        /* The Teleprompter Layout */
+        #prompter-area {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #prompter-grid {
+            display: grid;
+            grid-template-columns: 180px auto;
+            align-items: center;
+            column-gap: 30px;
+            row-gap: 5px;
+        }
+
+        .time-col { display: flex; justify-content: flex-end; align-items: center; }
+        .text-col { text-transform: capitalize; white-space: nowrap; }
+
+        /* Faded Text (Past & Future) */
+        .faded-text {
+            font-size: 3.8rem;
+            color: #baccd9; /* Light Steel Blue */
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        /* Active Text */
+        .active-text {
+            font-size: 5rem;
+            color: #57636e; /* Dark Slate Gray */
+            transition: all 0.3s ease;
+        }
+
+        /* Timer Blob */
+        #timer-blob {
+            background: #fae3a1; /* Pastel Yellow */
+            color: #000;
+            font-size: 4rem;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            padding: 15px 30px;
+            /* Organic oval shape using border-radius trick */
+            border-radius: 60% 40% 50% 50% / 50% 50% 60% 40%; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 80px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: background 0.5s ease;
+        }
+
+        /* Rest state for the timer blob */
+        .blob-rest { background: #baccd9 !important; } 
+
+        /* Bottom Left: Safety Cues */
+        #safety-cues {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            background: #111;
+            padding: 15px 25px;
+            border-left: 8px solid #d58d62;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+            display: none; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            max-width: 50%;
+        }
+
+        /* Bottom Right: Total Timer Widget */
+        #total-timer-widget {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            background: #fff;
+            border: 2px solid #baccd9;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .total-label {
+            font-size: 0.9rem;
+            color: #777;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        #total-time-display {
+            font-size: 2.5rem;
+            color: #57636e;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* Overlays (Styled for light theme) */
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(253, 251, 247, 0.95);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 20; text-align: center;
+        }
+        
+        #pause-overlay {
+            background: rgba(253, 251, 247, 0.85); /* Slightly transparent */
+            z-index: 25;
+            display: none;
+        }
+        #pause-overlay h1 {
+            color: #d58d62;
+            font-size: 6rem;
+            letter-spacing: 5px;
+            margin: 0;
+        }
+
+        h2.loading { color: #57636e; font-size: 3rem; }
+        
+        button.action-btn {
+            font-family: 'Arial Black', sans-serif; font-size: 2.5rem;
+            padding: 20px 50px; background: #57636e; color: #fff;
+            border: none; cursor: pointer; text-transform: uppercase;
+            border-radius: 50px; transition: 0.3s; box-shadow: 0 10px 20px rgba(87,99,110,0.3);
+        }
+        button.action-btn:hover { background: #d58d62; box-shadow: 0 10px 20px rgba(213,141,98,0.3); transform: translateY(-3px); }
+
+        select {
+            font-family: 'Arial Black', sans-serif; font-size: 1.5rem;
+            padding: 15px; margin-bottom: 30px; background: #fff;
+            color: #57636e; border: 3px solid #baccd9; border-radius: 12px; width: 80%; max-width: 400px;
+        }
+
+        /* Finisher text */
+        .overlay h1 { color: #57636e; font-size: 5rem; margin: 0; }
+        .overlay h2.sub { color: #d58d62; font-size: 2.5rem; margin-top: 10px; margin-bottom: 40px; }
+        .finisher-btn-group { display: flex; gap: 20px; margin-bottom: 30px; }
+        .small-btn { font-size: 1.2rem; padding: 10px 20px; background: #fff; color: #777; border: 2px solid #baccd9; border-radius: 8px; cursor: pointer; }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-blob b1"></div>
+    <div class="bg-blob b2"></div>
+    <div class="bg-blob b3"></div>
+
+    <div id="app-container">
+        
+        <div id="top-bar" style="display: none;">
+            <div id="round-display">Round 1</div>
+            <div style="display: flex; gap: 10px;">
+                <button id="pause-btn" class="ctrl-btn">⏸️</button>
+                <button id="mute-btn" class="ctrl-btn">🔊</button>
+            </div>
+        </div>
+
+        <div id="prompter-area" style="display: none;">
+            <div id="prompter-grid">
+                <div class="time-col"></div>
+                <div class="text-col faded-text" id="slot-m2"></div>
+                
+                <div class="time-col"></div>
+                <div class="text-col faded-text" id="slot-m1"></div>
+                
+                <div class="time-col">
+                    <div id="timer-blob">00</div>
+                </div>
+                <div class="text-col active-text" id="slot-0">Get Ready</div>
+                
+                <div class="time-col"></div>
+                <div class="text-col faded-text" id="slot-p1"></div>
+                
+                <div class="time-col"></div>
+                <div class="text-col faded-text" id="slot-p2"></div>
+            </div>
+        </div>
+
+        <div id="safety-cues"></div>
+
+        <div id="total-timer-widget" style="display: none;">
+            <div class="total-label">Total Time</div>
+            <div id="total-time-display">00:00</div>
+        </div>
+
+        <div id="start-overlay" class="overlay">
+            <h2 id="loading-text" class="loading">Loading Data...</h2>
+            <select id="workout-selector" style="display: none;"></select>
+            <button id="start-btn" class="action-btn" style="display: none;">START</button>
+        </div>
+
+        <div id="pause-overlay" class="overlay">
+            <h1>PAUSED</h1>
+        </div>
+
+        <div id="finisher-overlay" class="overlay" style="display: none;">
+            <h1>WORKOUT COMPLETE</h1>
+            <h2 class="sub">WANT SOME MORE?</h2>
+            
+            <div class="finisher-btn-group">
+                <button class="action-btn" onclick="startFinisher('finisher_core')" style="font-size: 1.5rem; padding: 15px 30px;">3-MIN CORE</button>
+                <button class="action-btn" onclick="startFinisher('finisher_cardio')" style="font-size: 1.5rem; padding: 15px 30px;">3-MIN CARDIO</button>
+                <button class="action-btn" onclick="startFinisher('finisher_upper')" style="font-size: 1.5rem; padding: 15px 30px;">3-MIN UPPER</button>
+            </div>
+            
+            <button onclick="location.reload()" class="small-btn">NO THANKS (RESET)</button>
+        </div>
+
+    </div>
+
+    <script>
+        const EXERCISES_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/exercises.json';
+        const WORKOUT_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/workout_routine.json';
+
+        // --- CONFIGURATION ---
+        const TARGET_WORKOUT_ID = "back_to_basics"; 
+        // ---------------------
+
+        let exerciseDB = {};
+        let allWorkouts = [];
+        let playlist = []; 
+        let currentIndex = 0;
+        
+        let totalTimeRemaining = 0;
+        let exerciseTimeRemaining = 0;
+        let timerInterval;
+
+        // Audio & State Setup
+        let isMuted = false;
+        let isPaused = false;
+        let audioCtx;
+
+        function playBeep(type) {
+            if (isMuted || isPaused) return;
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if (type === 'short') {
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.15);
+            } else if (type === 'long') {
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                oscillator.start();
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+                oscillator.stop(audioCtx.currentTime + 0.8);
+            }
+        }
+
+        // Top Controls Event Listeners
+        document.getElementById('mute-btn').addEventListener('click', function() {
+            isMuted = !isMuted;
+            if (isMuted) {
+                this.innerText = '🔇';
+                this.classList.add('active-state');
+            } else {
+                this.innerText = '🔊';
+                this.classList.remove('active-state');
+            }
+        });
+
+        document.getElementById('pause-btn').addEventListener('click', function() {
+            isPaused = !isPaused;
+            if (isPaused) {
+                this.innerText = '▶️';
+                this.classList.add('active-state');
+                document.getElementById('pause-overlay').style.display = 'flex';
+            } else {
+                this.innerText = '⏸️';
+                this.classList.remove('active-state');
+                document.getElementById('pause-overlay').style.display = 'none';
+            }
+        });
+
+
+        async function init() {
+            try {
+                // The Cache-Buster
+                const noCache = '?t=' + new Date().getTime();
+
+                const [exResponse, woResponse] = await Promise.all([
+                    fetch(EXERCISES_URL + noCache),
+                    fetch(WORKOUT_URL + noCache)
+                ]);
+
+                const exData = await exResponse.json();
+                const woData = await woResponse.json();
+
+                exData.exercises.forEach(ex => { exerciseDB[ex.id] = ex; });
+                allWorkouts = woData.workouts;
+
+                const selector = document.getElementById('workout-selector');
+
+                allWorkouts.forEach((wo, index) => {
+                    let option = document.createElement('option');
+                    option.value = index;
+                    option.text = wo.workoutName;
+                    selector.appendChild(option);
+                });
+                
+                if (TARGET_WORKOUT_ID !== "") {
+                    const targetIndex = allWorkouts.findIndex(w => w.id === TARGET_WORKOUT_ID);
+                    if (targetIndex !== -1) {
+                        selector.value = targetIndex; 
+                        document.getElementById('loading-text').innerText = allWorkouts[targetIndex].workoutName;
+                    } else {
+                        document.getElementById('loading-text').innerText = "Workout ID not found!";
+                    }
+                } else {
+                    document.getElementById('loading-text').style.display = 'none';
+                    selector.style.display = 'block';
+                }
+
+                document.getElementById('start-btn').style.display = 'block';
+                document.getElementById('start-btn').addEventListener('click', prepareWorkout);
+
+            } catch (error) {
+                console.error("Failed to load JSON files:", error);
+                document.getElementById('loading-text').innerText = "Error Loading GitHub Data.";
+            }
+        }
+
+        // --- THE FIXED LOGIC IS HERE ---
+        function prepareWorkout() {
+            const selectedIndex = document.getElementById('workout-selector').value;
+            const selectedWorkout = allWorkouts[selectedIndex];
+            
+            playlist = []; 
+            totalTimeRemaining = 0;
+
+            // Loop through each circuit in the workout
+            selectedWorkout.circuits.forEach(circuit => {
+                const circuitRounds = circuit.rounds || 1; // Find the rounds specifically for THIS circuit
+                
+                // Add this sequence to the playlist based on the circuit's round multiplier
+                for (let r = 0; r < circuitRounds; r++) {
+                    circuit.sequence.forEach(block => {
+                        const details = exerciseDB[block.exerciseId] || { name: 'Unknown', safetyCues: '' };
+                        playlist.push({
+                            ...block,
+                            name: details.name,
+                            safetyCues: details.safetyCues,
+                            round: r + 1 // Save the round number for display relative to the circuit
+                        });
+                        totalTimeRemaining += block.duration; 
+                    });
+                }
+            });
+
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+            document.getElementById('start-overlay').style.display = 'none';
+            document.getElementById('finisher-overlay').style.display = 'none';
+            
+            document.getElementById('top-bar').style.display = 'flex';
+            document.getElementById('prompter-area').style.display = 'flex';
+            document.getElementById('total-timer-widget').style.display = 'block';
+            
+            runBlock(0);
+        }
+
+        function runBlock(index) {
+            if (index >= playlist.length) {
+                finishWorkout();
+                return;
+            }
+
+            currentIndex = index;
+            const currentBlock = playlist[index];
+            exerciseTimeRemaining = currentBlock.duration;
+
+            updateUI(currentBlock);
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                // Stop the math if paused
+                if (isPaused) return;
+
+                exerciseTimeRemaining--;
+                totalTimeRemaining--;
+                
+                if (exerciseTimeRemaining === 3 || exerciseTimeRemaining === 2 || exerciseTimeRemaining === 1) {
+                    playBeep('short');
+                } else if (exerciseTimeRemaining === 0) {
+                    playBeep('long');
+                }
+                
+                updateTimerDisplay(currentBlock.type);
+
+                if (exerciseTimeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    runBlock(index + 1);
+                }
+            }, 1000);
+        }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function updateUI(block) {
+            document.getElementById('round-display').innerText = "Round " + block.round;
+
+            document.getElementById('slot-m2').innerText = (currentIndex >= 2) ? playlist[currentIndex - 2].name : "";
+            document.getElementById('slot-m1').innerText = (currentIndex >= 1) ? playlist[currentIndex - 1].name : "";
+            
+            document.getElementById('slot-0').innerText = block.name;
+            
+            document.getElementById('slot-p1').innerText = (currentIndex + 1 < playlist.length) ? playlist[currentIndex + 1].name : "";
+            document.getElementById('slot-p2').innerText = (currentIndex + 2 < playlist.length) ? playlist[currentIndex + 2].name : "";
+
+            const cuesEl = document.getElementById('safety-cues');
+            if (block.safetyCues && block.safetyCues.trim() !== "") {
+                cuesEl.innerHTML = `⚠️ ${block.safetyCues}`;
+                cuesEl.style.display = 'block';
+            } else {
+                cuesEl.style.display = 'none';
+            }
+
+            updateTimerDisplay(block.type);
+        }
+
+        function updateTimerDisplay(type) {
+            document.getElementById('total-time-display').innerText = formatTime(Math.max(0, totalTimeRemaining));
+            document.getElementById('timer-blob').innerText = exerciseTimeRemaining;
+
+            const blobEl = document.getElementById('timer-blob');
+            if (type === 'rest') {
+                blobEl.classList.add('blob-rest');
+            } else {
+                blobEl.classList.remove('blob-rest');
+            }
+        }
+
+        function finishWorkout() {
+            document.getElementById('top-bar').style.display = 'none';
+            document.getElementById('prompter-area').style.display = 'none';
+            document.getElementById('safety-cues').style.display = 'none';
+            document.getElementById('total-timer-widget').style.display = 'none';
+            document.getElementById('finisher-overlay').style.display = 'flex';
+        }
+
+        function startFinisher(finisherId) {
+            const targetIndex = allWorkouts.findIndex(w => w.id === finisherId);
+            
+            if (targetIndex !== -1) {
+                document.getElementById('workout-selector').value = targetIndex;
+                prepareWorkout(); 
+            } else {
+                alert("Finisher workout '" + finisherId + "' not found in your JSON.");
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
