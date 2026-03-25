@@ -593,6 +593,7 @@
             }
         }
 
+        // --- THE FIXED LOGIC IS HERE ---
         function prepareWorkout() {
             const selectedIndex = document.getElementById('workout-selector').value;
             const selectedWorkout = allWorkouts[selectedIndex];
@@ -600,9 +601,12 @@
             playlist = []; 
             totalTimeRemaining = 0;
 
-            const rounds = selectedWorkout.rounds || 1;
-            for (let r = 0; r < rounds; r++) {
-                selectedWorkout.circuits.forEach(circuit => {
+            // Loop through each circuit in the workout
+            selectedWorkout.circuits.forEach(circuit => {
+                const circuitRounds = circuit.rounds || 1; // Find the rounds specifically for THIS circuit
+                
+                // Add this sequence to the playlist based on the circuit's round multiplier
+                for (let r = 0; r < circuitRounds; r++) {
                     circuit.sequence.forEach(block => {
                         const details = exerciseDB[block.exerciseId] || { name: 'Unknown', safetyCues: '' };
                         playlist.push({
@@ -612,8 +616,8 @@
                         });
                         totalTimeRemaining += block.duration; 
                     });
-                });
-            }
+                }
+            });
 
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
