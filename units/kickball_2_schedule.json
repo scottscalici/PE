@@ -15,12 +15,12 @@
       "id": 2,
       "home_team": "Philadelphia Bears & Detroit Seals",
       "away_team": "New York Knights & Seattle Bulls",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 4,
+      "away_score": 2,
       "date_str": "March 25 (Day 59)",
       "time": "11:30",
       "location": "Full Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 3,
@@ -37,38 +37,38 @@
   "standings": {
     "Seattle Bulls": {
       "w": 1,
-      "l": 0,
+      "l": 1,
       "t": 0,
-      "pf": 8,
-      "pa": 0,
-      "pd": 8,
+      "pf": 10,
+      "pa": 4,
+      "pd": 6,
       "pts": 3
     },
     "Philadelphia Bears": {
-      "w": 1,
+      "w": 2,
       "l": 0,
       "t": 0,
-      "pf": 8,
-      "pa": 0,
-      "pd": 8,
-      "pts": 3
+      "pf": 12,
+      "pa": 2,
+      "pd": 10,
+      "pts": 6
     },
     "Detroit Seals": {
-      "w": 0,
+      "w": 1,
       "l": 1,
       "t": 0,
-      "pf": 0,
-      "pa": 8,
-      "pd": -8,
-      "pts": 0
+      "pf": 4,
+      "pa": 10,
+      "pd": -6,
+      "pts": 3
     },
     "New York Knights": {
       "w": 0,
-      "l": 1,
+      "l": 2,
       "t": 0,
-      "pf": 0,
-      "pa": 8,
-      "pd": -8,
+      "pf": 2,
+      "pa": 12,
+      "pd": -10,
       "pts": 0
     }
   },
