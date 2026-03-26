@@ -3,14 +3,13 @@
   "display_name": "Kickball",
   "header_image": "https://raw.githubusercontent.com/scottscalici/PE/main/teams/kickball/kickball.png",
   "setup_image": {
-    "file": "detroit_seals.png",
-    "caption": "placeholder"
+    "file": "",
+    "caption": ""
   },
   "equipment": [
     {
       "name": "Indoor soccer ball",
-      "image_file": "main/equipment/indoor_soccer_ball.png",
-      "caption": "indoor soccer ball"
+      "image_file": "main/equipment/indoor_soccer_ball.png"
     },
     "Playground ball (if outdoors)",
     "Bases (1st, 2nd, 3rd, and Home)",
@@ -57,8 +56,8 @@
     "description": "While popular in American schools, kickball has grown into massive adult social leagues across the United States and is frequently played as a community-building sport.",
     "highlights_video": "https://youtube.com/shorts/Wq_oa0xT6CI?si=l3yRLrb3riLJAZaU",
     "image": {
-      "file": "hollywood_eagles.png",
-      "caption": "replace"
+      "file": "",
+      "caption": ""
     }
   },
   "unit_plan": [
@@ -106,14 +105,15 @@
           "name": "Game play",
           "overview": "",
           "rules": [
-            "Played indoors with large 8'x4' mats for bases and a Scoring Line defined by two cones at home.",
-            "A Charge Line is designated just past 1st and 3rd base.",
+            "Played indoors with large bases (taped lines) for bases and a Scoring Line defined by two cones at home (AUX Gym's free throw line).",
+            "A Charge Line is designated just past 2nd, 3rd, and 4th base (Sideline of volleyball line)",
             "There is only ONE out per inning. The moment an out is recorded, the teams switch sides.",
             "Mercy Rule: An inning automatically ends when the offense scores 15 runs. A home run clearing the bases is the only way to exceed this.",
-            "The pitcher must roll the ball from the outfield, and it must pass exactly between the two scoring line cones.",
-            "Pitching Penalty: If the pitch misses the cones, all active runners advance one base (or the kicker takes 2nd if bases are empty).",
-            "The kicked ball must cross the Charge Line past 1st and 3rd base, otherwise it is a foul ball.",
-            "Pace of Play: The pitcher can roll the instant the defense resets. If the next kicker isn't ready at the cones, they are OUT.",
+            "The pitcher must roll the ball from the outfield, and it must pass cross the divider between main and aux gyms.",
+            "Pitching Penalty: If the pitch misses the zone, all active runners advance one base (or the kicker takes 2nd if bases are empty).",
+            "The kicked ball must cross the Charge Line (outfield line), otherwise it is a foul ball.",
+            "Defense can field the ball before it crosses as long as one of their feet is on or behind the line",
+            "Pace of Play: The pitcher can roll the instant the defense resets and the previous play is dead. If the next kicker isn't ready at the cones, they are OUT.",
             "Multiple runners are allowed on a single base at the same time.",
             "Baserunners can start running the exact moment the ball is kicked.",
             "There are absolutely no force outs on the field.",
