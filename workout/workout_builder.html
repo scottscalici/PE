@@ -62,6 +62,9 @@
         .remove-btn { background: #600; color: #fff; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; }
         .remove-btn:hover { background: #800; }
         .remove-card-btn { position: absolute; top: 10px; right: 10px; }
+
+        .dup-btn { background: #28a745; color: #fff; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+        .dup-btn:hover { background: #218838; }
         
         button.action-btn {
             background: #ff4500; color: #fff; font-family: 'Arial Black', sans-serif;
@@ -95,7 +98,7 @@
             
             <label>Workout Name (Display Title)</label>
             <input type="text" id="work-name" placeholder="e.g., Full Body Burner">
-            </div>
+        </div>
 
         <div class="panel">
             <h3>2. Build Circuits</h3>
@@ -133,9 +136,8 @@
 
         let availableExercises = [];
         let allWorkouts = [];
-        let exerciseSelectOptions = ''; // Cached HTML for the dropdowns
+        let exerciseSelectOptions = ''; 
 
-        // UI Logic
         function switchTab(tabId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -143,7 +145,6 @@
             btnElement.classList.add('active');
         }
 
-        // Fetch Data on Load
         async function init() {
             try {
                 const noCache = '?t=' + new Date().getTime();
@@ -163,15 +164,13 @@
                 updateExerciseSelectCache();
                 renderExerciseManager();
                 
-                // Add a default "Warmup" circuit and a "Circuit A" to start the user off
                 addCircuitBlock("Warmup", 1);
-                addCircuitBlock("Circuit A", 3);
+                addCircuitBlock("Circuit A", 1);
             } catch (err) {
                 alert("Failed to load GitHub data. Check your internet or URLs.");
             }
         }
 
-        // Cache the dropdown HTML so we don't rebuild it 100 times
         function updateExerciseSelectCache() {
             exerciseSelectOptions = `<select class="w-ex-id">`;
             availableExercises.forEach(ex => {
@@ -180,15 +179,11 @@
             exerciseSelectOptions += `</select>`;
         }
 
-        // ==========================================
-        // EXERCISE MANAGER LOGIC
-        // ==========================================
+        // --- EXERCISE MANAGER ---
         function renderExerciseManager() {
             const container = document.getElementById('exercise-list-container');
             container.innerHTML = '';
-            availableExercises.forEach(ex => {
-                container.appendChild(createExerciseCard(ex));
-            });
+            availableExercises.forEach(ex => container.appendChild(createExerciseCard(ex)));
         }
 
         function createExerciseCard(ex = {}) {
@@ -197,30 +192,12 @@
             div.innerHTML = `
                 <button class="remove-btn remove-card-btn" onclick="this.parentElement.remove()">X</button>
                 <div class="ex-grid">
-                    <div>
-                        <label>ID</label>
-                        <input type="text" class="m-id" value="${ex.id || ''}" placeholder="e.g., push_ups_01">
-                    </div>
-                    <div>
-                        <label>Name</label>
-                        <input type="text" class="m-name" value="${ex.name || ''}" placeholder="Display Name">
-                    </div>
-                    <div class="ex-grid-full">
-                        <label>Safety Cues / Modifier</label>
-                        <input type="text" class="m-cues" value="${ex.safetyCues || ''}" placeholder="e.g., Drop to your knees.">
-                    </div>
-                    <div class="ex-grid-full">
-                        <label>Instructions (Optional)</label>
-                        <input type="text" class="m-inst" value="${ex.instructions || ''}">
-                    </div>
-                    <div class="ex-grid-full">
-                        <label>Categories (Comma separated)</label>
-                        <input type="text" class="m-cat" value="${ex.category ? ex.category.join(', ') : ''}">
-                    </div>
-                    <div class="ex-grid-full">
-                        <label>GIF URL (Optional)</label>
-                        <input type="text" class="m-gif" value="${ex.gifUrl || ''}">
-                    </div>
+                    <div><label>ID</label><input type="text" class="m-id" value="${ex.id || ''}"></div>
+                    <div><label>Name</label><input type="text" class="m-name" value="${ex.name || ''}"></div>
+                    <div class="ex-grid-full"><label>Safety Cues / Modifier</label><input type="text" class="m-cues" value="${ex.safetyCues || ''}"></div>
+                    <div class="ex-grid-full"><label>Instructions</label><input type="text" class="m-inst" value="${ex.instructions || ''}"></div>
+                    <div class="ex-grid-full"><label>Categories</label><input type="text" class="m-cat" value="${ex.category ? ex.category.join(', ') : ''}"></div>
+                    <div class="ex-grid-full"><label>GIF URL</label><input type="text" class="m-gif" value="${ex.gifUrl || ''}"></div>
                 </div>
             `;
             return div;
@@ -237,15 +214,11 @@
             cards.forEach(card => {
                 const id = card.querySelector('.m-id').value.trim();
                 if (!id) return; 
-                
-                const name = card.querySelector('.m-name').value.trim();
                 const catString = card.querySelector('.m-cat').value;
-                const catArray = catString ? catString.split(',').map(s => s.trim()) : [];
-
                 updatedExercises.push({
                     id: id,
-                    name: name,
-                    category: catArray,
+                    name: card.querySelector('.m-name').value.trim(),
+                    category: catString ? catString.split(',').map(s => s.trim()) : [],
                     instructions: card.querySelector('.m-inst').value.trim(),
                     gifUrl: card.querySelector('.m-gif').value.trim(),
                     safetyCues: card.querySelector('.m-cues').value.trim()
@@ -253,18 +226,13 @@
             });
 
             updatedExercises.sort((a, b) => a.name.localeCompare(b.name));
-            const finalJSON = JSON.stringify({ exercises: updatedExercises }, null, 4);
-            copyToClipboard(finalJSON, 'btn-copy-exercises', 'COPIED FULL EXERCISE JSON!');
-            
+            copyToClipboard(JSON.stringify({ exercises: updatedExercises }, null, 4), 'btn-copy-exercises', 'COPIED!');
             availableExercises = updatedExercises; 
-            updateExerciseSelectCache(); // Update dropdowns to reflect new edits
+            updateExerciseSelectCache();
             renderExerciseManager();
         }
 
-        // ==========================================
-        // MULTI-CIRCUIT WORKOUT BUILDER LOGIC
-        // ==========================================
-        
+        // --- WORKOUT BUILDER ---
         function addCircuitBlock(defaultName = "Circuit", defaultRounds = 1) {
             const masterContainer = document.getElementById('circuits-master-container');
             const circuitDiv = document.createElement('div');
@@ -274,49 +242,57 @@
                 <div class="circuit-header">
                     <div style="flex-grow: 1;">
                         <label>Circuit Name</label>
-                        <input type="text" class="c-name" value="${defaultName}" placeholder="e.g., Warmup or Circuit A">
+                        <input type="text" class="c-name" value="${defaultName}">
                     </div>
                     <div>
                         <label>Rounds (Repeats)</label>
                         <input type="number" class="c-rounds" value="${defaultRounds}" min="1" style="width: 150px;">
                     </div>
-                    <button class="remove-btn" onclick="this.parentElement.parentElement.remove()">DELETE CIRCUIT</button>
-                </div>
-                
-                <div class="c-sequence-container">
+                    <div style="display: flex; gap: 10px;">
+                        <button class="dup-btn" onclick="duplicateCircuit(this)">📋 DUPLICATE</button>
+                        <button class="remove-btn" onclick="this.closest('.circuit-block').remove()">X DELETE</button>
                     </div>
-                
+                </div>
+                <div class="c-sequence-container"></div>
                 <button class="action-btn add-btn" onclick="addWorkoutRow(this.previousElementSibling)">+ ADD EXERCISE TO THIS CIRCUIT</button>
             `;
-            
             masterContainer.appendChild(circuitDiv);
-            
-            // Auto-add one blank row to this new circuit so it isn't empty
-            const sequenceContainer = circuitDiv.querySelector('.c-sequence-container');
-            addWorkoutRow(sequenceContainer);
+            addWorkoutRow(circuitDiv.querySelector('.c-sequence-container'));
         }
 
-        // Takes a specific container as an argument so it knows *which* circuit to add the row to
+        // The New Duplicator Logic
+        function duplicateCircuit(btn) {
+            const original = btn.closest('.circuit-block');
+            const name = original.querySelector('.c-name').value;
+            const rounds = original.querySelector('.c-rounds').value;
+
+            addCircuitBlock(name, rounds); // Spawn a new block
+            
+            const allBlocks = document.querySelectorAll('.circuit-block');
+            const newBlock = allBlocks[allBlocks.length - 1];
+            const seqContainer = newBlock.querySelector('.c-sequence-container');
+            
+            seqContainer.innerHTML = ''; // Clear default row
+
+            // Copy all the exercise rows and their values exactly
+            const rows = original.querySelectorAll('.sequence-row');
+            rows.forEach(row => {
+                addWorkoutRow(seqContainer);
+                const newRow = seqContainer.lastElementChild;
+                newRow.querySelector('.w-ex-id').value = row.querySelector('.w-ex-id').value;
+                newRow.querySelector('.w-duration').value = row.querySelector('.w-duration').value;
+                newRow.querySelector('.w-type').value = row.querySelector('.w-type').value;
+            });
+        }
+
         function addWorkoutRow(targetContainer) {
             const row = document.createElement('div');
             row.className = 'sequence-row';
-
             row.innerHTML = `
-                <div style="flex-grow: 2;">
-                    <label style="display:none;">Movement</label>
-                    ${exerciseSelectOptions}
-                </div>
-                <div style="flex-grow: 1;">
-                    <label style="display:none;">Seconds</label>
-                    <input type="number" class="w-duration" value="30" min="5">
-                </div>
-                <div style="flex-grow: 1;">
-                    <label style="display:none;">Type</label>
-                    <select class="w-type"><option value="work">Work</option><option value="rest">Rest</option></select>
-                </div>
-                <div>
-                    <button class="remove-btn" onclick="this.parentElement.parentElement.remove()">X</button>
-                </div>
+                <div style="flex-grow: 2;"><label style="display:none;">Movement</label>${exerciseSelectOptions}</div>
+                <div style="flex-grow: 1;"><label style="display:none;">Seconds</label><input type="number" class="w-duration" value="30" min="5"></div>
+                <div style="flex-grow: 1;"><label style="display:none;">Type</label><select class="w-type"><option value="work">Work</option><option value="rest">Rest</option></select></div>
+                <div><button class="remove-btn" onclick="this.parentElement.parentElement.remove()">X</button></div>
             `;
             targetContainer.appendChild(row);
         }
@@ -325,81 +301,48 @@
             const id = document.getElementById('work-id').value.trim();
             const name = document.getElementById('work-name').value.trim();
 
-            if (!id || !name) {
-                alert("Please provide an ID and Name for the workout.");
-                return;
-            }
+            if (!id || !name) return alert("Please provide an ID and Name.");
 
             const assembledCircuits = [];
-            const circuitBlocks = document.querySelectorAll('.circuit-block');
-
-            circuitBlocks.forEach(block => {
-                const circuitName = block.querySelector('.c-name').value.trim();
-                const rounds = parseInt(block.querySelector('.c-rounds').value) || 1;
-                
+            document.querySelectorAll('.circuit-block').forEach(block => {
                 const sequence = [];
-                const rows = block.querySelectorAll('.sequence-row');
-                rows.forEach(row => {
+                block.querySelectorAll('.sequence-row').forEach(row => {
                     sequence.push({
                         exerciseId: row.querySelector('.w-ex-id').value,
                         duration: parseInt(row.querySelector('.w-duration').value),
                         type: row.querySelector('.w-type').value
                     });
                 });
-
-                // Only add the circuit if it actually has exercises in it
                 if (sequence.length > 0) {
                     assembledCircuits.push({
-                        circuitId: circuitName,
-                        rounds: rounds, // Rounds are now stored per-circuit!
+                        circuitId: block.querySelector('.c-name').value.trim(),
+                        rounds: parseInt(block.querySelector('.c-rounds').value) || 1,
                         sequence: sequence
                     });
                 }
             });
 
-            if (assembledCircuits.length === 0) {
-                alert("Please add at least one circuit with an exercise.");
-                return;
-            }
+            if (assembledCircuits.length === 0) return alert("Please add at least one exercise.");
 
-            const newWorkoutObj = {
-                id: id,
-                workoutName: name,
-                circuits: assembledCircuits
-            };
-
+            const newObj = { id: id, workoutName: name, circuits: assembledCircuits };
             const existingIndex = allWorkouts.findIndex(w => w.id === id);
-            if (existingIndex !== -1) {
-                allWorkouts[existingIndex] = newWorkoutObj; 
-            } else {
-                allWorkouts.push(newWorkoutObj); 
-            }
+            
+            if (existingIndex !== -1) allWorkouts[existingIndex] = newObj; 
+            else allWorkouts.push(newObj); 
 
-            const finalJSON = JSON.stringify({ workouts: allWorkouts }, null, 4);
-            copyToClipboard(finalJSON, 'btn-copy-workouts', 'COPIED FULL WORKOUT JSON!');
+            copyToClipboard(JSON.stringify({ workouts: allWorkouts }, null, 4), 'btn-copy-workouts', 'COPIED!');
         }
 
-        // ==========================================
-        // UTILITY LOGIC
-        // ==========================================
         function copyToClipboard(text, buttonId, successText) {
             navigator.clipboard.writeText(text).then(() => {
                 const btn = document.getElementById(buttonId);
                 const originalText = btn.innerText;
                 btn.innerText = successText;
                 btn.classList.add('success');
-                
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.classList.remove('success');
-                }, 2000);
-            }).catch(err => {
-                alert("Clipboard copy failed. Check console.");
-                console.error(err);
+                setTimeout(() => { btn.innerText = originalText; btn.classList.remove('success'); }, 2000);
             });
         }
 
-        // Boot up
         init();
     </script>
 </body>
