@@ -34,6 +34,21 @@
             z-index: 1;
             display: flex;
             flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        /* Pseudo-Fullscreen Fallback Class */
+        .pseudo-fullscreen {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            border-radius: 0 !important;
+            border: none !important;
+            z-index: 9999 !important;
+            background-color: #fdfbf7;
         }
 
         /* Top Bar: Round Counter & Controls */
@@ -49,18 +64,19 @@
         }
 
         #round-display {
-            font-size: 3.5rem;
+            font-size: 2.5rem; /* Shrunk slightly to fit circuit names */
             color: #d58d62; /* Pastel Orange */
             letter-spacing: 1px;
             margin: 0;
+            text-transform: uppercase;
         }
 
         .ctrl-btn {
             background: rgba(255,255,255,0.8);
             color: #57636e;
             border: 2px solid #baccd9;
-            font-size: 1.5rem;
-            padding: 10px 15px;
+            font-size: 1.2rem;
+            padding: 8px 12px;
             cursor: pointer;
             border-radius: 8px;
             transition: 0.3s;
@@ -68,6 +84,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(5px);
         }
         .ctrl-btn:hover { background: #fff; border-color: #57636e; }
         .active-state { color: #d58d62 !important; border-color: #d58d62 !important; }
@@ -132,15 +149,17 @@
             position: absolute;
             bottom: 40px;
             left: 40px;
-            background: #111;
+            background: rgba(255,255,255,0.9);
             padding: 15px 25px;
             border-left: 8px solid #d58d62;
+            border-radius: 0 8px 8px 0;
             font-family: Arial, Helvetica, sans-serif;
             font-size: 1.5rem;
-            color: #fff;
+            color: #57636e;
             display: none; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             max-width: 50%;
+            backdrop-filter: blur(5px);
         }
 
         /* Bottom Right: Total Timer Widget */
@@ -178,11 +197,11 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(253, 251, 247, 0.95);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 20; text-align: center;
+            z-index: 40; text-align: center;
         }
         
         #pause-overlay {
-            background: rgba(253, 251, 247, 0.85); /* Slightly transparent */
+            background: rgba(253, 251, 247, 0.85);
             z-index: 25;
             display: none;
         }
@@ -228,8 +247,12 @@
         <div id="top-bar" style="display: none;">
             <div id="round-display">Round 1</div>
             <div style="display: flex; gap: 10px;">
-                <button id="pause-btn" class="ctrl-btn">⏸️</button>
-                <button id="mute-btn" class="ctrl-btn">🔊</button>
+                <button id="prev-btn" class="ctrl-btn" title="Previous / Restart (Left Arrow)">⏮️</button>
+                <button id="next-btn" class="ctrl-btn" title="Skip Forward (Right Arrow)">⏭️</button>
+                <button id="pause-btn" class="ctrl-btn" title="Pause (Spacebar)">⏸️</button>
+                <button id="modifier-btn" class="ctrl-btn" title="Toggle Modifier/Cues (S)">💪</button>
+                <button id="mute-btn" class="ctrl-btn" title="Mute (M)">🔊</button>
+                <button id="fullscreen-btn" class="ctrl-btn" title="Toggle Fullscreen (F)">🔲</button>
             </div>
         </div>
 
@@ -291,7 +314,7 @@
         const WORKOUT_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/workout_routine.json';
 
         // --- CONFIGURATION ---
-        const TARGET_WORKOUT_ID = "back_to_basics"; 
+        const TARGET_WORKOUT_ID = ""; 
         // ---------------------
 
         let exerciseDB = {};
@@ -306,6 +329,7 @@
         // Audio & State Setup
         let isMuted = false;
         let isPaused = false;
+        let showModifier = false; 
         let audioCtx;
 
         function playBeep(type) {
@@ -334,7 +358,46 @@
             }
         }
 
-        // Top Controls Event Listeners
+        // --- Helper: Recalculate Total Time ---
+        function recalculateRemainingTotal(fromIndex) {
+            let total = 0;
+            for (let i = fromIndex; i < playlist.length; i++) {
+                total += playlist[i].duration;
+            }
+            return total;
+        }
+
+        // --- Helper: Force Unpause ---
+        function forceUnpause() {
+            isPaused = false;
+            document.getElementById('pause-btn').innerText = '⏸️';
+            document.getElementById('pause-btn').classList.remove('active-state');
+            document.getElementById('pause-overlay').style.display = 'none';
+        }
+
+        // --- Top Controls Event Listeners ---
+        document.getElementById('prev-btn').addEventListener('click', function() {
+            if (playlist.length === 0) return; 
+            clearInterval(timerInterval); 
+            forceUnpause();
+            if (currentIndex > 0) currentIndex--; 
+            totalTimeRemaining = recalculateRemainingTotal(currentIndex);
+            runBlock(currentIndex);
+        });
+
+        document.getElementById('next-btn').addEventListener('click', function() {
+            if (playlist.length === 0 || currentIndex >= playlist.length) return;
+            clearInterval(timerInterval);
+            forceUnpause();
+            currentIndex++;
+            if (currentIndex >= playlist.length) {
+                finishWorkout(); 
+            } else {
+                totalTimeRemaining = recalculateRemainingTotal(currentIndex);
+                runBlock(currentIndex);
+            }
+        });
+
         document.getElementById('mute-btn').addEventListener('click', function() {
             isMuted = !isMuted;
             if (isMuted) {
@@ -353,18 +416,83 @@
                 this.classList.add('active-state');
                 document.getElementById('pause-overlay').style.display = 'flex';
             } else {
-                this.innerText = '⏸️';
+                forceUnpause();
+            }
+        });
+
+        document.getElementById('modifier-btn').addEventListener('click', function() {
+            showModifier = !showModifier;
+            if (showModifier) {
+                this.classList.add('active-state');
+            } else {
                 this.classList.remove('active-state');
-                document.getElementById('pause-overlay').style.display = 'none';
+            }
+            if (playlist.length > 0) {
+                updateUI(playlist[currentIndex]);
+            }
+        });
+
+        // --- SMART FULLSCREEN LOGIC ---
+        function updateFullscreenIcon(isActive) {
+            const btn = document.getElementById('fullscreen-btn');
+            if (isActive) {
+                btn.innerText = '✖️'; 
+                btn.classList.add('active-state');
+            } else {
+                btn.innerText = '🔲'; 
+                btn.classList.remove('active-state');
+            }
+        }
+
+        document.getElementById('fullscreen-btn').addEventListener('click', function() {
+            const docElm = document.documentElement;
+            const container = document.getElementById('app-container');
+            const isNativeFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+            const isPseudoFullscreen = container.classList.contains('pseudo-fullscreen');
+
+            if (!isNativeFullscreen && !isPseudoFullscreen) {
+                if (docElm.requestFullscreen) {
+                    docElm.requestFullscreen().catch(() => { container.classList.add('pseudo-fullscreen'); updateFullscreenIcon(true); });
+                } else if (docElm.webkitRequestFullscreen) {
+                    try { docElm.webkitRequestFullscreen(); } catch(e) { container.classList.add('pseudo-fullscreen'); updateFullscreenIcon(true); }
+                } else {
+                    container.classList.add('pseudo-fullscreen'); updateFullscreenIcon(true);
+                }
+            } else {
+                if (isNativeFullscreen) {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                }
+                if (isPseudoFullscreen) { container.classList.remove('pseudo-fullscreen'); updateFullscreenIcon(false); }
+            }
+        });
+
+        const handleFullscreenChange = () => {
+            const isNativeFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+            const isPseudoFullscreen = document.getElementById('app-container').classList.contains('pseudo-fullscreen');
+            if (!isNativeFullscreen && !isPseudoFullscreen) updateFullscreenIcon(false);
+            else if (isNativeFullscreen) updateFullscreenIcon(true);
+        };
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+
+        // --- Keyboard Shortcuts ---
+        document.addEventListener('keydown', function(event) {
+            if (playlist.length === 0) return;
+            switch(event.code) {
+                case 'Space': event.preventDefault(); document.getElementById('pause-btn').click(); break;
+                case 'ArrowRight': event.preventDefault(); document.getElementById('next-btn').click(); break;
+                case 'ArrowLeft': event.preventDefault(); document.getElementById('prev-btn').click(); break;
+                case 'KeyM': document.getElementById('mute-btn').click(); break;
+                case 'KeyF': document.getElementById('fullscreen-btn').click(); break;
+                case 'KeyS': document.getElementById('modifier-btn').click(); break;
             }
         });
 
 
         async function init() {
             try {
-                // The Cache-Buster
                 const noCache = '?t=' + new Date().getTime();
-
                 const [exResponse, woResponse] = await Promise.all([
                     fetch(EXERCISES_URL + noCache),
                     fetch(WORKOUT_URL + noCache)
@@ -407,7 +535,7 @@
             }
         }
 
-        // --- THE FIXED LOGIC IS HERE ---
+        // --- MULTI-CIRCUIT LOGIC ---
         function prepareWorkout() {
             const selectedIndex = document.getElementById('workout-selector').value;
             const selectedWorkout = allWorkouts[selectedIndex];
@@ -415,11 +543,9 @@
             playlist = []; 
             totalTimeRemaining = 0;
 
-            // Loop through each circuit in the workout
             selectedWorkout.circuits.forEach(circuit => {
-                const circuitRounds = circuit.rounds || 1; // Find the rounds specifically for THIS circuit
+                const circuitRounds = circuit.rounds || 1; 
                 
-                // Add this sequence to the playlist based on the circuit's round multiplier
                 for (let r = 0; r < circuitRounds; r++) {
                     circuit.sequence.forEach(block => {
                         const details = exerciseDB[block.exerciseId] || { name: 'Unknown', safetyCues: '' };
@@ -427,7 +553,8 @@
                             ...block,
                             name: details.name,
                             safetyCues: details.safetyCues,
-                            round: r + 1 // Save the round number for display relative to the circuit
+                            roundNum: r + 1,
+                            circuitName: circuit.circuitId || 'Circuit'
                         });
                         totalTimeRemaining += block.duration; 
                     });
@@ -460,7 +587,6 @@
 
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
-                // Stop the math if paused
                 if (isPaused) return;
 
                 exerciseTimeRemaining--;
@@ -488,7 +614,8 @@
         }
 
         function updateUI(block) {
-            document.getElementById('round-display').innerText = "Round " + block.round;
+            // Displays: "Warmup - Round 1" or "Circuit A - Round 3"
+            document.getElementById('round-display').innerText = `${block.circuitName} - Round ${block.roundNum}`;
 
             document.getElementById('slot-m2').innerText = (currentIndex >= 2) ? playlist[currentIndex - 2].name : "";
             document.getElementById('slot-m1').innerText = (currentIndex >= 1) ? playlist[currentIndex - 1].name : "";
@@ -499,8 +626,8 @@
             document.getElementById('slot-p2').innerText = (currentIndex + 2 < playlist.length) ? playlist[currentIndex + 2].name : "";
 
             const cuesEl = document.getElementById('safety-cues');
-            if (block.safetyCues && block.safetyCues.trim() !== "") {
-                cuesEl.innerHTML = `⚠️ ${block.safetyCues}`;
+            if (showModifier && block.safetyCues && block.safetyCues.trim() !== "") {
+                cuesEl.innerHTML = `💡 ${block.safetyCues}`;
                 cuesEl.style.display = 'block';
             } else {
                 cuesEl.style.display = 'none';
