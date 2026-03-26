@@ -109,7 +109,14 @@
             border-left: 2px dashed rgba(255,255,255,0.1);
         }
 
-        /* Top Left Counter */
+        /* Top Left Counters */
+        #circuit-display {
+            font-family: 'Gochi Hand', cursive; 
+            color: #ffcc00; 
+            font-size: 2rem; 
+            margin-bottom: 5px;
+        }
+
         #round-counter {
             font-size: 3rem;
             font-weight: 600;
@@ -118,7 +125,7 @@
             letter-spacing: 2px;
         }
 
-        /* Header (EMOM Style) */
+        /* Header */
         #current-exercise {
             font-family: 'Black Ops One', cursive;
             font-size: 4.5rem;
@@ -292,6 +299,7 @@
             
             <div id="left-panel">
                 <div>
+                    <div id="circuit-display"></div>
                     <div id="round-counter">1/1</div>
                     <h1 id="current-exercise">EMOM</h1>
                     <div id="safety-cues"></div>
@@ -428,10 +436,10 @@
             isMuted = !isMuted;
             if (isMuted) {
                 this.innerText = '🔇';
-                this.classList.add('muted-state');
+                this.classList.add('active-state');
             } else {
                 this.innerText = '🔊';
-                this.classList.remove('muted-state');
+                this.classList.remove('active-state');
             }
         });
 
@@ -573,9 +581,9 @@
                     const targetIndex = allWorkouts.findIndex(w => w.id === TARGET_WORKOUT_ID);
                     if (targetIndex !== -1) {
                         selector.value = targetIndex; 
-                        document.getElementById('current-exercise').innerText = allWorkouts[targetIndex].workoutName;
+                        document.getElementById('loading-text').innerText = allWorkouts[targetIndex].workoutName;
                     } else {
-                        document.getElementById('current-exercise').innerText = "Workout ID not found!";
+                        document.getElementById('loading-text').innerText = "Workout ID not found!";
                     }
                 } else {
                     selector.style.display = 'block';
@@ -593,7 +601,7 @@
             }
         }
 
-        // --- THE FIXED LOGIC IS HERE ---
+        // --- THE SMART LOGIC IS HERE ---
         function prepareWorkout() {
             const selectedIndex = document.getElementById('workout-selector').value;
             const selectedWorkout = allWorkouts[selectedIndex];
@@ -601,18 +609,28 @@
             playlist = []; 
             totalTimeRemaining = 0;
 
-            // Loop through each circuit in the workout
+            let runningRoundCount = 0;
+            let previousCircuitName = "";
+
             selectedWorkout.circuits.forEach(circuit => {
-                const circuitRounds = circuit.rounds || 1; // Find the rounds specifically for THIS circuit
+                const circuitName = circuit.circuitId || 'Circuit';
+                const circuitRounds = circuit.rounds || 1; 
                 
-                // Add this sequence to the playlist based on the circuit's round multiplier
+                if (circuitName !== previousCircuitName) {
+                    runningRoundCount = 0; 
+                    previousCircuitName = circuitName;
+                }
+                
                 for (let r = 0; r < circuitRounds; r++) {
+                    runningRoundCount++; 
                     circuit.sequence.forEach(block => {
                         const details = exerciseDB[block.exerciseId] || { name: 'Unknown', safetyCues: '' };
                         playlist.push({
                             ...block,
                             name: details.name,
-                            safetyCues: details.safetyCues 
+                            safetyCues: details.safetyCues,
+                            roundNum: runningRoundCount,
+                            circuitName: circuitName
                         });
                         totalTimeRemaining += block.duration; 
                     });
@@ -624,6 +642,7 @@
             document.getElementById('start-overlay').style.display = 'none';
             document.getElementById('finisher-overlay').style.display = 'none';
             document.getElementById('chalkboard-layout').style.display = 'flex';
+            document.getElementById('top-controls').style.display = 'flex';
             
             runBlock(0);
         }
@@ -680,10 +699,13 @@
         }
 
         function updateUI(block) {
+            // Update the display for Circuit and Round
+            document.getElementById('circuit-display').innerText = `${block.circuitName} - Round ${block.roundNum}`;
+            
             const titleEl = document.getElementById('current-exercise');
             titleEl.innerText = block.name;
             
-            // Update the counter to show current exercise / total exercises
+            // Keep the fraction counter to show progress through the whole list
             document.getElementById('round-counter').innerText = `${currentIndex + 1}/${playlist.length}`;
 
             if (block.type === 'rest') {
@@ -718,7 +740,6 @@
         }
 
         function updateTimerDisplay(totalDuration, type) {
-            // Updated to use the format from the image
             document.getElementById('total-time-display').innerText = formatBigTimer(Math.max(0, totalTimeRemaining));
             document.getElementById('exercise-time-display').innerText = exerciseTimeRemaining + 's';
 
