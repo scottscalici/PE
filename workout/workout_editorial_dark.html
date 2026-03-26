@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editorial Dark Workout Player</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Base Dark Theme */
+        body {
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Decorative Teal Circle (from the image) */
+        #accent-circle {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background-color: #3a9fbf;
+            border-radius: 50%;
+            z-index: 0;
+            opacity: 0.8;
+        }
+
+        #app-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        /* Pseudo-Fullscreen Fallback Class */
+        .pseudo-fullscreen {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            border-radius: 0 !important;
+            border: none !important;
+            z-index: 9999 !important;
+            background-color: #1a1a1a;
+        }
+
+        /* --- Top Controls --- */
+        #top-controls {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            z-index: 30; 
+            display: flex;
+            gap: 10px;
+        }
+
+        .ctrl-btn {
+            background: rgba(0,0,0,0.5);
+            color: #aaa;
+            border: 1px solid #555;
+            font-size: 1.2rem;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        .ctrl-btn:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: #aaa; }
+        .active-state { color: #3a9fbf !important; border-color: #3a9fbf !important; }
+
+        /* --- Main Split Layout --- */
+        #content-area {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 80px; /* Leave room for bottom bar */
+        }
+
+        #split-container {
+            display: flex;
+            align-items: flex-end; /* Aligns the block text to the bottom of the current exercise */
+            max-width: 90%;
+            width: 1000px;
+        }
+
+        /* Left Side: Circuit/Block Label */
+        #left-pane {
+            text-align: right;
+            padding-right: 30px;
+            flex-shrink: 0;
+            margin-bottom: 10px; /* Slight offset to align perfectly with the text */
+        }
+
+        #circuit-label {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: #ddd;
+            font-style: italic;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        
+        #round-label {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #888;
+            margin: 5px 0 0 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Right Side: Exercise List with Vertical Line */
+        #right-pane {
+            padding-left: 30px;
+            border-left: 4px solid #fff; /* The signature crisp white line */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #current-exercise {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            font-weight: 400;
+            font-style: italic;
+            color: #fff;
+            line-height: 1.1;
+            margin: 0 0 30px 0;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        #upcoming-exercises {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        #upcoming-exercises li {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 400;
+            font-style: italic;
+            color: #aaa;
+            line-height: 1.1;
+        }
+
+        .rest-text { color: #d9534f !important; }
+
+        /* --- Huge Set Timer (Bottom Right) --- */
+        #set-timer {
+            position: absolute;
+            bottom: 110px;
+            right: 50px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 9rem;
+            font-weight: 300;
+            color: #fff;
+            line-height: 1;
+            letter-spacing: -3px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            z-index: 10;
+            transition: color 0.3s ease;
+        }
+
+        #set-timer.warning { color: #d9534f; }
+
+        /* --- Safety Cues --- */
+        #safety-cues {
+            position: absolute;
+            bottom: 110px;
+            left: 50px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px 25px;
+            border-left: 4px solid #3a9fbf;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.2rem;
+            color: #fff;
+            max-width: 40%;
+            display: none; 
+            border-radius: 0 4px 4px 0;
+            backdrop-filter: blur(5px);
+        }
+
+        /* --- Bottom Dark Bar & Total Progress --- */
+        #bottom-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 70px;
+            background: #111;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 40px;
+            box-sizing: border-box;
+            border-top: 1px solid #333;
+            z-index: 20;
+        }
+
+        #total-progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: #d9534f;
+            width: 100%;
+            transition: width 1s linear;
+            box-shadow: 0 0 10px rgba(217, 83, 79, 0.8);
+            z-index: 2;
+        }
+
+        .bottom-bar-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .total-label {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        #total-time-display {
+            color: #fff;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            background: #1a1a1a;
+            padding: 5px 15px;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+
+        /* --- Overlays --- */
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(26, 26, 26, 0.95);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 40; text-align: center;
+        }
+        
+        #pause-overlay {
+            background: rgba(26, 26, 26, 0.85);
+            z-index: 25;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+        #pause-overlay h1 {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: #fff;
+            font-size: 6rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        h2.loading { font-family: 'Playfair Display', serif; font-style: italic; color: #fff; font-size: 3rem; font-weight: 400;}
+        
+        button.action-btn {
+            font-family: 'Open Sans', sans-serif; font-size: 1.2rem; font-weight: 600;
+            padding: 15px 40px; background: #fff; color: #1a1a1a;
+            border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+            border-radius: 4px; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        button.action-btn:hover { background: #3a9fbf; color: #fff; transform: translateY(-2px); }
+
+        select {
+            font-family: 'Open Sans', sans-serif; font-size: 1.2rem;
+            padding: 12px; margin-bottom: 30px; background: #222;
+            color: #fff; border: 1px solid #555; border-radius: 4px; width: 80%; max-width: 400px;
+        }
+
+        /* Finisher text */
+        .overlay h1 { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400; color: #fff; font-size: 4.5rem; margin: 0; }
+        .overlay h2.sub { color: #aaa; font-family: 'Open Sans', sans-serif; font-size: 1.5rem; font-weight: 300; margin-top: 10px; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 2px;}
+        .finisher-btn-group { display: flex; gap: 20px; margin-bottom: 30px; }
+        .small-btn { font-size: 1rem; padding: 10px 20px; background: transparent; color: #888; border: 1px solid #555; border-radius: 4px; cursor: pointer; transition: 0.2s;}
+        .small-btn:hover { background: #333; color: #fff; }
+
+    </style>
+</head>
+<body>
+
+    <div id="accent-circle"></div>
+
+    <div id="app-container">
+        
+        <div id="top-controls" style="display: none;">
+            <button id="prev-btn" class="ctrl-btn" title="Previous / Restart (Left Arrow)">⏮️</button>
+            <button id="next-btn" class="ctrl-btn" title="Skip Forward (Right Arrow)">⏭️</button>
+            <button id="pause-btn" class="ctrl-btn" title="Pause (Spacebar)">⏸️</button>
+            <button id="modifier-btn" class="ctrl-btn" title="Toggle Cues (S)">💪</button>
+            <button id="mute-btn" class="ctrl-btn" title="Mute (M)">🔊</button>
+            <button id="fullscreen-btn" class="ctrl-btn" title="Toggle Fullscreen (F)">🔲</button>
+        </div>
+
+        <div id="content-area" style="display: none;">
+            <div id="split-container">
+                
+                <div id="left-pane">
+                    <h2 id="circuit-label">Block A</h2>
+                    <h3 id="round-label">Round 1</h3>
+                </div>
+
+                <div id="right-pane">
+                    <h1 id="current-exercise">Burpee + 4 Pushups + 8 Floor Runs</h1>
+                    <ul id="upcoming-exercises">
+                        </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="set-timer" style="display: none;">00</div>
+
+        <div id="safety-cues"></div>
+
+        <div id="bottom-bar" style="display: none;">
+            <div id="total-progress-bar"></div>
+            <div class="bottom-bar-content">
+                <span class="total-label">Total Remaining</span>
+                <div id="total-time-display">00:00</div>
+            </div>
+        </div>
+
+        <div id="start-overlay" class="overlay">
+            <h2 id="loading-text" class="loading">Loading Routine...</h2>
+            <select id="workout-selector" style="display: none;"></select>
+            <button id="start-btn" class="action-btn" style="display: none;">BEGIN</button>
+        </div>
+
+        <div id="pause-overlay" class="overlay">
+            <h1>Paused.</h1>
+        </div>
+
+        <div id="finisher-overlay" class="overlay" style="display: none;">
+            <h1>Workout Complete.</h1>
+            <h2 class="sub">Select an optional finisher:</h2>
+            
+            <div class="finisher-btn-group">
+                <button class="action-btn" onclick="startFinisher('finisher_core')">3-Min Core</button>
+                <button class="action-btn" onclick="startFinisher('finisher_cardio')">3-Min Cardio</button>
+                <button class="action-btn" onclick="startFinisher('finisher_upper')">3-Min Upper</button>
+            </div>
+            
+            <button onclick="location.reload()" class="small-btn">Done (Reset)</button>
+        </div>
+
+    </div>
+
+    <script>
+        const EXERCISES_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/exercises.json';
+        const WORKOUT_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/workout_routine.json';
+
+        // --- CONFIGURATION ---
+        const TARGET_WORKOUT_ID = ""; 
+        // ---------------------
+
+        let exerciseDB = {};
+        let allWorkouts = [];
+        let playlist = []; 
+        let currentIndex = 0;
+        
+        let initialTotalTime = 0; 
+        let totalTimeRemaining = 0;
+        let exerciseTimeRemaining = 0;
+        let timerInterval;
+
+        let isMuted = false;
+        let isPaused = false;
+        let showModifier = false; 
+        let audioCtx;
+
+        function playBeep(type) {
+            if (isMuted || isPaused) return;
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if (type === 'short') {
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.15);
+            } else if (type === 'long') {
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                oscillator.start();
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+                oscillator.stop(audioCtx.currentTime + 0.8);
+            }
+        }
+
+        function recalculateRemainingTotal(fromIndex) {
+            let total = 0;
+            for (let i = fromIndex; i < playlist.length; i++) {
+                total += playlist[i].duration;
+            }
+            return total;
+        }
+
+        function forceUnpause() {
+            isPaused = false;
+            document.getElementById('pause-btn').innerText = '⏸️';
+            document.getElementById('pause-btn').classList.remove('active-state');
+            document.getElementById('pause-overlay').style.display = 'none';
+        }
+
+        // --- Controls Event Listeners ---
+        document.getElementById('prev-btn').addEventListener('click', function() {
+            if (playlist.length === 0) return; 
+            clearInterval(timerInterval); 
+            forceUnpause();
+            if (currentIndex > 0) currentIndex--; 
+            totalTimeRemaining = recalculateRemainingTotal(currentIndex);
+            runBlock(currentIndex);
+        });
+
+        document.getElementById('next-btn').addEventListener('click', function() {
+            if (playlist.length === 0 || currentIndex >= playlist.length) return;
+            clearInterval(timerInterval);
+            forceUnpause();
+            currentIndex++;
+            if (currentIndex >= playlist.length) {
+                finishWorkout(); 
+            } else {
+                totalTimeRemaining = recalculateRemainingTotal(currentIndex);
+                runBlock(currentIndex);
+            }
+        });
+
+        document.getElementById('mute-btn').addEventListener('click', function() {
+            isMuted = !isMuted;
+            if (isMuted) {
+                this.innerText = '🔇';
+                this.classList.add('active-state');
+            } else {
+                this.innerText = '🔊';
+                this.classList.remove('active-state');
+            }
+        });
+
+        document.getElementById('pause-btn').addEventListener('click', function() {
+            isPaused = !isPaused;
+            if (isPaused) {
+                this.innerText = '▶️';
+                this.classList.add('active-state');
+                document.getElementById('pause-overlay').style.display = 'flex';
+            } else {
+                forceUnpause();
+            }
+        });
+
+        document.getElementById('modifier-btn').addEventListener('click', function() {
+            showModifier = !showModifier;
+            if (showModifier) {
+                this.classList.add('active-state');
+            } else {
+                this.classList.remove('active-state');
+            }
+            if (playlist.length > 0) updateUI(playlist[currentIndex]);
+        });
+
+        // --- Fullscreen ---
+        function updateFullscreenIcon(isActive) {
+            const btn = document.getElementById('fullscreen-btn');
+            if (isActive) {
+                btn.innerText = '✖️'; 
+                btn.classList.add('active-state');
+            } else {
+                btn.innerText = '🔲'; 
+                btn.classList.remove('active-state');
+            }
+        }
+
+        document.getElementById('fullscreen-btn').addEventListener('click', function() {
+            const docElm = document.documentElement;
+            const container = document.getElementById('app-container');
+            const isNativeFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+            const isPseudoFullscreen = container.classList.contains('pseudo-fullscreen');
+
+            if (!isNativeFullscreen && !isPseudoFullscreen) {
+                if (docElm.requestFullscreen) {
+                    docElm.requestFullscreen().catch(() => { container.classList.add('pseudo-fullscreen'); updateFullscreenIcon(true); });
+                } else if (docElm.webkitRequestFullscreen) {
+                    try { docElm.webkitRequestFullscreen(); } catch(e) { container.classList.add('pseudo-fullscreen'); updateFullscreenIcon(true); }
+                } else {
+                    container.classList.add('pseudo-fullscreen'); updateFullscreenIcon(true);
+                }
+            } else {
+                if (isNativeFullscreen) {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                }
+                if (isPseudoFullscreen) { container.classList.remove('pseudo-fullscreen'); updateFullscreenIcon(false); }
+            }
+        });
+
+        const handleFullscreenChange = () => {
+            const isNativeFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+            const isPseudoFullscreen = document.getElementById('app-container').classList.contains('pseudo-fullscreen');
+            if (!isNativeFullscreen && !isPseudoFullscreen) updateFullscreenIcon(false);
+            else if (isNativeFullscreen) updateFullscreenIcon(true);
+        };
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+
+        document.addEventListener('keydown', function(event) {
+            if (playlist.length === 0) return;
+            switch(event.code) {
+                case 'Space': event.preventDefault(); document.getElementById('pause-btn').click(); break;
+                case 'ArrowRight': event.preventDefault(); document.getElementById('next-btn').click(); break;
+                case 'ArrowLeft': event.preventDefault(); document.getElementById('prev-btn').click(); break;
+                case 'KeyM': document.getElementById('mute-btn').click(); break;
+                case 'KeyF': document.getElementById('fullscreen-btn').click(); break;
+                case 'KeyS': document.getElementById('modifier-btn').click(); break;
+            }
+        });
+
+        // --- Init & Fetch ---
+        async function init() {
+            try {
+                const noCache = '?t=' + new Date().getTime();
+                const [exResponse, woResponse] = await Promise.all([
+                    fetch(EXERCISES_URL + noCache),
+                    fetch(WORKOUT_URL + noCache)
+                ]);
+
+                const exData = await exResponse.json();
+                const woData = await woResponse.json();
+
+                exData.exercises.forEach(ex => { exerciseDB[ex.id] = ex; });
+                allWorkouts = woData.workouts;
+
+                const selector = document.getElementById('workout-selector');
+
+                allWorkouts.forEach((wo, index) => {
+                    let option = document.createElement('option');
+                    option.value = index;
+                    option.text = wo.workoutName;
+                    selector.appendChild(option);
+                });
+                
+                if (TARGET_WORKOUT_ID !== "") {
+                    const targetIndex = allWorkouts.findIndex(w => w.id === TARGET_WORKOUT_ID);
+                    if (targetIndex !== -1) {
+                        selector.value = targetIndex; 
+                        document.getElementById('loading-text').innerText = allWorkouts[targetIndex].workoutName;
+                    } else {
+                        document.getElementById('loading-text').innerText = "Workout ID not found!";
+                    }
+                } else {
+                    document.getElementById('loading-text').style.display = 'none';
+                    selector.style.display = 'block';
+                }
+
+                document.getElementById('start-btn').style.display = 'block';
+                document.getElementById('start-btn').addEventListener('click', prepareWorkout);
+
+            } catch (error) {
+                console.error("Failed to load JSON files:", error);
+                document.getElementById('loading-text').innerText = "Error Loading GitHub Data.";
+            }
+        }
+
+        // --- Workout Logic ---
+        function prepareWorkout() {
+            const selectedIndex = document.getElementById('workout-selector').value;
+            const selectedWorkout = allWorkouts[selectedIndex];
+            
+            playlist = []; 
+            totalTimeRemaining = 0;
+
+            selectedWorkout.circuits.forEach(circuit => {
+                const circuitRounds = circuit.rounds || 1; 
+                
+                for (let r = 0; r < circuitRounds; r++) {
+                    circuit.sequence.forEach(block => {
+                        const details = exerciseDB[block.exerciseId] || { name: 'Unknown', safetyCues: '' };
+                        playlist.push({
+                            ...block,
+                            name: details.name,
+                            safetyCues: details.safetyCues,
+                            roundNum: r + 1,
+                            circuitName: circuit.circuitId || 'Circuit'
+                        });
+                        totalTimeRemaining += block.duration; 
+                    });
+                }
+            });
+
+            initialTotalTime = totalTimeRemaining;
+
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+            document.getElementById('start-overlay').style.display = 'none';
+            document.getElementById('finisher-overlay').style.display = 'none';
+            
+            document.getElementById('top-controls').style.display = 'flex';
+            document.getElementById('content-area').style.display = 'flex';
+            document.getElementById('set-timer').style.display = 'block';
+            document.getElementById('bottom-bar').style.display = 'flex';
+            
+            runBlock(0);
+        }
+
+        function runBlock(index) {
+            if (index >= playlist.length) {
+                finishWorkout();
+                return;
+            }
+
+            currentIndex = index;
+            const currentBlock = playlist[index];
+            exerciseTimeRemaining = currentBlock.duration;
+
+            updateUI(currentBlock);
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (isPaused) return;
+
+                exerciseTimeRemaining--;
+                totalTimeRemaining--;
+                
+                if (exerciseTimeRemaining === 3 || exerciseTimeRemaining === 2 || exerciseTimeRemaining === 1) {
+                    playBeep('short');
+                } else if (exerciseTimeRemaining === 0) {
+                    playBeep('long');
+                }
+                
+                updateTimerDisplay(currentBlock.type);
+
+                if (exerciseTimeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    runBlock(index + 1);
+                }
+            }, 1000);
+        }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function formatBigTimer(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            if (m > 0) return `${m}:${s.toString().padStart(2, '0')}`;
+            return `:${s.toString().padStart(2, '0')}`;
+        }
+
+        function updateUI(block) {
+            // Update Left Pane Labels
+            document.getElementById('circuit-label').innerText = block.circuitName;
+            document.getElementById('round-label').innerText = `Round ${block.roundNum}`;
+
+            // Update Right Pane
+            const currentExEl = document.getElementById('current-exercise');
+            if (block.type === 'rest') {
+                currentExEl.innerText = `Rest (${block.duration}s)`;
+                currentExEl.classList.add('rest-text');
+            } else {
+                currentExEl.innerText = block.name;
+                currentExEl.classList.remove('rest-text');
+            }
+
+            // Populate the "Upcoming" List (Next 2)
+            const listEl = document.getElementById('upcoming-exercises');
+            listEl.innerHTML = '';
+            
+            for (let i = 1; i <= 2; i++) {
+                if (currentIndex + i < playlist.length) {
+                    let nextBlock = playlist[currentIndex + i];
+                    let li = document.createElement('li');
+                    
+                    if (nextBlock.type === 'rest') {
+                        li.innerText = `Rest (${nextBlock.duration}s)`;
+                        li.classList.add('rest-text');
+                    } else {
+                        li.innerText = nextBlock.name;
+                    }
+                    listEl.appendChild(li);
+                }
+            }
+
+            // Safety Cues
+            const cuesEl = document.getElementById('safety-cues');
+            if (showModifier && block.safetyCues && block.safetyCues.trim() !== "") {
+                cuesEl.innerHTML = `<strong>Note:</strong> ${block.safetyCues}`;
+                cuesEl.style.display = 'block';
+            } else {
+                cuesEl.style.display = 'none';
+            }
+
+            updateTimerDisplay(block.type);
+        }
+
+        function updateTimerDisplay(type) {
+            // Update Top Progress Bar smoothly
+            const progressPct = (totalTimeRemaining / initialTotalTime) * 100;
+            document.getElementById('total-progress-bar').style.width = progressPct + '%';
+
+            // Total Bottom Timer
+            document.getElementById('total-time-display').innerText = formatTime(Math.max(0, totalTimeRemaining));
+            
+            // Set Timer
+            const setTimerEl = document.getElementById('set-timer');
+            setTimerEl.innerText = formatBigTimer(exerciseTimeRemaining);
+            
+            if (type === 'rest' || exerciseTimeRemaining <= 5) {
+                setTimerEl.classList.add('warning');
+            } else {
+                setTimerEl.classList.remove('warning');
+            }
+        }
+
+        function finishWorkout() {
+            document.getElementById('top-controls').style.display = 'none';
+            document.getElementById('content-area').style.display = 'none';
+            document.getElementById('safety-cues').style.display = 'none';
+            document.getElementById('set-timer').style.display = 'none';
+            document.getElementById('bottom-bar').style.display = 'none';
+            document.getElementById('finisher-overlay').style.display = 'flex';
+        }
+
+        function startFinisher(finisherId) {
+            const targetIndex = allWorkouts.findIndex(w => w.id === finisherId);
+            
+            if (targetIndex !== -1) {
+                document.getElementById('workout-selector').value = targetIndex;
+                prepareWorkout(); 
+            } else {
+                alert("Finisher workout '" + finisherId + "' not found in your JSON.");
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
