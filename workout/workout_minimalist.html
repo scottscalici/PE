@@ -3,309 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimalist Document Player</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Editorial Dark Workout Player</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* Minimalist Document Theme */
-        body {
-            background-color: #fdfdfd;
-            color: #333;
-            font-family: 'Open Sans', sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        #app-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            background-color: #fff;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-
-        /* Pseudo-Fullscreen Fallback Class */
-        .pseudo-fullscreen {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            max-width: none !important;
-            border-radius: 0 !important;
-            border: none !important;
-            z-index: 9999 !important;
-            background-color: #fff;
-        }
-
-        /* Top Controls (Dark text for light background) */
-        #top-controls {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            z-index: 30; 
-            display: flex;
-            gap: 10px;
-        }
-
-        .ctrl-btn {
-            background: transparent;
-            color: #555;
-            border: 1px solid #ccc;
-            font-size: 1.2rem;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .ctrl-btn:hover { background: #f0f0f0; color: #000; border-color: #999; }
-        .active-state { color: #d9534f !important; border-color: #d9534f !important; }
-
-        /* Main Content Layout */
-        #content-area {
-            flex-grow: 1;
-            padding: 60px 80px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Header Styling */
-        #circuit-title {
-            font-family: 'Lora', serif;
-            font-size: 3.5rem;
-            font-weight: 400;
-            color: #444;
-            margin: 0 0 15px 0;
-            letter-spacing: 0.5px;
-        }
-
-        hr.divider {
-            border: 0;
-            height: 1px;
-            background: #aaa;
-            margin-bottom: 30px;
-            width: 90%;
-            margin-left: 0;
-        }
-
-        /* Combo List Styling */
-        #combo-header {
-            font-size: 1.8rem;
-            font-weight: 300;
-            margin: 0 0 15px 0;
-            color: #222;
-        }
-
-        #combo-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            font-size: 2.2rem;
-            color: #444;
-            font-weight: 300;
-        }
-
-        #combo-list li {
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-        }
-
-        /* The open circle bullet */
-        #combo-list li::before {
-            content: '◦';
-            font-size: 1.5em;
-            margin-right: 15px;
-            line-height: 0;
-            position: relative;
-            top: -2px;
-        }
-
-        /* Highlight the active exercise */
-        #combo-list li.active-item {
-            font-weight: 600;
-            color: #111;
-        }
-        #combo-list li.active-item::before {
-            content: '•'; /* Solid circle for current */
-            color: #d9534f;
-        }
-
-        #combo-list li.rest-item {
-            color: #d9534f;
-            font-style: italic;
-        }
-
-        /* Tilted Hollow Timer */
-        #timer-widget {
-            position: absolute;
-            bottom: 120px; /* Above the dark bar */
-            right: 80px;
-            font-family: Arial, sans-serif;
-            font-size: 8rem;
-            font-weight: bold;
-            color: transparent; /* Makes the inside clear */
-            -webkit-text-stroke: 3px #222; /* Thin dark outline */
-            transform: rotate(-4deg);
-            letter-spacing: 5px;
-            z-index: 10;
-            transition: all 0.3s ease;
-        }
-
-        /* Danger state for timer */
-        #timer-widget.warning { -webkit-text-stroke-color: #d9534f; }
-
-        /* Modifier / Safety Cues */
-        #safety-cues {
-            position: absolute;
-            bottom: 100px;
-            left: 80px;
-            background: rgba(255, 243, 205, 0.9); /* Subtle yellow warning background */
-            padding: 15px 25px;
-            border-left: 6px solid #ffc107;
-            font-size: 1.3rem;
-            color: #856404;
-            max-width: 50%;
-            display: none; 
-            border-radius: 0 4px 4px 0;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-
-        /* --- UPDATED: Bottom Dark Bar & Total Progress --- */
-        #bottom-bar {
-            position: relative;
-            height: 80px;
-            background: linear-gradient(to bottom, #2a2a2a, #111);
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 0 50px;
-            box-sizing: border-box;
-        }
-
-        #total-progress-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 4px;
-            background: #d9534f;
-            width: 100%;
-            transition: width 1s linear;
-            box-shadow: 0 2px 5px rgba(217, 83, 79, 0.5);
-            z-index: 2;
-        }
-
-        .bottom-bar-content {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .total-label {
-            color: #999;
-            font-size: 0.95rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        #total-time-display {
-            color: #fff;
-            font-size: 1.4rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 6px 15px;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            display: flex;
-            align-items: center;
-        }
-
-        /* Overlays */
-        .overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 40; text-align: center;
-        }
-        
-        #pause-overlay {
-            background: rgba(255, 255, 255, 0.85);
-            z-index: 25;
-            display: none;
-            backdrop-filter: blur(5px);
-        }
-        #pause-overlay h1 {
-            font-family: 'Lora', serif;
-            color: #d9534f;
-            font-size: 5rem;
-            letter-spacing: 2px;
-            margin: 0;
-        }
-
-        h2.loading { font-family: 'Lora', serif; color: #333; font-size: 3rem; font-weight: 400;}
-        
-        button.action-btn {
-            font-family: 'Open Sans', sans-serif; font-size: 1.5rem; font-weight: 600;
-            padding: 15px 40px; background: #333; color: #fff;
-            border: none; cursor: pointer; text-transform: uppercase;
-            border-radius: 4px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        button.action-btn:hover { background: #555; transform: translateY(-2px); }
-
-        select {
-            font-family: 'Open Sans', sans-serif; font-size: 1.2rem;
-            padding: 12px; margin-bottom: 30px; background: #fff;
-            color: #333; border: 2px solid #ccc; border-radius: 4px; width: 80%; max-width: 400px;
-        }
-
-        /* Finisher text */
-        .overlay h1 { font-family: 'Lora', serif; color: #333; font-size: 4.5rem; margin: 0; }
-        .overlay h2.sub { color: #666; font-size: 2rem; font-weight: 300; margin-top: 10px; margin-bottom: 40px; }
+        body { background-color: #1a1a1a; color: #fff; font-family: 'Open Sans', sans-serif; margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+        #accent-circle { position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background-color: #3a9fbf; border-radius: 50%; z-index: 0; opacity: 0.8; }
+        #app-container { width: 100%; height: 100%; position: relative; z-index: 1; display: flex; flex-direction: column; box-sizing: border-box; transition: all 0.3s ease; }
+        .pseudo-fullscreen { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; max-width: none !important; border-radius: 0 !important; border: none !important; z-index: 9999 !important; background-color: #1a1a1a; }
+        #top-controls { position: absolute; top: 20px; right: 30px; z-index: 30; display: flex; gap: 10px; }
+        .ctrl-btn { background: rgba(0,0,0,0.5); color: #aaa; border: 1px solid #555; font-size: 1.2rem; padding: 8px 12px; cursor: pointer; border-radius: 4px; transition: 0.2s ease; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .ctrl-btn:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: #aaa; }
+        .active-state { color: #3a9fbf !important; border-color: #3a9fbf !important; }
+        #content-area { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding-bottom: 80px; }
+        #split-container { display: flex; align-items: flex-end; max-width: 90%; width: 1000px; }
+        #left-pane { text-align: right; padding-right: 30px; flex-shrink: 0; margin-bottom: 10px; }
+        #circuit-label { font-family: 'Open Sans', sans-serif; font-size: 1.8rem; font-weight: 300; color: #ddd; font-style: italic; margin: 0; letter-spacing: 1px; }
+        #round-label { font-family: 'Open Sans', sans-serif; font-size: 1.2rem; font-weight: 600; color: #888; margin: 5px 0 0 0; text-transform: uppercase; letter-spacing: 2px; }
+        #right-pane { padding-left: 30px; border-left: 4px solid #fff; display: flex; flex-direction: column; justify-content: center; }
+        #current-exercise { font-family: 'Playfair Display', serif; font-size: 4.5rem; font-weight: 400; font-style: italic; color: #fff; line-height: 1.1; margin: 0 0 30px 0; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        #upcoming-exercises { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 20px; }
+        #upcoming-exercises li { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 400; font-style: italic; color: #aaa; line-height: 1.1; }
+        .rest-text { color: #d9534f !important; }
+        #set-timer { position: absolute; bottom: 110px; right: 50px; font-family: 'Open Sans', sans-serif; font-size: 9rem; font-weight: 300; color: #fff; line-height: 1; letter-spacing: -3px; text-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 10; transition: color 0.3s ease; }
+        #set-timer.warning { color: #d9534f; }
+        #safety-cues { position: absolute; bottom: 110px; left: 50px; background: rgba(0, 0, 0, 0.6); padding: 15px 25px; border-left: 4px solid #3a9fbf; font-family: 'Open Sans', sans-serif; font-size: 1.2rem; color: #fff; max-width: 40%; display: none; border-radius: 0 4px 4px 0; backdrop-filter: blur(5px); }
+        #bottom-bar { position: absolute; bottom: 0; left: 0; height: 70px; background: #111; width: 100%; display: flex; justify-content: flex-end; align-items: center; padding: 0 40px; box-sizing: border-box; border-top: 1px solid #333; z-index: 20; }
+        #total-progress-bar { position: absolute; top: 0; left: 0; height: 3px; background: #d9534f; width: 100%; transition: width 1s linear; box-shadow: 0 0 10px rgba(217, 83, 79, 0.8); z-index: 2; }
+        .bottom-bar-content { display: flex; align-items: center; gap: 15px; }
+        .total-label { color: #666; font-size: 0.9rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+        #total-time-display { color: #fff; font-family: 'Open Sans', sans-serif; font-size: 1.4rem; font-weight: 400; letter-spacing: 1px; background: #1a1a1a; padding: 5px 15px; border-radius: 4px; border: 1px solid #333; }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 26, 26, 0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 40; text-align: center; }
+        #pause-overlay { background: rgba(26, 26, 26, 0.85); z-index: 25; display: none; backdrop-filter: blur(10px); }
+        #pause-overlay h1 { font-family: 'Playfair Display', serif; font-style: italic; color: #fff; font-size: 6rem; font-weight: 400; letter-spacing: 2px; margin: 0; }
+        h2.loading { font-family: 'Playfair Display', serif; font-style: italic; color: #fff; font-size: 3rem; font-weight: 400;}
+        button.action-btn { font-family: 'Open Sans', sans-serif; font-size: 1.2rem; font-weight: 600; padding: 15px 40px; background: #fff; color: #1a1a1a; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; border-radius: 4px; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        button.action-btn:hover { background: #3a9fbf; color: #fff; transform: translateY(-2px); }
+        select { font-family: 'Open Sans', sans-serif; font-size: 1.2rem; padding: 12px; margin-bottom: 30px; background: #222; color: #fff; border: 1px solid #555; border-radius: 4px; width: 80%; max-width: 400px; }
+        .overlay h1 { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400; color: #fff; font-size: 4.5rem; margin: 0; }
+        .overlay h2.sub { color: #aaa; font-family: 'Open Sans', sans-serif; font-size: 1.5rem; font-weight: 300; margin-top: 10px; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 2px;}
         .finisher-btn-group { display: flex; gap: 20px; margin-bottom: 30px; }
-        .small-btn { font-size: 1rem; padding: 10px 20px; background: #fff; color: #666; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; }
-        .small-btn:hover { background: #f0f0f0; }
-
+        .small-btn { font-size: 1rem; padding: 10px 20px; background: transparent; color: #888; border: 1px solid #555; border-radius: 4px; cursor: pointer; transition: 0.2s;}
+        .small-btn:hover { background: #333; color: #fff; }
     </style>
 </head>
 <body>
-
+    <div id="accent-circle"></div>
     <div id="app-container">
-        
         <div id="top-controls" style="display: none;">
-            <button id="prev-btn" class="ctrl-btn" title="Previous / Restart (Left Arrow)">⏮️</button>
-            <button id="next-btn" class="ctrl-btn" title="Skip Forward (Right Arrow)">⏭️</button>
-            <button id="pause-btn" class="ctrl-btn" title="Pause (Spacebar)">⏸️</button>
-            <button id="modifier-btn" class="ctrl-btn" title="Toggle Cues (S)">💪</button>
-            <button id="mute-btn" class="ctrl-btn" title="Mute (M)">🔊</button>
-            <button id="fullscreen-btn" class="ctrl-btn" title="Toggle Fullscreen (F)">🔲</button>
+            <button id="prev-btn" class="ctrl-btn" title="Previous / Restart">⏮️</button>
+            <button id="next-btn" class="ctrl-btn" title="Skip Forward">⏭️</button>
+            <button id="pause-btn" class="ctrl-btn" title="Pause">⏸️</button>
+            <button id="modifier-btn" class="ctrl-btn" title="Toggle Cues">💪</button>
+            <button id="mute-btn" class="ctrl-btn" title="Mute">🔊</button>
+            <button id="fullscreen-btn" class="ctrl-btn" title="Toggle Fullscreen">🔲</button>
         </div>
-
         <div id="content-area" style="display: none;">
-            <h1 id="circuit-title">Block B: Tabata Round</h1>
-            <hr class="divider">
-
-            <h2 id="combo-header">Combo:</h2>
-            <ul id="combo-list">
-                </ul>
+            <div id="split-container">
+                <div id="left-pane">
+                    <h2 id="circuit-label">Block A</h2>
+                    <h3 id="round-label">Round 1</h3>
+                </div>
+                <div id="right-pane">
+                    <h1 id="current-exercise">Get Ready...</h1>
+                    <ul id="upcoming-exercises"></ul>
+                </div>
+            </div>
         </div>
-
+        <div id="set-timer" style="display: none;">00</div>
         <div id="safety-cues"></div>
-
-        <div id="timer-widget" style="display: none;">:00</div>
-
         <div id="bottom-bar" style="display: none;">
             <div id="total-progress-bar"></div>
             <div class="bottom-bar-content">
@@ -313,50 +78,39 @@
                 <div id="total-time-display">00:00</div>
             </div>
         </div>
-
         <div id="start-overlay" class="overlay">
-            <h2 id="loading-text" class="loading">Loading Workout Data...</h2>
+            <h2 id="loading-text" class="loading">Loading Routine...</h2>
             <select id="workout-selector" style="display: none;"></select>
-            <button id="start-btn" class="action-btn" style="display: none;">START WORKOUT</button>
+            <button id="start-btn" class="action-btn" style="display: none;">BEGIN</button>
         </div>
-
         <div id="pause-overlay" class="overlay">
-            <h1>Paused</h1>
+            <h1>Paused.</h1>
         </div>
-
         <div id="finisher-overlay" class="overlay" style="display: none;">
-            <h1>Workout Complete</h1>
+            <h1>Workout Complete.</h1>
             <h2 class="sub">Select an optional finisher:</h2>
-            
             <div class="finisher-btn-group">
                 <button class="action-btn" onclick="startFinisher('finisher_core')">3-Min Core</button>
                 <button class="action-btn" onclick="startFinisher('finisher_cardio')">3-Min Cardio</button>
                 <button class="action-btn" onclick="startFinisher('finisher_upper')">3-Min Upper</button>
             </div>
-            
-            <button onclick="location.reload()" class="small-btn">No Thanks (Reset)</button>
+            <button onclick="location.reload()" class="small-btn">Done (Reset)</button>
         </div>
-
     </div>
 
     <script>
         const EXERCISES_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/exercises.json';
         const WORKOUT_URL = 'https://raw.githubusercontent.com/scottscalici/PE/main/workout/workout_routine.json';
-
-        // --- CONFIGURATION ---
         const TARGET_WORKOUT_ID = ""; 
-        // ---------------------
 
         let exerciseDB = {};
         let allWorkouts = [];
         let playlist = []; 
         let currentIndex = 0;
-        
-        let initialTotalTime = 0; // Added to calculate progress percentage
+        let initialTotalTime = 0; 
         let totalTimeRemaining = 0;
         let exerciseTimeRemaining = 0;
         let timerInterval;
-
         let isMuted = false;
         let isPaused = false;
         let showModifier = false; 
@@ -365,13 +119,10 @@
         function playBeep(type) {
             if (isMuted || isPaused) return;
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
             const oscillator = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
-
             oscillator.connect(gainNode);
             gainNode.connect(audioCtx.destination);
-
             if (type === 'short') {
                 oscillator.type = 'sine';
                 oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
@@ -390,9 +141,7 @@
 
         function recalculateRemainingTotal(fromIndex) {
             let total = 0;
-            for (let i = fromIndex; i < playlist.length; i++) {
-                total += playlist[i].duration;
-            }
+            for (let i = fromIndex; i < playlist.length; i++) total += playlist[i].duration;
             return total;
         }
 
@@ -403,11 +152,9 @@
             document.getElementById('pause-overlay').style.display = 'none';
         }
 
-        // --- Event Listeners ---
         document.getElementById('prev-btn').addEventListener('click', function() {
             if (playlist.length === 0) return; 
-            clearInterval(timerInterval); 
-            forceUnpause();
+            clearInterval(timerInterval); forceUnpause();
             if (currentIndex > 0) currentIndex--; 
             totalTimeRemaining = recalculateRemainingTotal(currentIndex);
             runBlock(currentIndex);
@@ -415,58 +162,35 @@
 
         document.getElementById('next-btn').addEventListener('click', function() {
             if (playlist.length === 0 || currentIndex >= playlist.length) return;
-            clearInterval(timerInterval);
-            forceUnpause();
+            clearInterval(timerInterval); forceUnpause();
             currentIndex++;
-            if (currentIndex >= playlist.length) {
-                finishWorkout(); 
-            } else {
-                totalTimeRemaining = recalculateRemainingTotal(currentIndex);
-                runBlock(currentIndex);
-            }
+            if (currentIndex >= playlist.length) finishWorkout(); 
+            else { totalTimeRemaining = recalculateRemainingTotal(currentIndex); runBlock(currentIndex); }
         });
 
         document.getElementById('mute-btn').addEventListener('click', function() {
             isMuted = !isMuted;
-            if (isMuted) {
-                this.innerText = '🔇';
-                this.classList.add('active-state');
-            } else {
-                this.innerText = '🔊';
-                this.classList.remove('active-state');
-            }
+            if (isMuted) { this.innerText = '🔇'; this.classList.add('active-state'); } 
+            else { this.innerText = '🔊'; this.classList.remove('active-state'); }
         });
 
         document.getElementById('pause-btn').addEventListener('click', function() {
             isPaused = !isPaused;
-            if (isPaused) {
-                this.innerText = '▶️';
-                this.classList.add('active-state');
-                document.getElementById('pause-overlay').style.display = 'flex';
-            } else {
-                forceUnpause();
-            }
+            if (isPaused) { this.innerText = '▶️'; this.classList.add('active-state'); document.getElementById('pause-overlay').style.display = 'flex'; } 
+            else { forceUnpause(); }
         });
 
         document.getElementById('modifier-btn').addEventListener('click', function() {
             showModifier = !showModifier;
-            if (showModifier) {
-                this.classList.add('active-state');
-            } else {
-                this.classList.remove('active-state');
-            }
+            if (showModifier) this.classList.add('active-state');
+            else this.classList.remove('active-state');
             if (playlist.length > 0) updateUI(playlist[currentIndex]);
         });
 
         function updateFullscreenIcon(isActive) {
             const btn = document.getElementById('fullscreen-btn');
-            if (isActive) {
-                btn.innerText = '✖️'; 
-                btn.classList.add('active-state');
-            } else {
-                btn.innerText = '🔲'; 
-                btn.classList.remove('active-state');
-            }
+            if (isActive) { btn.innerText = '✖️'; btn.classList.add('active-state'); } 
+            else { btn.innerText = '🔲'; btn.classList.remove('active-state'); }
         }
 
         document.getElementById('fullscreen-btn').addEventListener('click', function() {
@@ -474,20 +198,12 @@
             const container = document.getElementById('app-container');
             const isNativeFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
             const isPseudoFullscreen = container.classList.contains('pseudo-fullscreen');
-
             if (!isNativeFullscreen && !isPseudoFullscreen) {
-                if (docElm.requestFullscreen) {
-                    docElm.requestFullscreen().catch(() => { container.classList.add('pseudo-fullscreen'); updateFullscreenIcon(true); });
-                } else if (docElm.webkitRequestFullscreen) {
-                    try { docElm.webkitRequestFullscreen(); } catch(e) { container.classList.add('pseudo-fullscreen'); updateFullscreenIcon(true); }
-                } else {
-                    container.classList.add('pseudo-fullscreen'); updateFullscreenIcon(true);
-                }
+                if (docElm.requestFullscreen) docElm.requestFullscreen().catch(() => { container.classList.add('pseudo-fullscreen'); updateFullscreenIcon(true); });
+                else if (docElm.webkitRequestFullscreen) try { docElm.webkitRequestFullscreen(); } catch(e) { container.classList.add('pseudo-fullscreen'); updateFullscreenIcon(true); }
+                else { container.classList.add('pseudo-fullscreen'); updateFullscreenIcon(true); }
             } else {
-                if (isNativeFullscreen) {
-                    if (document.exitFullscreen) document.exitFullscreen();
-                    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-                }
+                if (isNativeFullscreen) { if (document.exitFullscreen) document.exitFullscreen(); else if (document.webkitExitFullscreen) document.webkitExitFullscreen(); }
                 if (isPseudoFullscreen) { container.classList.remove('pseudo-fullscreen'); updateFullscreenIcon(false); }
             }
         });
@@ -517,209 +233,148 @@
             try {
                 const noCache = '?t=' + new Date().getTime();
                 const [exResponse, woResponse] = await Promise.all([
-                    fetch(EXERCISES_URL + noCache),
-                    fetch(WORKOUT_URL + noCache)
+                    fetch(EXERCISES_URL + noCache), fetch(WORKOUT_URL + noCache)
                 ]);
-
-                const exData = await exResponse.json();
-                const woData = await woResponse.json();
-
+                const exData = await exResponse.json(); const woData = await woResponse.json();
                 exData.exercises.forEach(ex => { exerciseDB[ex.id] = ex; });
                 allWorkouts = woData.workouts;
-
                 const selector = document.getElementById('workout-selector');
-
                 allWorkouts.forEach((wo, index) => {
-                    let option = document.createElement('option');
-                    option.value = index;
-                    option.text = wo.workoutName;
-                    selector.appendChild(option);
+                    let option = document.createElement('option'); option.value = index; option.text = wo.workoutName; selector.appendChild(option);
                 });
-                
                 if (TARGET_WORKOUT_ID !== "") {
                     const targetIndex = allWorkouts.findIndex(w => w.id === TARGET_WORKOUT_ID);
-                    if (targetIndex !== -1) {
-                        selector.value = targetIndex; 
-                        document.getElementById('loading-text').innerText = allWorkouts[targetIndex].workoutName;
-                    } else {
-                        document.getElementById('loading-text').innerText = "Workout ID not found!";
-                    }
-                } else {
-                    document.getElementById('loading-text').style.display = 'none';
-                    selector.style.display = 'block';
-                }
-
+                    if (targetIndex !== -1) { selector.value = targetIndex; document.getElementById('loading-text').innerText = allWorkouts[targetIndex].workoutName; } 
+                    else { document.getElementById('loading-text').innerText = "Workout ID not found!"; }
+                } else { document.getElementById('loading-text').style.display = 'none'; selector.style.display = 'block'; }
                 document.getElementById('start-btn').style.display = 'block';
                 document.getElementById('start-btn').addEventListener('click', prepareWorkout);
-
-            } catch (error) {
-                console.error("Failed to load JSON files:", error);
-                document.getElementById('loading-text').innerText = "Error Loading GitHub Data.";
-            }
+            } catch (error) { document.getElementById('loading-text').innerText = "Error Loading GitHub Data."; }
         }
 
         function prepareWorkout() {
             const selectedIndex = document.getElementById('workout-selector').value;
             const selectedWorkout = allWorkouts[selectedIndex];
-            
-            playlist = []; 
-            totalTimeRemaining = 0;
+            playlist = []; totalTimeRemaining = 0;
+
+            // --- THE SMART ROUND COUNTER ---
+            let runningRoundCount = 0;
+            let previousCircuitName = "";
 
             selectedWorkout.circuits.forEach(circuit => {
+                const circuitName = circuit.circuitId || 'Circuit';
                 const circuitRounds = circuit.rounds || 1; 
                 
+                if (circuitName !== previousCircuitName) {
+                    runningRoundCount = 0; 
+                    previousCircuitName = circuitName;
+                }
+                
                 for (let r = 0; r < circuitRounds; r++) {
+                    runningRoundCount++; 
                     circuit.sequence.forEach(block => {
                         const details = exerciseDB[block.exerciseId] || { name: 'Unknown', safetyCues: '' };
                         playlist.push({
                             ...block,
                             name: details.name,
                             safetyCues: details.safetyCues,
-                            roundNum: r + 1,
-                            circuitName: circuit.circuitId || 'Circuit'
+                            roundNum: runningRoundCount,
+                            circuitName: circuitName
                         });
                         totalTimeRemaining += block.duration; 
                     });
                 }
             });
 
-            // Save the starting total time to calculate the progress bar percentage
             initialTotalTime = totalTimeRemaining;
-
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
             document.getElementById('start-overlay').style.display = 'none';
             document.getElementById('finisher-overlay').style.display = 'none';
             
             document.getElementById('top-controls').style.display = 'flex';
             document.getElementById('content-area').style.display = 'flex';
-            document.getElementById('timer-widget').style.display = 'block';
+            document.getElementById('set-timer').style.display = 'block';
             document.getElementById('bottom-bar').style.display = 'flex';
-            
             runBlock(0);
         }
 
         function runBlock(index) {
-            if (index >= playlist.length) {
-                finishWorkout();
-                return;
-            }
-
+            if (index >= playlist.length) { finishWorkout(); return; }
             currentIndex = index;
             const currentBlock = playlist[index];
             exerciseTimeRemaining = currentBlock.duration;
-
             updateUI(currentBlock);
-
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
                 if (isPaused) return;
-
-                exerciseTimeRemaining--;
-                totalTimeRemaining--;
-                
-                if (exerciseTimeRemaining === 3 || exerciseTimeRemaining === 2 || exerciseTimeRemaining === 1) {
-                    playBeep('short');
-                } else if (exerciseTimeRemaining === 0) {
-                    playBeep('long');
-                }
-                
+                exerciseTimeRemaining--; totalTimeRemaining--;
+                if (exerciseTimeRemaining === 3 || exerciseTimeRemaining === 2 || exerciseTimeRemaining === 1) playBeep('short');
+                else if (exerciseTimeRemaining === 0) playBeep('long');
                 updateTimerDisplay(currentBlock.type);
-
-                if (exerciseTimeRemaining <= 0) {
-                    clearInterval(timerInterval);
-                    runBlock(index + 1);
-                }
+                if (exerciseTimeRemaining <= 0) { clearInterval(timerInterval); runBlock(index + 1); }
             }, 1000);
         }
 
         function formatTime(seconds) {
-            const m = Math.floor(seconds / 60);
-            const s = seconds % 60;
+            const m = Math.floor(seconds / 60); const s = seconds % 60;
             return `${m}:${s.toString().padStart(2, '0')}`;
         }
 
         function formatBigTimer(seconds) {
-            const m = Math.floor(seconds / 60);
-            const s = seconds % 60;
+            const m = Math.floor(seconds / 60); const s = seconds % 60;
             if (m > 0) return `${m}:${s.toString().padStart(2, '0')}`;
             return `:${s.toString().padStart(2, '0')}`;
         }
 
         function updateUI(block) {
-            document.getElementById('circuit-title').innerText = `${block.circuitName}: Round ${block.roundNum}`;
+            document.getElementById('circuit-label').innerText = block.circuitName;
+            document.getElementById('round-label').innerText = `Round ${block.roundNum}`;
+            const currentExEl = document.getElementById('current-exercise');
+            if (block.type === 'rest') { currentExEl.innerText = `Rest (${block.duration}s)`; currentExEl.classList.add('rest-text'); } 
+            else { currentExEl.innerText = block.name; currentExEl.classList.remove('rest-text'); }
 
-            const listEl = document.getElementById('combo-list');
+            const listEl = document.getElementById('upcoming-exercises');
             listEl.innerHTML = '';
-            
-            for (let i = 0; i < 4; i++) {
+            for (let i = 1; i <= 2; i++) {
                 if (currentIndex + i < playlist.length) {
                     let nextBlock = playlist[currentIndex + i];
                     let li = document.createElement('li');
-                    
-                    if (nextBlock.type === 'rest') {
-                        li.innerText = `Rest (${nextBlock.duration}s)`;
-                        li.classList.add('rest-item');
-                    } else {
-                        li.innerText = nextBlock.name;
-                    }
-                    
-                    if (i === 0) {
-                        li.classList.add('active-item');
-                    }
-                    
+                    if (nextBlock.type === 'rest') { li.innerText = `Rest (${nextBlock.duration}s)`; li.classList.add('rest-text'); } 
+                    else { li.innerText = nextBlock.name; }
                     listEl.appendChild(li);
                 }
             }
 
             const cuesEl = document.getElementById('safety-cues');
             if (showModifier && block.safetyCues && block.safetyCues.trim() !== "") {
-                cuesEl.innerHTML = `<strong>Note:</strong> ${block.safetyCues}`;
-                cuesEl.style.display = 'block';
-            } else {
-                cuesEl.style.display = 'none';
-            }
-
+                cuesEl.innerHTML = `<strong>Note:</strong> ${block.safetyCues}`; cuesEl.style.display = 'block';
+            } else { cuesEl.style.display = 'none'; }
             updateTimerDisplay(block.type);
         }
 
         function updateTimerDisplay(type) {
-            // Update Text Badge
-            document.getElementById('total-time-display').innerText = `⏱️ ${formatTime(Math.max(0, totalTimeRemaining))}`;
-            
-            // Update Top Progress Bar smoothly
             const progressPct = (totalTimeRemaining / initialTotalTime) * 100;
             document.getElementById('total-progress-bar').style.width = progressPct + '%';
-
-            // Main Hollow Timer
-            document.getElementById('timer-widget').innerText = formatBigTimer(exerciseTimeRemaining);
-            const timerEl = document.getElementById('timer-widget');
-            
-            if (type === 'rest' || exerciseTimeRemaining <= 5) {
-                timerEl.classList.add('warning');
-            } else {
-                timerEl.classList.remove('warning');
-            }
+            document.getElementById('total-time-display').innerText = formatTime(Math.max(0, totalTimeRemaining));
+            const setTimerEl = document.getElementById('set-timer');
+            setTimerEl.innerText = formatBigTimer(exerciseTimeRemaining);
+            if (type === 'rest' || exerciseTimeRemaining <= 5) setTimerEl.classList.add('warning');
+            else setTimerEl.classList.remove('warning');
         }
 
         function finishWorkout() {
             document.getElementById('top-controls').style.display = 'none';
             document.getElementById('content-area').style.display = 'none';
             document.getElementById('safety-cues').style.display = 'none';
-            document.getElementById('timer-widget').style.display = 'none';
+            document.getElementById('set-timer').style.display = 'none';
             document.getElementById('bottom-bar').style.display = 'none';
             document.getElementById('finisher-overlay').style.display = 'flex';
         }
 
         function startFinisher(finisherId) {
             const targetIndex = allWorkouts.findIndex(w => w.id === finisherId);
-            
-            if (targetIndex !== -1) {
-                document.getElementById('workout-selector').value = targetIndex;
-                prepareWorkout(); 
-            } else {
-                alert("Finisher workout '" + finisherId + "' not found in your JSON.");
-            }
+            if (targetIndex !== -1) { document.getElementById('workout-selector').value = targetIndex; prepareWorkout(); } 
+            else { alert("Finisher workout '" + finisherId + "' not found in your JSON."); }
         }
 
         init();
