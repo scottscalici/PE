@@ -26,49 +26,49 @@
       "id": 3,
       "home_team": "Dallas Wolves & New York Knights",
       "away_team": "Hollywood Eagles & Detroit Seals",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 13,
+      "away_score": 5,
       "date_str": "March 26 (Day 60)",
       "time": "11:30",
       "location": "Full Gym",
-      "completed": false
+      "completed": true
     }
   ],
   "standings": {
     "Dallas Wolves": {
-      "w": 2,
+      "w": 3,
       "l": 0,
       "t": 0,
-      "pf": 20,
-      "pa": 9,
-      "pd": 11,
-      "pts": 6
+      "pf": 33,
+      "pa": 14,
+      "pd": 19,
+      "pts": 9
     },
     "Detroit Seals": {
       "w": 1,
-      "l": 1,
+      "l": 2,
       "t": 0,
-      "pf": 11,
-      "pa": 18,
-      "pd": -7,
+      "pf": 16,
+      "pa": 31,
+      "pd": -15,
       "pts": 3
     },
     "New York Knights": {
-      "w": 0,
+      "w": 1,
       "l": 2,
       "t": 0,
-      "pf": 9,
-      "pa": 20,
-      "pd": -11,
-      "pts": 0
+      "pf": 22,
+      "pa": 25,
+      "pd": -3,
+      "pts": 3
     },
     "Hollywood Eagles": {
       "w": 1,
-      "l": 1,
+      "l": 2,
       "t": 0,
-      "pf": 18,
-      "pa": 11,
-      "pd": 7,
+      "pf": 23,
+      "pa": 24,
+      "pd": -1,
       "pts": 3
     }
   },
