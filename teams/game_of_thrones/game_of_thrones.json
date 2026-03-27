@@ -1,0 +1,88 @@
+{
+  "sport": "game_of_thrones",
+  "display_name": "game_of_thrones",
+  "header_image": "https://raw.githubusercontent.com/scottscalici/PE/main/teams/game_of_thrones.png",
+  "setup_image": {
+    "file": "",
+    "caption": ""
+  },
+  "equipment": [
+    "Gym Mats: 4 total (2 per side to build the Towers)",
+    "Big Traffic Cones: 4 total (used as the Pillars)",
+    "Agility Pads: Multiple (needed to block the balls on the 4 pillars, plus extras to create the \"valley\" track for the bowling balls)",
+    "Chairs: 2 total (one for each team to act as the \"Throne\")",
+    "Hula Hoops: 2 total (one to hang on each basketball rim)",
+    "Wall Scythes: 2 total (one attached to each Tower)",
+    "Bowling Balls: 2 total",
+    "Target Balls: 4 total (to rest on top of the 4 Pillar cones)",
+    "Assorted Throwing Balls: A large amount (Dodgeballs, Foam Balls, or Smoosh Balls). You will need these for:"
+  ],
+  "rules": [
+    "🏰 Game Setup & Equipment",
+    "The Moat: The area between the back volleyball line and the baseline.",
+    "Towers: Form a square using 4 mats (2 on each side). Place them outside of where the block and back volleyball line meet.",
+    "Pillars: 4 Big Traffic Cones placed on \"corner 3\" / baseline. Place a ball on top of each, and use Agility Pads to block the balls.",
+    "The Throne: Place a chair behind the rim on the baseline (behind the moat line).",
+    "Hula Hoop: Place one on the basketball rim.",
+    "Bowling Ball \"Valley\": Set up a bowling ball between agility pads. Place this out of bounds, between the basketball court sideline and the bleachers (an even distance from half-court for both teams).",
+    "🤺 Player Roles & Movement",
+    "Regular Players: Must stay on their own half of the court, strictly between the half-court line and the back volleyball line.",
+    "The Knight: One designated player per team.",
+    "Movement: The only player allowed to travel anywhere in the gym, including the opponent's side.",
+    "Restrictions: The Knight cannot complete any regular tasks. They are only allowed to knock over the Towers (Step 3) and complete the Final Move.",
+    "🚨 Jail & Penalties",
+    "Entering the Moat: If any regular player steps into the moat, they immediately go to jail.",
+    "To escape: They must catch a ball thrown to them by a teammate.",
+    "Bonus Penalty: Every time a team completes one of the \"Side Quests\" (see below), they get to choose one opponent to send to jail for 1 minute.",
+    "📜 The Main Quest (Sequential Tasks)",
+    "These tasks MUST be completed in this exact order to win the game:",
+    "Disarm: Remove the wall scythe from the Tower.",
+    "Fill the Towers: Throw 3 balls into each Tower.",
+    "Destroy the Towers: Once filled, the Knight gets to knock the Towers over (both towers can be destroyed at the same time, but both must be knocked over before moving on).",
+    "Clear the Pillars: Knock down the Agility Pads that are blocking the balls on the Pillars.",
+    "Strike the Pillars: Knock the balls off both Pillars.",
+    "The Final Move: The Knight must sit on the Throne and catch a ball thrown by their team.",
+    "🎯 Side Quests (Bonus Challenges)",
+    "These mandatory tasks can be completed at ANY time during the game, as long as they are done before the Knight attempts the Final Move.",
+    "The Bowling Ball Roll: Teams must get the bowling ball across the opposite side through the \"valley\" and into the moat (crossing the back volleyball line).",
+    "Rule: The bowling ball cannot be touched. It can only be moved by hitting it with a dodgeball, foam ball, or smoosh ball.",
+    "Knock the Halo: Knock the hula hoop off the basketball rim."
+  ],
+  "key_terms": [],
+  "global_connections": {
+    "description": "",
+    "highlights_video": "",
+    "image": {
+      "file": "",
+      "caption": ""
+    }
+  },
+  "unit_plan": [],
+  "available_teams": [
+    {
+      "display": "Stark",
+      "id": "stark",
+      "logo": "stark.png"
+    },
+    {
+      "display": "Targaryen",
+      "id": "targaryen",
+      "logo": "targaryen.png"
+    },
+    {
+      "display": "Tyrell",
+      "id": "tyrell",
+      "logo": "tyrell.png"
+    },
+    {
+      "display": "Barratheon",
+      "id": "barratheon",
+      "logo": "barratheon.png"
+    },
+    {
+      "display": "Lannister",
+      "id": "lannister",
+      "logo": "lannister.png"
+    }
+  ]
+}
