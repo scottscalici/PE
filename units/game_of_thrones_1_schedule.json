@@ -1,0 +1,36 @@
+{
+  "matches": [
+    {
+      "id": 1,
+      "home_team": "Standard Team 1",
+      "away_team": "Standard Team 2",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "April 6 (Day 61)",
+      "time": "11:15",
+      "location": "Main Gym",
+      "completed": false
+    }
+  ],
+  "standings": {
+    "Standard Team 1": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Standard Team 2": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    }
+  },
+  "tournament": []
+}
