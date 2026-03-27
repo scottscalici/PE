@@ -26,50 +26,50 @@
       "id": 3,
       "home_team": "Philadelphia Bears & New York Knights",
       "away_team": "Seattle Bulls & Detroit Seals",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 17,
+      "away_score": 9,
       "date_str": "March 27 (Day 60)",
       "time": "11:30",
       "location": "Full Gym",
-      "completed": false
+      "completed": true
     }
   ],
   "standings": {
     "Seattle Bulls": {
       "w": 1,
-      "l": 1,
+      "l": 2,
       "t": 0,
-      "pf": 10,
-      "pa": 4,
-      "pd": 6,
+      "pf": 19,
+      "pa": 21,
+      "pd": -2,
       "pts": 3
     },
     "Philadelphia Bears": {
-      "w": 2,
+      "w": 3,
       "l": 0,
       "t": 0,
-      "pf": 12,
-      "pa": 2,
-      "pd": 10,
-      "pts": 6
+      "pf": 29,
+      "pa": 11,
+      "pd": 18,
+      "pts": 9
     },
     "Detroit Seals": {
       "w": 1,
-      "l": 1,
+      "l": 2,
       "t": 0,
-      "pf": 4,
-      "pa": 10,
-      "pd": -6,
+      "pf": 13,
+      "pa": 27,
+      "pd": -14,
       "pts": 3
     },
     "New York Knights": {
-      "w": 0,
+      "w": 1,
       "l": 2,
       "t": 0,
-      "pf": 2,
-      "pa": 12,
-      "pd": -10,
-      "pts": 0
+      "pf": 19,
+      "pa": 21,
+      "pd": -2,
+      "pts": 3
     }
   },
   "tournament": []
