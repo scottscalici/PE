@@ -7,7 +7,7 @@
   "baseTeams": [
     {
       "id": 1,
-      "name": "Standard Team 1",
+      "name": "Targaryen",
       "league": "Standard",
       "players": [
         {
@@ -129,11 +129,12 @@
           "compete": 4,
           "gender": "M"
         }
-      ]
+      ],
+      "logo_id": "targaryen"
     },
     {
       "id": 2,
-      "name": "Standard Team 2",
+      "name": "Barratheon",
       "league": "Standard",
       "players": [
         {
@@ -248,7 +249,8 @@
           "compete": 2,
           "gender": "M"
         }
-      ]
+      ],
+      "logo_id": "barratheon"
     }
   ]
 }
