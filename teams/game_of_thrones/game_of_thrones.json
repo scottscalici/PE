@@ -1,7 +1,7 @@
 {
   "sport": "game_of_thrones",
-  "display_name": "game_of_thrones",
-  "header_image": "https://raw.githubusercontent.com/scottscalici/PE/main/teams/game_of_thrones.png",
+  "display_name": "Game of Thrones",
+  "header_image": "https://raw.githubusercontent.com/scottscalici/PE/main/teams/game_of_thrones/game_of_thrones.png",
   "setup_image": {
     "file": "",
     "caption": ""
