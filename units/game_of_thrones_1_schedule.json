@@ -2,18 +2,18 @@
   "matches": [
     {
       "id": 1,
-      "home_team": "Standard Team 1",
-      "away_team": "Standard Team 2",
+      "home_team": "Targaryen",
+      "away_team": "Barratheon",
       "home_score": null,
       "away_score": null,
       "date_str": "April 6 (Day 61)",
-      "time": "11:15",
+      "time": "11:30",
       "location": "Main Gym",
       "completed": false
     }
   ],
   "standings": {
-    "Standard Team 1": {
+    "Targaryen": {
       "w": 0,
       "l": 0,
       "t": 0,
@@ -22,7 +22,7 @@
       "pd": 0,
       "pts": 0
     },
-    "Standard Team 2": {
+    "Barratheon": {
       "w": 0,
       "l": 0,
       "t": 0,
