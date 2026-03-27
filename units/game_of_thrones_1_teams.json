@@ -88,11 +88,11 @@
           "gender": "M"
         },
         {
-          "id": "3A_25",
-          "name": "Jermarco H.",
-          "skill": 4,
+          "id": "3A_06",
+          "name": "Dima D.",
+          "skill": 5,
           "compete": 3,
-          "gender": "M"
+          "gender": "F"
         },
         {
           "id": "3A_11",
@@ -145,11 +145,11 @@
           "gender": "F"
         },
         {
-          "id": "3A_06",
-          "name": "Dima D.",
-          "skill": 5,
+          "id": "3A_25",
+          "name": "Jermarco H.",
+          "skill": 4,
           "compete": 3,
-          "gender": "F"
+          "gender": "M"
         },
         {
           "id": "3A_21",
