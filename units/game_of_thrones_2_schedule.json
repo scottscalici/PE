@@ -2,18 +2,58 @@
   "matches": [
     {
       "id": 1,
-      "home_team": "Barratheon",
-      "away_team": "Tyrell",
+      "home_team": "Targaryen & Lannister",
+      "away_team": "Stark & Tyrell",
       "home_score": null,
       "away_score": null,
       "date_str": "April 7 (Day 61)",
+      "time": "11:10",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "home_team": "Targaryen & Stark",
+      "away_team": "Lannister & Tyrell",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "TBD",
       "time": "11:30",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 3,
+      "home_team": "Targaryen & Tyrell",
+      "away_team": "Lannister & Stark",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "TBD",
+      "time": "11:50",
       "location": "Main Gym",
       "completed": false
     }
   ],
   "standings": {
-    "Barratheon": {
+    "Targaryen": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Lannister": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Stark": {
       "w": 0,
       "l": 0,
       "t": 0,
