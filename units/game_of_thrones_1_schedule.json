@@ -4,71 +4,71 @@
       "id": 1,
       "home_team": "Stark & Targaryen",
       "away_team": "Barratheon & Lannister",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 1,
+      "away_score": 0,
       "date_str": "April 6 (Day 61)",
-      "time": "09:00",
+      "time": "11:10",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 2,
       "home_team": "Stark & Barratheon",
       "away_team": "Targaryen & Lannister",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 1,
+      "away_score": 0,
       "date_str": "TBD",
-      "time": "09:00",
+      "time": "11:30",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 3,
       "home_team": "Stark & Lannister",
       "away_team": "Targaryen & Barratheon",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 0,
+      "away_score": 1,
       "date_str": "TBD",
-      "time": "09:00",
+      "time": "11:50",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     }
   ],
   "standings": {
     "Stark": {
-      "w": 0,
-      "l": 0,
+      "w": 2,
+      "l": 1,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
+      "pf": 2,
+      "pa": 1,
+      "pd": 1,
+      "pts": 6
     },
     "Targaryen": {
-      "w": 0,
-      "l": 0,
+      "w": 2,
+      "l": 1,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
+      "pf": 2,
+      "pa": 1,
+      "pd": 1,
+      "pts": 6
     },
     "Barratheon": {
-      "w": 0,
-      "l": 0,
+      "w": 2,
+      "l": 1,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
+      "pf": 2,
+      "pa": 1,
+      "pd": 1,
+      "pts": 6
     },
     "Lannister": {
       "w": 0,
-      "l": 0,
+      "l": 3,
       "t": 0,
       "pf": 0,
-      "pa": 0,
-      "pd": 0,
+      "pa": 3,
+      "pd": -3,
       "pts": 0
     }
   },
