@@ -2,48 +2,39 @@
   "matches": [
     {
       "id": 1,
-      "home_team": "Cardinals & Dodgers",
-      "away_team": "Phillies & Tigers",
+      "home_team": "Dodgers & Phillies",
+      "away_team": "Tigers & Yankees",
       "home_score": null,
       "away_score": null,
-      "date_str": "April 7 (Day 61)",
-      "time": "11:30",
-      "location": "Full Gym",
+      "date_str": "April 9 (Day 62)",
+      "time": "11:15",
+      "location": "Main Gym",
       "completed": false
     },
     {
       "id": 2,
-      "home_team": "Cardinals & Phillies",
-      "away_team": "Dodgers & Tigers",
+      "home_team": "Dodgers & Tigers",
+      "away_team": "Phillies & Yankees",
       "home_score": null,
       "away_score": null,
-      "date_str": "April 9 (Day 62)",
-      "time": "11:30",
-      "location": "Full Gym",
+      "date_str": "April 13 (Day 63)",
+      "time": "11:15",
+      "location": "Main Gym",
       "completed": false
     },
     {
       "id": 3,
-      "home_team": "Cardinals & Tigers",
-      "away_team": "Dodgers & Phillies",
+      "home_team": "Dodgers & Yankees",
+      "away_team": "Phillies & Tigers",
       "home_score": null,
       "away_score": null,
-      "date_str": "April 13 (Day 63)",
-      "time": "11:30",
-      "location": "Full Gym",
+      "date_str": "April 15 (Day 64)",
+      "time": "11:15",
+      "location": "Main Gym",
       "completed": false
     }
   ],
   "standings": {
-    "Cardinals": {
-      "w": 0,
-      "l": 0,
-      "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
-    },
     "Dodgers": {
       "w": 0,
       "l": 0,
@@ -63,6 +54,15 @@
       "pts": 0
     },
     "Tigers": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Yankees": {
       "w": 0,
       "l": 0,
       "t": 0,
