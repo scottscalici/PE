@@ -1,5 +1,5 @@
 {
-  "unit_id": "U_1774311468488",
+  "unit_id": "U_1775579873412",
   "unit_name": "smushball_2",
   "sport_type": "smushball",
   "class_id": "3B",
@@ -7,28 +7,21 @@
   "baseTeams": [
     {
       "id": 1,
-      "name": "Cardinals",
+      "name": "Dodgers",
       "league": "Standard",
       "players": [
         {
-          "id": "3B_09",
-          "name": "Shila L.",
-          "skill": 5,
-          "compete": 2,
-          "gender": "F"
-        },
-        {
-          "id": "3B_08",
-          "name": "Evalynn P.",
-          "skill": 2,
+          "id": "3B_13",
+          "name": "Sara S.",
+          "skill": 4,
           "compete": 1,
           "gender": "F"
         },
         {
-          "id": "3B_22",
-          "name": "Denny G.",
-          "skill": 7,
-          "compete": 3,
+          "id": "3B_19",
+          "name": "Alexander S.",
+          "skill": 8,
+          "compete": 5,
           "gender": "M"
         },
         {
@@ -39,8 +32,115 @@
           "gender": "M"
         },
         {
-          "id": "3B_18",
-          "name": "Christian T.",
+          "id": "3B_17",
+          "name": "Adam B.",
+          "skill": 5,
+          "compete": 4,
+          "gender": "M"
+        },
+        {
+          "id": "3B_10",
+          "name": "Anthony G.",
+          "skill": 8,
+          "compete": 5,
+          "gender": "M"
+        },
+        {
+          "id": "3B_05",
+          "name": "Aarav C.",
+          "skill": 5,
+          "compete": 4,
+          "gender": "M"
+        }
+      ],
+      "logo_id": "dodgers"
+    },
+    {
+      "id": 2,
+      "name": "Tigers",
+      "league": "Standard",
+      "players": [
+        {
+          "id": "3B_15",
+          "name": "Mia K.",
+          "skill": 1,
+          "compete": 1,
+          "gender": "F"
+        },
+        {
+          "id": "3B_16",
+          "name": "Lindsay G.",
+          "skill": 7,
+          "compete": 3,
+          "gender": "F"
+        },
+        {
+          "id": "3B_07",
+          "name": "Kate S.",
+          "skill": 6,
+          "compete": 3,
+          "gender": "F"
+        },
+        {
+          "id": "3B_22",
+          "name": "Denny G.",
+          "skill": 7,
+          "compete": 3,
+          "gender": "M"
+        },
+        {
+          "id": "3B_09",
+          "name": "Shila L.",
+          "skill": 5,
+          "compete": 2,
+          "gender": "F"
+        },
+        {
+          "id": "3B_20",
+          "name": "Colin M.",
+          "skill": 6,
+          "compete": 3,
+          "gender": "M"
+        }
+      ],
+      "logo_id": "tigers"
+    },
+    {
+      "id": 3,
+      "name": "Yankees",
+      "league": "Standard",
+      "players": [
+        {
+          "id": "3B_11",
+          "name": "Veron B.",
+          "skill": 6,
+          "compete": 5,
+          "gender": "M"
+        },
+        {
+          "id": "3B_02",
+          "name": "Angel R.",
+          "skill": 6,
+          "compete": 3,
+          "gender": "F"
+        },
+        {
+          "id": "3B_04",
+          "name": "Sebastian J.",
+          "skill": 6,
+          "compete": 5,
+          "gender": "M"
+        },
+        {
+          "id": "3B_01",
+          "name": "Camden S.",
+          "skill": 4,
+          "compete": 2,
+          "gender": "M"
+        },
+        {
+          "id": "3B_23",
+          "name": "Carter A.",
           "skill": 6,
           "compete": 5,
           "gender": "M"
@@ -53,61 +153,11 @@
           "gender": "M"
         }
       ],
-      "logo_id": "cardinals"
+      "logo_id": "yankees"
     },
     {
-      "id": 2,
+      "id": 4,
       "name": "Phillies",
-      "league": "Standard",
-      "players": [
-        {
-          "id": "3B_13",
-          "name": "Sara S.",
-          "skill": 4,
-          "compete": 1,
-          "gender": "F"
-        },
-        {
-          "id": "3B_15",
-          "name": "Mia K.",
-          "skill": 1,
-          "compete": 1,
-          "gender": "F"
-        },
-        {
-          "id": "3B_03",
-          "name": "Matthew M.",
-          "skill": 10,
-          "compete": 5,
-          "gender": "M"
-        },
-        {
-          "id": "3B_23",
-          "name": "Carter A.",
-          "skill": 6,
-          "compete": 5,
-          "gender": "M"
-        },
-        {
-          "id": "3B_04",
-          "name": "Sebastian J.",
-          "skill": 6,
-          "compete": 5,
-          "gender": "M"
-        },
-        {
-          "id": "3B_11",
-          "name": "Veron B.",
-          "skill": 6,
-          "compete": 5,
-          "gender": "M"
-        }
-      ],
-      "logo_id": "phillies"
-    },
-    {
-      "id": 3,
-      "name": "Tigers",
       "league": "Standard",
       "players": [
         {
@@ -118,25 +168,11 @@
           "gender": "F"
         },
         {
-          "id": "3B_02",
-          "name": "Angel R.",
-          "skill": 6,
-          "compete": 3,
+          "id": "3B_08",
+          "name": "Evalynn P.",
+          "skill": 2,
+          "compete": 1,
           "gender": "F"
-        },
-        {
-          "id": "3B_20",
-          "name": "Colin M.",
-          "skill": 6,
-          "compete": 3,
-          "gender": "M"
-        },
-        {
-          "id": "3B_10",
-          "name": "Anthony G.",
-          "skill": 8,
-          "compete": 5,
-          "gender": "M"
         },
         {
           "id": "3B_12",
@@ -146,57 +182,21 @@
           "gender": "M"
         },
         {
-          "id": "3B_17",
-          "name": "Adam B.",
-          "skill": 5,
-          "compete": 4,
-          "gender": "M"
-        }
-      ],
-      "logo_id": "tigers"
-    },
-    {
-      "id": 4,
-      "name": "Dodgers",
-      "league": "Standard",
-      "players": [
-        {
-          "id": "3B_07",
-          "name": "Kate S.",
-          "skill": 6,
-          "compete": 3,
-          "gender": "F"
-        },
-        {
-          "id": "3B_16",
-          "name": "Lindsay G.",
-          "skill": 7,
-          "compete": 3,
-          "gender": "F"
-        },
-        {
-          "id": "3B_19",
-          "name": "Alexander S.",
-          "skill": 8,
+          "id": "3B_03",
+          "name": "Matthew M.",
+          "skill": 10,
           "compete": 5,
           "gender": "M"
         },
         {
-          "id": "3B_01",
-          "name": "Camden S.",
-          "skill": 4,
-          "compete": 2,
-          "gender": "M"
-        },
-        {
-          "id": "3B_05",
-          "name": "Aarav C.",
-          "skill": 5,
-          "compete": 4,
+          "id": "3B_18",
+          "name": "Christian T.",
+          "skill": 6,
+          "compete": 5,
           "gender": "M"
         }
       ],
-      "logo_id": "dodgers"
+      "logo_id": "phillies"
     }
   ]
 }
