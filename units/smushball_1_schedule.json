@@ -2,49 +2,40 @@
   "matches": [
     {
       "id": 1,
-      "home_team": "Cubs & Twins",
-      "away_team": "Tigers & Blue Jays",
+      "home_team": "Cubs & Tigers",
+      "away_team": "Blue Jays & Twins",
       "home_score": null,
       "away_score": null,
-      "date_str": "April 6 (Day 61)",
-      "time": "11:30",
-      "location": "Full Gym",
+      "date_str": "April 8 (Day 62)",
+      "time": "11:15",
+      "location": "Main Gym",
       "completed": false
     },
     {
       "id": 2,
-      "home_team": "Cubs & Tigers",
-      "away_team": "Twins & Blue Jays",
+      "home_team": "Cubs & Blue Jays",
+      "away_team": "Tigers & Twins",
       "home_score": null,
       "away_score": null,
-      "date_str": "April 8 (Day 62)",
-      "time": "11:30",
-      "location": "Full Gym",
+      "date_str": "April 10 (Day 63)",
+      "time": "11:15",
+      "location": "Main Gym",
       "completed": false
     },
     {
       "id": 3,
-      "home_team": "Cubs & Blue Jays",
-      "away_team": "Twins & Tigers",
+      "home_team": "Cubs & Twins",
+      "away_team": "Tigers & Blue Jays",
       "home_score": null,
       "away_score": null,
-      "date_str": "April 10 (Day 63)",
-      "time": "11:30",
-      "location": "Full Gym",
+      "date_str": "April 14 (Day 64)",
+      "time": "11:15",
+      "location": "Main Gym",
       "completed": false
     }
   ],
   "standings": {
     "Cubs": {
-      "w": 0,
-      "l": 0,
-      "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
-    },
-    "Twins": {
       "w": 0,
       "l": 0,
       "t": 0,
@@ -63,6 +54,15 @@
       "pts": 0
     },
     "Blue Jays": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Twins": {
       "w": 0,
       "l": 0,
       "t": 0,
