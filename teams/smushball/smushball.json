@@ -1,7 +1,7 @@
 {
   "sport": "smushball",
   "display_name": "Smushball",
-  "header_image": "smushball.png",
+  "header_image": "https://raw.githubusercontent.com/scottscalici/PE/main/teams/smushball/smushball.png",
   "setup_image": {
     "file": "",
     "caption": ""
