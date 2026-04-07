@@ -6,7 +6,11 @@
     "file": "",
     "caption": ""
   },
-  "equipment": [],
+  "equipment": [
+    "Smushballs",
+    "Cone/Tee",
+    "Bases"
+  ],
   "rules": [],
   "key_terms": [],
   "global_connections": {
@@ -34,7 +38,7 @@
     },
     {
       "day": 3,
-      "topic": "Final Game",
+      "topic": "Final Game - Estilo Loco",
       "skills": "",
       "discussion": "",
       "activities": []
