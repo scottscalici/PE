@@ -4,12 +4,12 @@
       "id": 1,
       "home_team": "Cubs & Tigers",
       "away_team": "Blue Jays & Twins",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 11,
+      "away_score": 6,
       "date_str": "April 8 (Day 62)",
       "time": "11:15",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 2,
@@ -36,39 +36,39 @@
   ],
   "standings": {
     "Cubs": {
-      "w": 0,
+      "w": 1,
       "l": 0,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
+      "pf": 11,
+      "pa": 6,
+      "pd": 5,
+      "pts": 3
     },
     "Tigers": {
-      "w": 0,
+      "w": 1,
       "l": 0,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
+      "pf": 11,
+      "pa": 6,
+      "pd": 5,
+      "pts": 3
     },
     "Blue Jays": {
       "w": 0,
-      "l": 0,
+      "l": 1,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
+      "pf": 6,
+      "pa": 11,
+      "pd": -5,
       "pts": 0
     },
     "Twins": {
       "w": 0,
-      "l": 0,
+      "l": 1,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
+      "pf": 6,
+      "pa": 11,
+      "pd": -5,
       "pts": 0
     }
   },
