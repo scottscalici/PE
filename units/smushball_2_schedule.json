@@ -4,12 +4,12 @@
       "id": 1,
       "home_team": "Dodgers & Phillies",
       "away_team": "Tigers & Yankees",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 6,
+      "away_score": 3,
       "date_str": "April 9 (Day 62)",
       "time": "11:15",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 2,
@@ -36,39 +36,39 @@
   ],
   "standings": {
     "Dodgers": {
-      "w": 0,
+      "w": 1,
       "l": 0,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
+      "pf": 6,
+      "pa": 3,
+      "pd": 3,
+      "pts": 3
     },
     "Phillies": {
-      "w": 0,
+      "w": 1,
       "l": 0,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
-      "pts": 0
+      "pf": 6,
+      "pa": 3,
+      "pd": 3,
+      "pts": 3
     },
     "Tigers": {
       "w": 0,
-      "l": 0,
+      "l": 1,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
+      "pf": 3,
+      "pa": 6,
+      "pd": -3,
       "pts": 0
     },
     "Yankees": {
       "w": 0,
-      "l": 0,
+      "l": 1,
       "t": 0,
-      "pf": 0,
-      "pa": 0,
-      "pd": 0,
+      "pf": 3,
+      "pa": 6,
+      "pd": -3,
       "pts": 0
     }
   },
