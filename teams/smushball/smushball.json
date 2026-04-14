@@ -9,10 +9,22 @@
   "equipment": [
     "Smushballs",
     "Cone/Tee",
-    "Bases"
+    "Bases",
+    "Bucket"
   ],
-  "rules": [],
-  "key_terms": [],
+  "rules": [
+    "The game is played with a batting tee and a smushball.",
+    "Traditional games use standard base running and outs (tag outs, force outs, pop flys).",
+    "A batted ball must land in fair territory to be in play. Foul balls count as a strike.",
+    "Teams score 1 point (run) for every player who safely crosses home plate.",
+    "Teams switch sides after 3 outs or a set time limit."
+  ],
+  "key_terms": [
+    "Smushball",
+    "Batting Tee",
+    "Force Out",
+    "Home Run Havoc"
+  ],
   "global_connections": {
     "description": "",
     "highlights_video": "",
@@ -24,24 +36,36 @@
   "unit_plan": [
     {
       "day": 1,
-      "topic": "First Game",
-      "skills": "Swinging the bat, throwing",
+      "topic": "First Game: Fundamentals",
+      "skills": "Swinging the bat, throwing, traditional base running",
       "discussion": "Is hitting a baseball really the most difficult skill in sports?",
-      "activities": []
+      "activities": [
+        "Introduction to core Smushball rules (traditional outs and base running).",
+        "Practice hitting off the tee and safe base running."
+      ]
     },
     {
       "day": 2,
-      "topic": "Second Game",
-      "skills": "",
-      "discussion": "",
-      "activities": []
+      "topic": "Second Game: Defensive Strategy",
+      "skills": "Fielding, force outs, communication",
+      "discussion": "How can the defense communicate better to get runners out?",
+      "activities": [
+        "Full game of traditional Smushball focusing on defensive plays and situational awareness."
+      ]
     },
     {
       "day": 3,
-      "topic": "Final Game - Estilo Loco",
-      "skills": "",
-      "discussion": "",
-      "activities": []
+      "topic": "Final Game - Home Run Havoc",
+      "skills": "Continuous action, cardiovascular endurance, rapid fielding",
+      "discussion": "How does removing 'outs' change your strategy both at the plate and in the field?",
+      "activities": [
+        "Introduce the 'Home Run Havoc' ruleset:",
+        "No tag outs, force outs, or pop outs. Everyone runs the bases and multiple runners can occupy the same base (passing is allowed).",
+        "Continuous Batting: The on-deck batter waits at home. Once the runner reaches 1st, they run to the pitcher's mound bucket, grab the next ball, and hit. This continues until the entire lineup hits.",
+        "Empty Bucket Bonus: If the bucket is empty when a batter goes to grab a ball, the offense gets 1 bonus point.",
+        "Home runs earn 3 points. A batter can earn a total of 4 points if they hit a home run and cross home plate before the inning ends.",
+        "The half-inning ends when the last batter hits and the defense successfully returns all 3 smushballs to the bucket. If the balls are returned before the final runner crosses home, the final run doesn't count."
+      ]
     }
   ],
   "available_teams": [
