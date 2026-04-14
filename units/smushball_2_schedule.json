@@ -15,12 +15,12 @@
       "id": 2,
       "home_team": "Dodgers & Tigers",
       "away_team": "Phillies & Yankees",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 12,
+      "away_score": 14,
       "date_str": "April 13 (Day 63)",
       "time": "11:15",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     },
     {
       "id": 3,
@@ -37,39 +37,39 @@
   "standings": {
     "Dodgers": {
       "w": 1,
-      "l": 0,
+      "l": 1,
       "t": 0,
-      "pf": 6,
-      "pa": 3,
-      "pd": 3,
+      "pf": 18,
+      "pa": 17,
+      "pd": 1,
       "pts": 3
     },
     "Phillies": {
-      "w": 1,
+      "w": 2,
       "l": 0,
       "t": 0,
-      "pf": 6,
-      "pa": 3,
-      "pd": 3,
-      "pts": 3
+      "pf": 20,
+      "pa": 15,
+      "pd": 5,
+      "pts": 6
     },
     "Tigers": {
       "w": 0,
-      "l": 1,
+      "l": 2,
       "t": 0,
-      "pf": 3,
-      "pa": 6,
-      "pd": -3,
+      "pf": 15,
+      "pa": 20,
+      "pd": -5,
       "pts": 0
     },
     "Yankees": {
-      "w": 0,
+      "w": 1,
       "l": 1,
       "t": 0,
-      "pf": 3,
-      "pa": 6,
-      "pd": -3,
-      "pts": 0
+      "pf": 17,
+      "pa": 18,
+      "pd": -1,
+      "pts": 3
     }
   },
   "tournament": []
