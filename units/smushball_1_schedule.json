@@ -26,50 +26,50 @@
       "id": 3,
       "home_team": "Cubs & Twins",
       "away_team": "Tigers & Blue Jays",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 1,
+      "away_score": 0,
       "date_str": "April 14 (Day 64)",
       "time": "11:15",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     }
   ],
   "standings": {
     "Cubs": {
-      "w": 2,
+      "w": 3,
       "l": 0,
       "t": 0,
-      "pf": 23,
+      "pf": 24,
       "pa": 14,
-      "pd": 9,
-      "pts": 6
+      "pd": 10,
+      "pts": 9
     },
     "Tigers": {
       "w": 1,
-      "l": 1,
+      "l": 2,
       "t": 0,
       "pf": 19,
-      "pa": 18,
-      "pd": 1,
+      "pa": 19,
+      "pd": 0,
       "pts": 3
     },
     "Blue Jays": {
       "w": 1,
-      "l": 1,
+      "l": 2,
       "t": 0,
       "pf": 18,
-      "pa": 19,
-      "pd": -1,
+      "pa": 20,
+      "pd": -2,
       "pts": 3
     },
     "Twins": {
-      "w": 0,
+      "w": 1,
       "l": 2,
       "t": 0,
-      "pf": 14,
+      "pf": 15,
       "pa": 23,
-      "pd": -9,
-      "pts": 0
+      "pd": -8,
+      "pts": 3
     }
   },
   "tournament": []
