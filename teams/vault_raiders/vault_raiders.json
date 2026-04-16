@@ -1,0 +1,89 @@
+{
+  "sport": "vault_raiders",
+  "display_name": "Vault Raiders",
+  "header_image": "https://raw.githubusercontent.com/scottscalici/PE/main/teams/vault_raiders/vault_raiders.png",
+  "setup_image": {
+    "file": "",
+    "caption": ""
+  },
+  "equipment": [
+    "Beanbags (The Vault Loot)",
+    "Gymnastics mats (Jail)",
+    "Cones (To mark the Vaults and boundary lines)"
+  ],
+  "rules": [
+    "The gym is divided into two halves. Each team has a Vault containing beanbags and a Jail mat in the corner of their side.",
+    "Players are safe on their own half but can be tagged by the defense when crossing into enemy territory.",
+    "If tagged in enemy territory, the player must go to the enemy's Jail mat.",
+    "Players making it safely to the Vault can choose to steal ONE beanbag OR rescue ONE teammate from Jail per trip.",
+    "Rescued players get a free, safe walk back to their half. If a player is tagged while carrying a beanbag, the beanbag is returned and the player goes to Jail.",
+    "If a tie occurs on the center line, it is resolved instantly with Rock, Paper, Scissors."
+  ],
+  "key_terms": [
+    {
+      "term": "Risk vs. Reward",
+      "definition": "The tactical decision between attempting to steal a beanbag or rescuing a captured teammate.",
+      "image": {
+        "file": "",
+        "caption": ""
+      }
+    },
+    {
+      "term": "Role Designation",
+      "definition": "Assigning specific duties such as attackers, vault defenders, and jail guards before the round begins.",
+      "image": {
+        "file": "",
+        "caption": ""
+      }
+    }
+  ],
+  "global_connections": {
+    "description": "",
+    "highlights_video": "",
+    "image": {
+      "file": "",
+      "caption": ""
+    }
+  },
+  "unit_plan": [
+    {
+      "day": 1,
+      "topic": "Heist Execution & Strategy",
+      "skills": "Teamwork, evasion, and sprinting",
+      "discussion": "How did your team balance the need for offense (stealing) with defense (protecting the vault)?",
+      "activities": [
+        {
+          "name": "Vault Raiders",
+          "overview": "Teams compete to clear out the opposing vault while defending their own, requiring constant communication and tactical adjustments.",
+          "rules": [],
+          "image": {
+            "file": "",
+            "caption": ""
+          }
+        }
+      ]
+    }
+  ],
+  "available_teams": [
+    {
+      "display": "Nairobi",
+      "id": "nairobi",
+      "logo": "nairobi.png"
+    },
+    {
+      "display": "Tokio",
+      "id": "tokio",
+      "logo": "tokio.png"
+    },
+    {
+      "display": "Berlín",
+      "id": "berlin",
+      "logo": "berlin.png"
+    },
+    {
+      "display": "Río",
+      "id": "rio",
+      "logo": "rio.png"
+    }
+  ]
+}
