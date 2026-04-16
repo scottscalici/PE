@@ -26,49 +26,49 @@
       "id": 3,
       "home_team": "Dodgers & Yankees",
       "away_team": "Phillies & Tigers",
-      "home_score": null,
-      "away_score": null,
+      "home_score": 0,
+      "away_score": 1,
       "date_str": "April 15 (Day 64)",
       "time": "11:15",
       "location": "Main Gym",
-      "completed": false
+      "completed": true
     }
   ],
   "standings": {
     "Dodgers": {
       "w": 1,
-      "l": 1,
+      "l": 2,
       "t": 0,
       "pf": 18,
-      "pa": 17,
-      "pd": 1,
+      "pa": 18,
+      "pd": 0,
       "pts": 3
     },
     "Phillies": {
-      "w": 2,
+      "w": 3,
       "l": 0,
       "t": 0,
-      "pf": 20,
+      "pf": 21,
       "pa": 15,
-      "pd": 5,
-      "pts": 6
+      "pd": 6,
+      "pts": 9
     },
     "Tigers": {
-      "w": 0,
+      "w": 1,
       "l": 2,
       "t": 0,
-      "pf": 15,
+      "pf": 16,
       "pa": 20,
-      "pd": -5,
-      "pts": 0
+      "pd": -4,
+      "pts": 3
     },
     "Yankees": {
       "w": 1,
-      "l": 1,
+      "l": 2,
       "t": 0,
       "pf": 17,
-      "pa": 18,
-      "pd": -1,
+      "pa": 19,
+      "pd": -2,
       "pts": 3
     }
   },
