@@ -2,7 +2,7 @@
   "matches": [
     {
       "id": 1,
-      "home_team": "Tokio",
+      "home_team": "Nairobi",
       "away_team": "Berlín",
       "home_score": null,
       "away_score": null,
@@ -13,7 +13,7 @@
     }
   ],
   "standings": {
-    "Tokio": {
+    "Nairobi": {
       "w": 0,
       "l": 0,
       "t": 0,
