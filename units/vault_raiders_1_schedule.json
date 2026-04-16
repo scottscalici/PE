@@ -1,0 +1,36 @@
+{
+  "matches": [
+    {
+      "id": 1,
+      "home_team": "Tokio",
+      "away_team": "Berlín",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "April 16 (Day 65)",
+      "time": "11:10",
+      "location": "Main Gym",
+      "completed": false
+    }
+  ],
+  "standings": {
+    "Tokio": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Berlín": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    }
+  },
+  "tournament": []
+}
