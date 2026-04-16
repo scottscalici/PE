@@ -7,7 +7,7 @@
   "baseTeams": [
     {
       "id": 1,
-      "name": "Tokio",
+      "name": "Nairobi",
       "league": "Standard",
       "players": [
         {
@@ -130,7 +130,7 @@
           "gender": "M"
         }
       ],
-      "logo_id": "tokio"
+      "logo_id": "nairobi"
     },
     {
       "id": 2,
