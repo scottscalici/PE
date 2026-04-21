@@ -25,24 +25,24 @@
   "unit_plan": [],
   "available_teams": [
     {
-      "display": "tupu",
-      "id": "Tupu Titans",
-      "logo": "Tupu Titans.png"
+      "display": "Tupu Titans",
+      "id": "tupu",
+      "logo": "tupu.png"
     },
     {
-      "display": "taniwha",
-      "id": "Taniwha Tribe",
-      "logo": "Taniwha Tribe.png"
+      "display": "Taniwha Tribe",
+      "id": "taniwha",
+      "logo": "taniwha.png"
     },
     {
-      "display": "kioma",
-      "id": "Kioma Crushers",
-      "logo": "Kioma Crushers.png"
+      "display": "Kioma Crushers",
+      "id": "kioma",
+      "logo": "kioma.png"
     },
     {
-      "display": "pou",
-      "id": "Pou Powerhouses",
-      "logo": "Pou Powerhouses.png"
+      "display": "Pou Powerhouses",
+      "id": "pou",
+      "logo": "pou.png"
     }
   ]
 }
