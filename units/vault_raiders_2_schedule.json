@@ -1,0 +1,36 @@
+{
+  "matches": [
+    {
+      "id": 1,
+      "home_team": "Río",
+      "away_team": "Tokio",
+      "home_score": 2,
+      "away_score": 3,
+      "date_str": "April 17 (Day 65)",
+      "time": "11:15",
+      "location": "Main Gym",
+      "completed": true
+    }
+  ],
+  "standings": {
+    "Río": {
+      "w": 0,
+      "l": 1,
+      "t": 0,
+      "pf": 2,
+      "pa": 3,
+      "pd": -1,
+      "pts": 0
+    },
+    "Tokio": {
+      "w": 1,
+      "l": 0,
+      "t": 0,
+      "pf": 3,
+      "pa": 2,
+      "pd": 1,
+      "pts": 3
+    }
+  },
+  "tournament": []
+}
