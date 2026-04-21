@@ -75,9 +75,9 @@
       "league": "Standard",
       "players": [
         {
-          "id": "3B_13",
-          "name": "Sara S.",
-          "skill": 4,
+          "id": "3B_08",
+          "name": "Evalynn P.",
+          "skill": 2,
           "compete": 1,
           "gender": "F"
         },
@@ -117,11 +117,11 @@
           "gender": "M"
         },
         {
-          "id": "3B_17",
-          "name": "Adam B.",
-          "skill": 5,
-          "compete": 4,
-          "gender": "M"
+          "id": "3B_14",
+          "name": "Noor M.",
+          "skill": 4,
+          "compete": 1,
+          "gender": "F"
         },
         {
           "id": "3B_16",
@@ -139,18 +139,18 @@
       "league": "Standard",
       "players": [
         {
-          "id": "3B_08",
-          "name": "Evalynn P.",
-          "skill": 2,
+          "id": "3B_13",
+          "name": "Sara S.",
+          "skill": 4,
           "compete": 1,
           "gender": "F"
         },
         {
-          "id": "3B_14",
-          "name": "Noor M.",
-          "skill": 4,
-          "compete": 1,
-          "gender": "F"
+          "id": "3B_17",
+          "name": "Adam B.",
+          "skill": 5,
+          "compete": 4,
+          "gender": "M"
         },
         {
           "id": "3B_23",
