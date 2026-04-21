@@ -1,0 +1,109 @@
+{
+  "matches": [
+    {
+      "id": 1,
+      "home_team": "Tupu Titans",
+      "away_team": "Pou Powerhouses",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "April 22 (Day 67)",
+      "time": "09:00",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "home_team": "Taniwha Tribe",
+      "away_team": "Kioma Crushers",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "April 22 (Day 67)",
+      "time": "09:25",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 3,
+      "home_team": "Tupu Titans",
+      "away_team": "Kioma Crushers",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "April 22 (Day 67)",
+      "time": "09:50",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 4,
+      "home_team": "Pou Powerhouses",
+      "away_team": "Taniwha Tribe",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "April 24 (Day 68)",
+      "time": "09:00",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 5,
+      "home_team": "Tupu Titans",
+      "away_team": "Taniwha Tribe",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "April 24 (Day 68)",
+      "time": "09:25",
+      "location": "Main Gym",
+      "completed": false
+    },
+    {
+      "id": 6,
+      "home_team": "Kioma Crushers",
+      "away_team": "Pou Powerhouses",
+      "home_score": null,
+      "away_score": null,
+      "date_str": "April 24 (Day 68)",
+      "time": "09:50",
+      "location": "Main Gym",
+      "completed": false
+    }
+  ],
+  "standings": {
+    "Tupu Titans": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Pou Powerhouses": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Taniwha Tribe": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    },
+    "Kioma Crushers": {
+      "w": 0,
+      "l": 0,
+      "t": 0,
+      "pf": 0,
+      "pa": 0,
+      "pd": 0,
+      "pts": 0
+    }
+  },
+  "tournament": []
+}
