@@ -1,0 +1,48 @@
+{
+  "sport": "ki_o_rahi",
+  "display_name": "ki_o_rahi",
+  "header_image": "ki_o_rahi",
+  "setup_image": {
+    "file": "",
+    "caption": ""
+  },
+  "equipment": [
+    "tupu (tackle dummy)",
+    "ki (indoor soccer ball)",
+    "markings (poly dots and low profile cones)",
+    "Flags?"
+  ],
+  "rules": [],
+  "key_terms": [],
+  "global_connections": {
+    "description": "",
+    "highlights_video": "",
+    "image": {
+      "file": "",
+      "caption": ""
+    }
+  },
+  "unit_plan": [],
+  "available_teams": [
+    {
+      "display": "tupu",
+      "id": "Tupu Titans",
+      "logo": "Tupu Titans.png"
+    },
+    {
+      "display": "taniwha",
+      "id": "Taniwha Tribe",
+      "logo": "Taniwha Tribe.png"
+    },
+    {
+      "display": "kioma",
+      "id": "Kioma Crushers",
+      "logo": "Kioma Crushers.png"
+    },
+    {
+      "display": "pou",
+      "id": "Pou Powerhouses",
+      "logo": "Pou Powerhouses.png"
+    }
+  ]
+}
