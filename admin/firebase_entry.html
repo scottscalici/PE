@@ -1,0 +1,33 @@
+// This assumes you have included the Firebase SDK scripts in your HTML head
+
+// Your web app's Firebase configuration (you get this from Firebase Console)
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  // ... other config items
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// The function to upload your JSON data
+async function uploadLocksToFirestore(lockDataJSON) {
+  const lockData = JSON.parse(lockDataJSON); // The JSON from your converter
+  const batch = db.batch(); // We use a batch to upload everything at once
+
+  // Loop through every lock in your JSON and stage it for upload
+  for (const [serialNumber, lockDetails] of Object.entries(lockData)) {
+    const lockRef = db.collection("locks").doc(serialNumber);
+    batch.set(lockRef, lockDetails);
+  }
+
+  // Commit the batch to Firestore
+  try {
+    await batch.commit();
+    alert("Success! All locks uploaded to Firestore.");
+  } catch (error) {
+    console.error("Error uploading documents: ", error);
+  }
+}
